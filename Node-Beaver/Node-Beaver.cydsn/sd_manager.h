@@ -29,10 +29,8 @@ enum Types
 CY_ISR_PROTO(power_interrupt);
 
 void sd_init(Time time);
-
-void sd_push(const DataPacket* data_queue, uint16_t data_head,
-	uint16_t data_tail);
-
+void sd_time_set(Time time);
+void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
 void sd_stop(void);
 
 

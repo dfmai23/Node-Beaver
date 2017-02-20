@@ -20,6 +20,7 @@
 #include <CyLib.h>
 #include <power_isr.h>
 
+
 #if !defined(power_isr__REMOVED) /* Check for removal by optimization */
 
 /*******************************************************************************
@@ -159,6 +160,10 @@ void power_isr_Stop(void)
 *******************************************************************************/
 CY_ISR(power_isr_Interrupt)
 {
+    #ifdef power_isr_INTERRUPT_INTERRUPT_CALLBACK
+        power_isr_Interrupt_InterruptCallback();
+    #endif /* power_isr_INTERRUPT_INTERRUPT_CALLBACK */ 
+
     /*  Place your Interrupt code here. */
     /* `#START power_isr_Interrupt` */
     LED_Write(1);

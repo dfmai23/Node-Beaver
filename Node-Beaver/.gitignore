@@ -3,6 +3,7 @@
 *.cyprj.*
 *.cycdx
 *.cyfit
+*.cyversion
 *.rpt
 *.uvopt
 *.uvproj

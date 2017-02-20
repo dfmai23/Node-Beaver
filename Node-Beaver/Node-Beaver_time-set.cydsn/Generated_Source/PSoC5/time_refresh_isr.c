@@ -20,6 +20,7 @@
 #include <CyLib.h>
 #include <time_refresh_isr.h>
 
+
 #if !defined(time_refresh_isr__REMOVED) /* Check for removal by optimization */
 
 /*******************************************************************************
@@ -158,6 +159,10 @@ void time_refresh_isr_Stop(void)
 *******************************************************************************/
 CY_ISR(time_refresh_isr_Interrupt)
 {
+    #ifdef time_refresh_isr_INTERRUPT_INTERRUPT_CALLBACK
+        time_refresh_isr_Interrupt_InterruptCallback();
+    #endif /* time_refresh_isr_INTERRUPT_INTERRUPT_CALLBACK */ 
+
     /*  Place your Interrupt code here. */
     /* `#START time_refresh_isr_Interrupt` */
 

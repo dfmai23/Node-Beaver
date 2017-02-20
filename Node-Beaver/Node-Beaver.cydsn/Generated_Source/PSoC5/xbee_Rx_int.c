@@ -20,6 +20,7 @@
 #include <CyLib.h>
 #include <xbee_Rx_int.h>
 
+
 #if !defined(xbee_Rx_int__REMOVED) /* Check for removal by optimization */
 
 /*******************************************************************************
@@ -158,6 +159,10 @@ void xbee_Rx_int_Stop(void)
 *******************************************************************************/
 CY_ISR(xbee_Rx_int_Interrupt)
 {
+    #ifdef xbee_Rx_int_INTERRUPT_INTERRUPT_CALLBACK
+        xbee_Rx_int_Interrupt_InterruptCallback();
+    #endif /* xbee_Rx_int_INTERRUPT_INTERRUPT_CALLBACK */ 
+
     /*  Place your Interrupt code here. */
     /* `#START xbee_Rx_int_Interrupt` */
     /* `#END` */

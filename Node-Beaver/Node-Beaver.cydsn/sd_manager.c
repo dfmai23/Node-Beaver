@@ -1,12 +1,10 @@
 #include "sd_manager.h"
 
 
-
 FS_FILE* pfile;
 uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
-
 
 
 CY_ISR(power_interrupt) {
@@ -45,91 +43,36 @@ void sd_init(Time time) {
     //power_isr_Start();
     
 	FS_Init();
+    FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
 	sd_ok = 1;
 	char date_str[32], run_str[64];
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
 
-		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes("logs")) // if logs not a dir
-			if(FS_MkDir("logs"))
-			{
+		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes("logs")) { // if logs not a dir
+			if(FS_MkDir("logs")) {
 				sd_ok = 0;
 				return;
 			} // if logs folder can't be created
+        }
 
-		// insert time getting
-		if((pfile = FS_FOpen(set_time_file, "r"))) {
-			char buffer[64];
-			char *ptr;
-			uint16_t num;
-			Time tmp_time;
-
-
-			/* Time Setting File (set_time.txt) Format
-				Enter the following two lines of text in a file called "set_time.txt" in
-				the /LOGS folder to set the time. The line breaks can consist of \r or
-				\n characters.
-				
-				[month]/[day]/[year]
-				[24-hour]:[minute]:[second]
-			*/
-			FS_Read(pfile, buffer, 64); // read entire file
-
-			ptr = strtok(buffer, "/: \r\n"); // month
-			num = atoi(ptr);
-			if(num <= 12) tmp_time.month = num;
-			
-			ptr = strtok(NULL, "/: \r\n"); // day
-			num = atoi(ptr);
-			if(num <= 31) tmp_time.day = num;
-			
-			ptr = strtok(NULL, "/: \r\n"); // year
-			num = atoi(ptr);
-			if(num <= 99) tmp_time.year = num;  // 2 digit year
-			else if(num >= 1900) tmp_time.year = num % 100; // 4 digit year
-				
-			ptr = strtok(NULL, "/: \r\n"); // 24-hour
-			num = atoi(ptr);
-			if(num <= 23) tmp_time.hour = num;
-
-			ptr = strtok(NULL, "/: \r\n"); // minute
-			num = atoi(ptr);
-			if(num <= 59) tmp_time.minute = num;
-
-			ptr = strtok(NULL, "/: \r\n"); // second 
-			num = atoi(ptr);
-			if(num <= 59) tmp_time.second = num;
-
-			FS_FClose(pfile);
-
-			time_set(tmp_time); // set the new time
-			time = tmp_time; // use new time for file names
-			
-			FS_Remove(set_time_file); // delete file
-		} // try to find file and set time
-
-
+        sd_time_set(time);          //set time from a file
 
 		// create folder 
-		sprintf(date_str, "\\logs\\20%u-%02u-%02u", time.year, time.month, time.day);
-
-		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes(date_str)) // if day not a dir
-			if(FS_MkDir(date_str))
-			{
+        sprintf(date_str, "\\logs\\%04u-%02u-%02u", time.year, time.month, time.day);
+		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes(date_str)) { // if day not a dir
+			if(FS_MkDir(date_str)) {
 				sd_ok = 0;
 				return;
 			} // if day folder can't be created
-    
+        }
+        
         // create file
-		//sprintf(run_str, "%s\\%u-%u-%u.csv", date_str, time.hour, time.minute, time.second);
-        sprintf(run_str, "%s\\[20%u-%02u-%02u]_%02u.%02u.csv",
+        sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.csv",
             date_str, time.year, time.month, time.day, time.hour, time.minute);
-
-		pfile = FS_FOpen(run_str, "w"); // open test file
-
-		if(pfile == NULL)
-		{
+		pfile = FS_FOpen(run_str, "w"); //create and open new file for writing
+		if(pfile == NULL) {
 			sd_ok = 0;
 			return;
 		} // if file does not exist
@@ -149,7 +92,7 @@ void sd_init(Time time) {
 		FS_SetFileTime(run_str, file_time_string);
 	} // if a single file volume exists
   
-  FS_Sync("");
+    FS_Sync("");
 /*
 	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
 
@@ -167,6 +110,57 @@ void sd_init(Time time) {
 	*/
 } // sd_init()
 
+
+/*  Sets the RTC time from a file called set_time.txt
+    
+	Enter the following two lines of text in a file called "set_time.txt" in
+	the /LOGS folder to set the time. The line breaks can consist of \r or
+	\n characters.
+	
+	[month]/[day]/[year]
+	[24-hour]:[minute]:[second] */
+void sd_time_set(Time time) {
+	if((pfile = FS_FOpen(set_time_file, "r"))) {
+		char buffer[64];
+		char *ptr;
+		uint16_t num;
+		Time tmp_time;
+
+		FS_Read(pfile, buffer, 64); // read entire file
+
+		ptr = strtok(buffer, "/: \r\n"); // month
+		num = atoi(ptr);
+		if(num <= 12) tmp_time.month = num;
+		
+		ptr = strtok(NULL, "/: \r\n"); // day
+		num = atoi(ptr);
+		if(num <= 31) tmp_time.day = num;
+		
+		ptr = strtok(NULL, "/: \r\n"); // year
+		num = atoi(ptr);
+		if(num <= 99) tmp_time.year = num;  // 2 digit year
+		else if(num >= 1900) tmp_time.year = num % 100; // 4 digit year
+			
+		ptr = strtok(NULL, "/: \r\n"); // 24-hour
+		num = atoi(ptr);
+		if(num <= 23) tmp_time.hour = num;
+
+		ptr = strtok(NULL, "/: \r\n"); // minute
+		num = atoi(ptr);
+		if(num <= 59) tmp_time.minute = num;
+
+		ptr = strtok(NULL, "/: \r\n"); // second 
+		num = atoi(ptr);
+		if(num <= 59) tmp_time.second = num;
+
+		FS_FClose(pfile);
+
+		time_set(tmp_time); // set the new time
+		time = tmp_time; // use new time for file names
+		
+		FS_Remove(set_time_file); // delete file
+	} // try to find file and set time
+}
 
 
 /* sd_push()

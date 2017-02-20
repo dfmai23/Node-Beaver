@@ -18,6 +18,7 @@
 
 #include "xbee_spi_PVT.h"
 
+
 /* User code required at start of ISR */
 /* `#START xbee_spi_ISR_START_DEF` */
 
@@ -54,11 +55,15 @@ CY_ISR(xbee_spi_TX_ISR)
         uint8 tmpStatus;
     #endif /* (xbee_spi_TX_SOFTWARE_BUF_ENABLED) */
 
+    #ifdef xbee_spi_TX_ISR_ENTRY_CALLBACK
+        xbee_spi_TX_ISR_EntryCallback();
+    #endif /* xbee_spi_TX_ISR_ENTRY_CALLBACK */
+
     /* User code required at start of ISR */
     /* `#START xbee_spi_TX_ISR_START` */
 
     /* `#END` */
-
+    
     #if(xbee_spi_TX_SOFTWARE_BUF_ENABLED)
         /* Check if TX data buffer is not empty and there is space in TX FIFO */
         while(xbee_spi_txBufferRead != xbee_spi_txBufferWrite)
@@ -104,6 +109,10 @@ CY_ISR(xbee_spi_TX_ISR)
     /* `#START xbee_spi_TX_ISR_END` */
 
     /* `#END` */
+    
+    #ifdef xbee_spi_TX_ISR_EXIT_CALLBACK
+        xbee_spi_TX_ISR_ExitCallback();
+    #endif /* xbee_spi_TX_ISR_EXIT_CALLBACK */
 }
 
 
@@ -138,11 +147,15 @@ CY_ISR(xbee_spi_RX_ISR)
         uint8 rxData;
     #endif /* (xbee_spi_RX_SOFTWARE_BUF_ENABLED) */
 
+    #ifdef xbee_spi_RX_ISR_ENTRY_CALLBACK
+        xbee_spi_RX_ISR_EntryCallback();
+    #endif /* xbee_spi_RX_ISR_ENTRY_CALLBACK */
+
     /* User code required at start of ISR */
     /* `#START xbee_spi_RX_ISR_START` */
 
     /* `#END` */
-
+    
     #if(xbee_spi_RX_SOFTWARE_BUF_ENABLED)
 
         tmpStatus = xbee_spi_GET_STATUS_RX(xbee_spi_swStatusRx);
@@ -184,6 +197,10 @@ CY_ISR(xbee_spi_RX_ISR)
     /* `#START xbee_spi_RX_ISR_END` */
 
     /* `#END` */
+    
+    #ifdef xbee_spi_RX_ISR_EXIT_CALLBACK
+        xbee_spi_RX_ISR_ExitCallback();
+    #endif /* xbee_spi_RX_ISR_EXIT_CALLBACK */
 }
 
 /* [] END OF FILE */

@@ -67,6 +67,7 @@ void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_t
 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
 	if(refresh_status)  { //if refresh_status = 1 (set by time_refresh isr every 10secs), will insert time into queue
+        //current_time.year += 0x7D0;
         data_queue[*data_tail].id = ID_TIME;
 		data_queue[*data_tail].length = 8;
 		data_queue[*data_tail].millicounter = current_time.millicounter;
@@ -189,7 +190,7 @@ Time time_retreive(void) {
 	byte = rtc_i2c_MasterReadByte(0);
 	tmp_time.year = byte & 0x0F; // Year
 	tmp_time.year += 10 * (byte >> 4); // 10 Years
-
+    tmp_time.year += 0x7D0;     // add year 2000;
 	rtc_i2c_MasterSendStop(); // End Receiving
 
 	tmp_time.millicounter = millis_timer_ReadCounter();

@@ -1,14 +1,14 @@
 /*******************************************************************************
 * File Name: RTC_SDA_1.h  
-* Version 2.10
+* Version 2.20
 *
 * Description:
-*  This file containts Control Register function prototypes and register defines
+*  This file contains Pin function prototypes and register defines
 *
 * Note:
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions, 
 * disclaimers, and limitations in the end user license agreement accompanying 
 * the software package with which this file was provided.
@@ -22,12 +22,6 @@
 #include "cypins.h"
 #include "RTC_SDA_1_aliases.h"
 
-/* Check to see if required defines such as CY_PSOC5A are available */
-/* They are defined starting with cy_boot v3.0 */
-#if !defined (CY_PSOC5A)
-    #error Component cy_pins_v2_10 requires cy_boot v3.0 or later
-#endif /* (CY_PSOC5A) */
-
 /* APIs are not generated for P15[7:6] */
 #if !(CY_PSOC5A &&\
 	 RTC_SDA_1__PORT == 15 && ((RTC_SDA_1__MASK & 0xC0) != 0))
@@ -37,31 +31,64 @@
 *        Function Prototypes             
 ***************************************/    
 
-void    RTC_SDA_1_Write(uint8 value) ;
-void    RTC_SDA_1_SetDriveMode(uint8 mode) ;
-uint8   RTC_SDA_1_ReadDataReg(void) ;
-uint8   RTC_SDA_1_Read(void) ;
-uint8   RTC_SDA_1_ClearInterrupt(void) ;
-
+/**
+* \addtogroup group_general
+* @{
+*/
+void    RTC_SDA_1_Write(uint8 value);
+void    RTC_SDA_1_SetDriveMode(uint8 mode);
+uint8   RTC_SDA_1_ReadDataReg(void);
+uint8   RTC_SDA_1_Read(void);
+void    RTC_SDA_1_SetInterruptMode(uint16 position, uint16 mode);
+uint8   RTC_SDA_1_ClearInterrupt(void);
+/** @} general */
 
 /***************************************
 *           API Constants        
 ***************************************/
-
-/* Drive Modes */
-#define RTC_SDA_1_DM_ALG_HIZ         PIN_DM_ALG_HIZ
-#define RTC_SDA_1_DM_DIG_HIZ         PIN_DM_DIG_HIZ
-#define RTC_SDA_1_DM_RES_UP          PIN_DM_RES_UP
-#define RTC_SDA_1_DM_RES_DWN         PIN_DM_RES_DWN
-#define RTC_SDA_1_DM_OD_LO           PIN_DM_OD_LO
-#define RTC_SDA_1_DM_OD_HI           PIN_DM_OD_HI
-#define RTC_SDA_1_DM_STRONG          PIN_DM_STRONG
-#define RTC_SDA_1_DM_RES_UPDWN       PIN_DM_RES_UPDWN
-
+/**
+* \addtogroup group_constants
+* @{
+*/
+    /** \addtogroup driveMode Drive mode constants
+     * \brief Constants to be passed as "mode" parameter in the RTC_SDA_1_SetDriveMode() function.
+     *  @{
+     */
+        #define RTC_SDA_1_DM_ALG_HIZ         PIN_DM_ALG_HIZ
+        #define RTC_SDA_1_DM_DIG_HIZ         PIN_DM_DIG_HIZ
+        #define RTC_SDA_1_DM_RES_UP          PIN_DM_RES_UP
+        #define RTC_SDA_1_DM_RES_DWN         PIN_DM_RES_DWN
+        #define RTC_SDA_1_DM_OD_LO           PIN_DM_OD_LO
+        #define RTC_SDA_1_DM_OD_HI           PIN_DM_OD_HI
+        #define RTC_SDA_1_DM_STRONG          PIN_DM_STRONG
+        #define RTC_SDA_1_DM_RES_UPDWN       PIN_DM_RES_UPDWN
+    /** @} driveMode */
+/** @} group_constants */
+    
 /* Digital Port Constants */
 #define RTC_SDA_1_MASK               RTC_SDA_1__MASK
 #define RTC_SDA_1_SHIFT              RTC_SDA_1__SHIFT
 #define RTC_SDA_1_WIDTH              1u
+
+/* Interrupt constants */
+#if defined(RTC_SDA_1__INTSTAT)
+/**
+* \addtogroup group_constants
+* @{
+*/
+    /** \addtogroup intrMode Interrupt constants
+     * \brief Constants to be passed as "mode" parameter in RTC_SDA_1_SetInterruptMode() function.
+     *  @{
+     */
+        #define RTC_SDA_1_INTR_NONE      (uint16)(0x0000u)
+        #define RTC_SDA_1_INTR_RISING    (uint16)(0x0001u)
+        #define RTC_SDA_1_INTR_FALLING   (uint16)(0x0002u)
+        #define RTC_SDA_1_INTR_BOTH      (uint16)(0x0003u) 
+    /** @} intrMode */
+/** @} group_constants */
+
+    #define RTC_SDA_1_INTR_MASK      (0x01u) 
+#endif /* (RTC_SDA_1__INTSTAT) */
 
 
 /***************************************
@@ -114,13 +141,21 @@ uint8   RTC_SDA_1_ClearInterrupt(void) ;
 /* Sync Output Enable Registers */
 #define RTC_SDA_1_PRTDSI__SYNC_OUT       (* (reg8 *) RTC_SDA_1__PRTDSI__SYNC_OUT) 
 
+/* SIO registers */
+#if defined(RTC_SDA_1__SIO_CFG)
+    #define RTC_SDA_1_SIO_HYST_EN        (* (reg8 *) RTC_SDA_1__SIO_HYST_EN)
+    #define RTC_SDA_1_SIO_REG_HIFREQ     (* (reg8 *) RTC_SDA_1__SIO_REG_HIFREQ)
+    #define RTC_SDA_1_SIO_CFG            (* (reg8 *) RTC_SDA_1__SIO_CFG)
+    #define RTC_SDA_1_SIO_DIFF           (* (reg8 *) RTC_SDA_1__SIO_DIFF)
+#endif /* (RTC_SDA_1__SIO_CFG) */
 
-#if defined(RTC_SDA_1__INTSTAT)  /* Interrupt Registers */
-
-    #define RTC_SDA_1_INTSTAT                (* (reg8 *) RTC_SDA_1__INTSTAT)
-    #define RTC_SDA_1_SNAP                   (* (reg8 *) RTC_SDA_1__SNAP)
-
-#endif /* Interrupt Registers */
+/* Interrupt Registers */
+#if defined(RTC_SDA_1__INTSTAT)
+    #define RTC_SDA_1_INTSTAT            (* (reg8 *) RTC_SDA_1__INTSTAT)
+    #define RTC_SDA_1_SNAP               (* (reg8 *) RTC_SDA_1__SNAP)
+    
+	#define RTC_SDA_1_0_INTTYPE_REG 		(* (reg8 *) RTC_SDA_1__0__INTTYPE)
+#endif /* (RTC_SDA_1__INTSTAT) */
 
 #endif /* CY_PSOC5A... */
 

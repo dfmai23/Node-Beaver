@@ -1,14 +1,14 @@
 /*******************************************************************************
 * File Name: xbee_ss.h  
-* Version 2.10
+* Version 2.20
 *
 * Description:
-*  This file containts Control Register function prototypes and register defines
+*  This file contains Pin function prototypes and register defines
 *
 * Note:
 *
 ********************************************************************************
-* Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions, 
 * disclaimers, and limitations in the end user license agreement accompanying 
 * the software package with which this file was provided.
@@ -22,12 +22,6 @@
 #include "cypins.h"
 #include "xbee_ss_aliases.h"
 
-/* Check to see if required defines such as CY_PSOC5A are available */
-/* They are defined starting with cy_boot v3.0 */
-#if !defined (CY_PSOC5A)
-    #error Component cy_pins_v2_10 requires cy_boot v3.0 or later
-#endif /* (CY_PSOC5A) */
-
 /* APIs are not generated for P15[7:6] */
 #if !(CY_PSOC5A &&\
 	 xbee_ss__PORT == 15 && ((xbee_ss__MASK & 0xC0) != 0))
@@ -37,31 +31,64 @@
 *        Function Prototypes             
 ***************************************/    
 
-void    xbee_ss_Write(uint8 value) ;
-void    xbee_ss_SetDriveMode(uint8 mode) ;
-uint8   xbee_ss_ReadDataReg(void) ;
-uint8   xbee_ss_Read(void) ;
-uint8   xbee_ss_ClearInterrupt(void) ;
-
+/**
+* \addtogroup group_general
+* @{
+*/
+void    xbee_ss_Write(uint8 value);
+void    xbee_ss_SetDriveMode(uint8 mode);
+uint8   xbee_ss_ReadDataReg(void);
+uint8   xbee_ss_Read(void);
+void    xbee_ss_SetInterruptMode(uint16 position, uint16 mode);
+uint8   xbee_ss_ClearInterrupt(void);
+/** @} general */
 
 /***************************************
 *           API Constants        
 ***************************************/
-
-/* Drive Modes */
-#define xbee_ss_DM_ALG_HIZ         PIN_DM_ALG_HIZ
-#define xbee_ss_DM_DIG_HIZ         PIN_DM_DIG_HIZ
-#define xbee_ss_DM_RES_UP          PIN_DM_RES_UP
-#define xbee_ss_DM_RES_DWN         PIN_DM_RES_DWN
-#define xbee_ss_DM_OD_LO           PIN_DM_OD_LO
-#define xbee_ss_DM_OD_HI           PIN_DM_OD_HI
-#define xbee_ss_DM_STRONG          PIN_DM_STRONG
-#define xbee_ss_DM_RES_UPDWN       PIN_DM_RES_UPDWN
-
+/**
+* \addtogroup group_constants
+* @{
+*/
+    /** \addtogroup driveMode Drive mode constants
+     * \brief Constants to be passed as "mode" parameter in the xbee_ss_SetDriveMode() function.
+     *  @{
+     */
+        #define xbee_ss_DM_ALG_HIZ         PIN_DM_ALG_HIZ
+        #define xbee_ss_DM_DIG_HIZ         PIN_DM_DIG_HIZ
+        #define xbee_ss_DM_RES_UP          PIN_DM_RES_UP
+        #define xbee_ss_DM_RES_DWN         PIN_DM_RES_DWN
+        #define xbee_ss_DM_OD_LO           PIN_DM_OD_LO
+        #define xbee_ss_DM_OD_HI           PIN_DM_OD_HI
+        #define xbee_ss_DM_STRONG          PIN_DM_STRONG
+        #define xbee_ss_DM_RES_UPDWN       PIN_DM_RES_UPDWN
+    /** @} driveMode */
+/** @} group_constants */
+    
 /* Digital Port Constants */
 #define xbee_ss_MASK               xbee_ss__MASK
 #define xbee_ss_SHIFT              xbee_ss__SHIFT
 #define xbee_ss_WIDTH              1u
+
+/* Interrupt constants */
+#if defined(xbee_ss__INTSTAT)
+/**
+* \addtogroup group_constants
+* @{
+*/
+    /** \addtogroup intrMode Interrupt constants
+     * \brief Constants to be passed as "mode" parameter in xbee_ss_SetInterruptMode() function.
+     *  @{
+     */
+        #define xbee_ss_INTR_NONE      (uint16)(0x0000u)
+        #define xbee_ss_INTR_RISING    (uint16)(0x0001u)
+        #define xbee_ss_INTR_FALLING   (uint16)(0x0002u)
+        #define xbee_ss_INTR_BOTH      (uint16)(0x0003u) 
+    /** @} intrMode */
+/** @} group_constants */
+
+    #define xbee_ss_INTR_MASK      (0x01u) 
+#endif /* (xbee_ss__INTSTAT) */
 
 
 /***************************************
@@ -114,13 +141,21 @@ uint8   xbee_ss_ClearInterrupt(void) ;
 /* Sync Output Enable Registers */
 #define xbee_ss_PRTDSI__SYNC_OUT       (* (reg8 *) xbee_ss__PRTDSI__SYNC_OUT) 
 
+/* SIO registers */
+#if defined(xbee_ss__SIO_CFG)
+    #define xbee_ss_SIO_HYST_EN        (* (reg8 *) xbee_ss__SIO_HYST_EN)
+    #define xbee_ss_SIO_REG_HIFREQ     (* (reg8 *) xbee_ss__SIO_REG_HIFREQ)
+    #define xbee_ss_SIO_CFG            (* (reg8 *) xbee_ss__SIO_CFG)
+    #define xbee_ss_SIO_DIFF           (* (reg8 *) xbee_ss__SIO_DIFF)
+#endif /* (xbee_ss__SIO_CFG) */
 
-#if defined(xbee_ss__INTSTAT)  /* Interrupt Registers */
-
-    #define xbee_ss_INTSTAT                (* (reg8 *) xbee_ss__INTSTAT)
-    #define xbee_ss_SNAP                   (* (reg8 *) xbee_ss__SNAP)
-
-#endif /* Interrupt Registers */
+/* Interrupt Registers */
+#if defined(xbee_ss__INTSTAT)
+    #define xbee_ss_INTSTAT            (* (reg8 *) xbee_ss__INTSTAT)
+    #define xbee_ss_SNAP               (* (reg8 *) xbee_ss__SNAP)
+    
+	#define xbee_ss_0_INTTYPE_REG 		(* (reg8 *) xbee_ss__0__INTTYPE)
+#endif /* (xbee_ss__INTSTAT) */
 
 #endif /* CY_PSOC5A... */
 

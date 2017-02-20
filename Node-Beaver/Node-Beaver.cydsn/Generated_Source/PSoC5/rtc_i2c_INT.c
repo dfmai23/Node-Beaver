@@ -16,6 +16,7 @@
 #include "rtc_i2c_PVT.h"
 
 
+
 /*******************************************************************************
 *  Place your includes, defines and code here.
 ********************************************************************************/
@@ -49,6 +50,11 @@ CY_ISR(rtc_i2c_ISR)
 #endif  /* (rtc_i2c_MODE_SLAVE_ENABLED) */
 
     uint8  tmpCsr;
+    
+#ifdef rtc_i2c_ISR_ENTRY_CALLBACK
+    rtc_i2c_ISR_EntryCallback();
+#endif /* rtc_i2c_ISR_ENTRY_CALLBACK */
+    
 
 #if(rtc_i2c_TIMEOUT_FF_ENABLED)
     if(0u != rtc_i2c_TimeoutGetStatus())
@@ -340,6 +346,10 @@ CY_ISR(rtc_i2c_ISR)
 
                         /* `#END` */
 
+                    #ifdef rtc_i2c_SW_PREPARE_READ_BUF_CALLBACK
+                        rtc_i2c_SwPrepareReadBuf_Callback();
+                    #endif /* rtc_i2c_SW_PREPARE_READ_BUF_CALLBACK */
+                        
                         /* Prepare next operation to read, get data and place in data register */
                         if(rtc_i2c_slRdBufIndex < rtc_i2c_slRdBufSize)
                         {
@@ -377,12 +387,20 @@ CY_ISR(rtc_i2c_ISR)
 
                     /* `#END` */
 
+                #ifdef rtc_i2c_SW_ADDR_COMPARE_ENTRY_CALLBACK
+                    rtc_i2c_SwAddrCompare_EntryCallback();
+                #endif /* rtc_i2c_SW_ADDR_COMPARE_ENTRY_CALLBACK */
+                    
                     rtc_i2c_NAK_AND_RECEIVE;   /* NACK address */
 
                     /* Place code to end of condition for NACK generation here */
                     /* `#START rtc_i2c_SW_ADDR_COMPARE_interruptEnd`  */
 
                     /* `#END` */
+
+                #ifdef rtc_i2c_SW_ADDR_COMPARE_EXIT_CALLBACK
+                    rtc_i2c_SwAddrCompare_ExitCallback();
+                #endif /* rtc_i2c_SW_ADDR_COMPARE_EXIT_CALLBACK */
                 }
 
             #else /* (rtc_i2c_HW_ADRR_DECODE) */
@@ -393,6 +411,10 @@ CY_ISR(rtc_i2c_ISR)
                     /* `#START rtc_i2c_HW_PREPARE_READ_BUF_interrupt` */
 
                     /* `#END` */
+                    
+                #ifdef rtc_i2c_HW_PREPARE_READ_BUF_CALLBACK
+                    rtc_i2c_HwPrepareReadBuf_Callback();
+                #endif /* rtc_i2c_HW_PREPARE_READ_BUF_CALLBACK */
 
                     /* Prepare next operation to read, get data and place in data register */
                     if(rtc_i2c_slRdBufIndex < rtc_i2c_slRdBufSize)
@@ -495,6 +517,10 @@ CY_ISR(rtc_i2c_ISR)
         /* The FSM skips master and slave processing: return to IDLE */
         rtc_i2c_state = rtc_i2c_SM_IDLE;
     }
+
+#ifdef rtc_i2c_ISR_EXIT_CALLBACK
+    rtc_i2c_ISR_ExitCallback();
+#endif /* rtc_i2c_ISR_EXIT_CALLBACK */    
 }
 
 
@@ -515,10 +541,18 @@ CY_ISR(rtc_i2c_ISR)
     *******************************************************************************/
     CY_ISR(rtc_i2c_WAKEUP_ISR)
     {
-         /* Set flag to notify that matched address is received */
+    #ifdef rtc_i2c_WAKEUP_ISR_ENTRY_CALLBACK
+        rtc_i2c_WAKEUP_ISR_EntryCallback();
+    #endif /* rtc_i2c_WAKEUP_ISR_ENTRY_CALLBACK */
+         
+        /* Set flag to notify that matched address is received */
         rtc_i2c_wakeupSource = 1u;
 
         /* SCL is stretched until the I2C_Wake() is called */
+
+    #ifdef rtc_i2c_WAKEUP_ISR_EXIT_CALLBACK
+        rtc_i2c_WAKEUP_ISR_ExitCallback();
+    #endif /* rtc_i2c_WAKEUP_ISR_EXIT_CALLBACK */
     }
 #endif /* ((rtc_i2c_FF_IMPLEMENTED) && (rtc_i2c_WAKEUP_ENABLED)) */
 
