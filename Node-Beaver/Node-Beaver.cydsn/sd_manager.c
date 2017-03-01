@@ -28,15 +28,13 @@ CY_ISR(power_interrupt) {
 		- unable to create a directory named after the date
 		- unable to create and open file for writing
 
-	sd_ok is set when the SD card is functional
-*/
+	sd_ok is set when the SD card is functional */
 void sd_init(Time time) {
 	/* power_isr note:
 		Triggers unexpectedly due to floating pin/environmental voltages and
 		capacitance. power isr is disabled for prototyping only.
 	*/
     //probe_Write(0);
-
 	power_comp_Start();
 	power_isr_ClearPending();
 	power_isr_StartEx(power_interrupt);
@@ -49,7 +47,8 @@ void sd_init(Time time) {
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
-
+        
+        //create logs folder
 		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes("logs")) { // if logs not a dir
 			if(FS_MkDir("logs")) {
 				sd_ok = 0;
@@ -59,7 +58,7 @@ void sd_init(Time time) {
 
         sd_time_set(time);          //set time from a file
 
-		// create folder 
+		// create date folder 
         sprintf(date_str, "\\logs\\%04u-%02u-%02u", time.year, time.month, time.day);
 		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes(date_str)) { // if day not a dir
 			if(FS_MkDir(date_str)) {
@@ -68,7 +67,7 @@ void sd_init(Time time) {
 			} // if day folder can't be created
         }
         
-        // create file
+        // create log file
         sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.csv",
             date_str, time.year, time.month, time.day, time.hour, time.minute);
 		pfile = FS_FOpen(run_str, "w"); //create and open new file for writing
@@ -111,7 +110,7 @@ void sd_init(Time time) {
 } // sd_init()
 
 
-/*  Sets the RTC time from a file called set_time.txt
+/*  Sets the RTC time from a file called set_time.txt if it exists
     
 	Enter the following two lines of text in a file called "set_time.txt" in
 	the /LOGS folder to set the time. The line breaks can consist of \r or
@@ -178,7 +177,7 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 
 	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH)
 	{
-		length = sprintf(buffer, "%u,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
 			(unsigned)data_queue[pos].id,
 			(unsigned)data_queue[pos].millicounter,
 			(unsigned)data_queue[pos].data[0],

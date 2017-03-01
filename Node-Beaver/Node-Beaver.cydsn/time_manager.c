@@ -67,7 +67,6 @@ void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_t
 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
 	if(refresh_status)  { //if refresh_status = 1 (set by time_refresh isr every 10secs), will insert time into queue
-        //current_time.year += 0x7D0;
         data_queue[*data_tail].id = ID_TIME;
 		data_queue[*data_tail].length = 8;
 		data_queue[*data_tail].millicounter = current_time.millicounter;
@@ -104,18 +103,18 @@ void time_set(Time now) {
 	uint8_t byte;
 
 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);
-	rtc_i2c_MasterWriteByte(0x00); // move to top of register file
+	rtc_i2c_MasterWriteByte(0x00);      // move to top of register file
 
-	byte = now.second % 10; // seconds
-	byte |= (now.second / 10) << 4; // 10 seconds
+	byte = now.second % 10;             // seconds
+	byte |= (now.second / 10) << 4;     // 10 seconds   0-59
 	rtc_i2c_MasterWriteByte(byte);
 
-	byte = now.minute % 10; // minute
-	byte |= (now.minute/ 10) << 4; // 10 minute
+	byte = now.minute % 10;             // minute
+	byte |= (now.minute/ 10) << 4;      // 10 minute    0-59
 	rtc_i2c_MasterWriteByte(byte);
 
-	byte = now.hour % 10; // hour
-	byte |= (now.hour / 10) << 4; // 10 hour
+	byte = now.hour % 10;               // hour
+	byte |= (now.hour / 10) << 4;       // 10 hour      0-23 
 	rtc_i2c_MasterWriteByte(byte);
 
 	rtc_i2c_MasterSendStop(); // End Receiving
@@ -123,18 +122,18 @@ void time_set(Time now) {
 	// skip day
 
 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);
-	rtc_i2c_MasterWriteByte(RTC_DATE); // move to Date
+	rtc_i2c_MasterWriteByte(RTC_DATE);  // move to Date
 
-	byte = now.day % 10; // day
-	byte |= (now.day / 10) << 4; // 10 day
+	byte = now.day % 10;                // day
+	byte |= (now.day / 10) << 4;        // 10 day       0-31
 	rtc_i2c_MasterWriteByte(byte);
 
-	byte = now.month % 10; // month
-	byte |= (now.month / 10) << 4; // 10 month
+	byte = now.month % 10;              // month
+	byte |= (now.month / 10) << 4;      // 10 month     1-12
 	rtc_i2c_MasterWriteByte(byte);
 
-	byte = now.year % 10; // year
-	byte |= (now.year / 10) << 4; // 10 year
+	byte = now.year % 10;               // year
+	byte |= (now.year / 10) << 4;       // 10 year      0-99
 	rtc_i2c_MasterWriteByte(byte);
 
 	rtc_i2c_MasterSendStop(); // End Receiving
