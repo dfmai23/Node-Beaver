@@ -31,10 +31,10 @@ int main(void) {
     
     //manual time input
     now.year = 0x11;      //RTC only holds 2 digit years 20XX
-    now.month = 0x02;
-    now.day   = 0x18;
-    now.hour  = 0x0A;       //24hour time
-    now.minute = 0x2D;
+    now.month = 0x03;
+    now.day   = 0x04;
+    now.hour  = 0x0c;       //24hour time
+    now.minute = 0x0F;
     now.second = 0x00;
     
     time_set(now);

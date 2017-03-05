@@ -12,12 +12,8 @@
 
 
 void usb_init();
-
-void usb_put(const DataPacket* data_queue, uint16_t data_head,
-	uint16_t data_tail);
-
+void usb_put(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
 inline void usb_escape(uint8_t* buffer, uint16_t* buff_end, uint8_t byte);
-
 void usb_get();
 
 

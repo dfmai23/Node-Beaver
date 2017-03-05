@@ -19,17 +19,11 @@ int main(void) {
 	uint16_t data_head, data_tail;
 	data_head = data_tail = 0;
 
-    //LED_Write(1);             //hook up test LED
 	time_init();                //init everything
 	can_init();
 	usb_init();
 	sd_init(time_get());
-    radio_init_UART();          //xbee UART   FE4
-    /*
-    CyDelay(3000);
-    LED_Write(0);
-    CyDelay(1000);
-    */
+    radio_init_UART();          //xbee UART
     
 	for(;;)	{
         //can_test_send();

@@ -30,8 +30,8 @@ CY_ISR(xbee_isr) {
 
 void radio_init_UART(void) {
     xbee_UART_Start();
-    xbee_UART_EnableRxInt();         //enable Rx interrupts 5bytes RX buffer size on Xbee_UART
-    xbee_Rx_int_StartEx(xbee_isr);   //start custom Rx isr
+    //xbee_UART_EnableRxInt();         //enable Rx interrupts 5bytes RX buffer size on Xbee_UART
+    //xbee_Rx_int_StartEx(xbee_isr);   //start custom Rx isr
     //xbee_Rx_int_Start();           //start Rx interrupt service
 }
 
@@ -45,8 +45,6 @@ void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_t
     uint16_t pos;
     
 	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH)   {   //for all messages in data queue
-        LED_Write(1);
-       
         /*
         xbee_msg[0] = (data_queue[pos].id>>8) & 0xff;                //CAN ID 2bytes
         xbee_msg[1] = data_queue[pos].id & 0xff;
@@ -95,8 +93,7 @@ void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_t
         
         
         //CyDelay(100);
-        LED_Write(0);
-        
+       
 	} //for
 }
 

@@ -3,10 +3,10 @@
 
 volatile Time current_time;
 volatile uint8_t refresh_status = 1;
-
+volatile uint32_t milliseconds = 0;
 
 /* CY_ISR(time_refresh_vector)
-	Runs every 10 seconds and retreives the current time from the RTC and the
+	Runs every 5 seconds and retreives the current time from the RTC and the
 	millisecond counter from millis_timer.
 	Sets the refresh_status flag, which will trigger time_announce() to inject a
 	message containing the current time to the data_queue.  */
@@ -15,6 +15,10 @@ CY_ISR(time_refresh_vector) {
 	refresh_status = 1;
 } // CY_ISR(time_refresh_vector)
 
+//milliseconds since startup
+CY_ISR(ms_refresh_vector) {
+    milliseconds++;
+}
 
 /* time_init()
 	Takes and Returns nothing.
@@ -45,11 +49,9 @@ void time_init(void) {
 	rtc_i2c_MasterWriteByte(0x40 | byte);   //bit number 6 defines 12/24 hours
 	rtc_i2c_MasterSendStop();
 
-	//time_one_sec_isr_StartEx(time_one_sec_vector); // enable rtc isr
-	//while(!init_status); // wait for second synchronization
-
-	time_refresh_isr_StartEx(time_refresh_vector); // enable 10 second isr
-
+	time_refresh_isr_StartEx(time_refresh_vector);  // enable 5 second isr
+    ms_isr_StartEx(ms_refresh_vector);     //enable millisecond counter
+    
 	// Start timers
 	millis_timer_Start();
 	time_refresh_timer_Start();
@@ -192,7 +194,7 @@ Time time_retreive(void) {
     tmp_time.year += 0x7D0;     // add year 2000;
 	rtc_i2c_MasterSendStop(); // End Receiving
 
-	tmp_time.millicounter = millis_timer_ReadCounter();
+    tmp_time.millicounter = milliseconds;
 
 	return tmp_time; 
 } // time_retreive()
