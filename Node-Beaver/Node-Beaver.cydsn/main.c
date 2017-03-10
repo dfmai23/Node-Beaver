@@ -8,7 +8,6 @@
 #include "can_manager.h"
 #include "usb_manager.h"
 #include "sd_manager.h"
-
 #include "radio_manager.h"
 
 

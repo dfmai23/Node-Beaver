@@ -6,12 +6,11 @@ uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
 
-
 CY_ISR(power_interrupt) {
     LED_Write(1);
 	sd_stop();
 	power_isr_ClearPending();
-    CyDelay(5000);
+    CyDelay(3000);
     CySoftwareReset();
     for(;;); // halt program
 } // CY_ISR(power_interrupt)
@@ -38,7 +37,6 @@ void sd_init(Time time) {
 	power_comp_Start();
 	power_isr_ClearPending();
 	power_isr_StartEx(power_interrupt);
-    //power_isr_Start();
     
 	FS_Init();
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
@@ -68,8 +66,8 @@ void sd_init(Time time) {
         }
         
         // create log file
-        sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.csv",
-            date_str, time.year, time.month, time.day, time.hour, time.minute);
+        sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv",
+            date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
 		pfile = FS_FOpen(run_str, "w"); //create and open new file for writing
 		if(pfile == NULL) {
 			sd_ok = 0;
@@ -179,7 +177,7 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 	{
 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
 			(unsigned)data_queue[pos].id,
-			(unsigned)data_queue[pos].millicounter,
+			MILLI_PERIOD - (unsigned)data_queue[pos].millicounter,
 			(unsigned)data_queue[pos].data[0],
 			(unsigned)data_queue[pos].data[1],
 			(unsigned)data_queue[pos].data[2],

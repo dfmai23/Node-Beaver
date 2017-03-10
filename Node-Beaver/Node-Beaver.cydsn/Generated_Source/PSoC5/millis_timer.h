@@ -168,7 +168,7 @@ void millis_timer_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define millis_timer_INIT_PERIOD             999u
+#define millis_timer_INIT_PERIOD             3599999u
 #define millis_timer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << millis_timer_CTRL_CAP_MODE_SHIFT))
 #define millis_timer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << millis_timer_CTRL_TRIG_MODE_SHIFT))
 #if (millis_timer_UsingFixedFunction)

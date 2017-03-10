@@ -2,7 +2,6 @@
 
 volatile DataPacket can_queue[CAN_QUEUE_LENGTH];
 volatile uint16_t can_head = 0, can_tail = 0;
-extern volatile uint32_t milliseconds;
 
 void can_init() {
 	CAN_1_GlobalIntEnable(); // CAN Initialization
@@ -68,12 +67,13 @@ void can_test_send() {
 } // can_test_send()
 
 
+extern volatile uint32_t milliseconds;
 void can_test_receive(DataPacket* data_queue, uint16_t* data_tail, uint16_t* data_head) {
     uint8 i;
     //test packets
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-    for(i=100; i<103; i++) {  //start CAN ID at 100 
-		data_queue[*data_tail].millicounter = milliseconds;    
+    for(i=101; i<102; i++) {  //start CAN ID at 100 
+		data_queue[*data_tail].millicounter = millis_timer_ReadCounter();    
 		data_queue[*data_tail].id = 0x0999;
 		data_queue[*data_tail].length = 8;
 		data_queue[*data_tail].data[0]= 1;

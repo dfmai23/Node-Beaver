@@ -29,6 +29,7 @@
 
 extern DataPacket can_queue[];
 extern uint16_t can_head, can_tail;
+
 // ReceiveMsg() at around line 533
 
 /* `#END` */
@@ -641,8 +642,8 @@ void CAN_1_ReceiveMsg(uint8 rxMailbox)
     
         can_queue[can_tail].id = CAN_1_GET_RX_ID(rxMailbox);
 		can_queue[can_tail].length = Rx_length;
-		can_queue[can_tail].millicounter = millis_timer_ReadCounter();
-
+        can_queue[can_tail].millicounter = millis_timer_ReadCounter();
+        
 		for(index = 0; index < Rx_length; index++) {    // copy data to can_queue
 			can_queue[can_tail].data[index] = CAN_1_RX_DATA_BYTE(rxMailbox, index);
 		} 

@@ -13,9 +13,9 @@
 
 #define STARTER_DELIM   (0x7E)      // Frame delimiter for API Mode
 
-void    radio_init_UART (void);
-
+    
 CY_ISR_PROTO(xbee_isr);         //custom interrupt
+void    radio_init_UART (void);
 void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
 
 #endif

@@ -72,10 +72,11 @@ void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_t
         xbee_msg2[1] = data_queue[pos].id & 0xff;
         xbee_msg2[2] = 0x20;
         
-        xbee_msg2[3] = data_queue[pos].millicounter>>24;     //timestamp 4bytes
-        xbee_msg2[4] = data_queue[pos].millicounter>>16;
-        xbee_msg2[5] = data_queue[pos].millicounter>>8;
-        xbee_msg2[6] = data_queue[pos].millicounter;
+        uint32_t milliseconds = MILLI_PERIOD - data_queue[pos].millicounter;
+        xbee_msg2[3] = milliseconds>>24;                     //timestamp 4bytes
+        xbee_msg2[4] = milliseconds>>16;
+        xbee_msg2[5] = milliseconds>>8;
+        xbee_msg2[6] = milliseconds;
         xbee_msg2[7] = 0x20;
         
         xbee_msg2[8]  = data_queue[pos].data[0];             //payload 8bytes
@@ -93,7 +94,6 @@ void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_t
         
         
         //CyDelay(100);
-       
 	} //for
 }
 

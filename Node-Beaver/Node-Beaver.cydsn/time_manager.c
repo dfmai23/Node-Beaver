@@ -3,7 +3,6 @@
 
 volatile Time current_time;
 volatile uint8_t refresh_status = 1;
-volatile uint32_t milliseconds = 0;
 
 /* CY_ISR(time_refresh_vector)
 	Runs every 5 seconds and retreives the current time from the RTC and the
@@ -15,10 +14,6 @@ CY_ISR(time_refresh_vector) {
 	refresh_status = 1;
 } // CY_ISR(time_refresh_vector)
 
-//milliseconds since startup
-CY_ISR(ms_refresh_vector) {
-    milliseconds++;
-}
 
 /* time_init()
 	Takes and Returns nothing.
@@ -50,7 +45,6 @@ void time_init(void) {
 	rtc_i2c_MasterSendStop();
 
 	time_refresh_isr_StartEx(time_refresh_vector);  // enable 5 second isr
-    ms_isr_StartEx(ms_refresh_vector);     //enable millisecond counter
     
 	// Start timers
 	millis_timer_Start();
@@ -62,7 +56,7 @@ void time_init(void) {
 /* time_announce()
 	Takes time and puts into a DataPacket queue.
 	Returns nothing.
-    The actual time and millisecond counter is set by the time_refresh_vector interrupt.
+    The actual time and millisecond counter is set by the refresh_vector interrupts.
 */
 void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_tail) {
 	/* Time Frame for serial data
@@ -194,7 +188,7 @@ Time time_retreive(void) {
     tmp_time.year += 0x7D0;     // add year 2000;
 	rtc_i2c_MasterSendStop(); // End Receiving
 
-    tmp_time.millicounter = milliseconds;
+    tmp_time.millicounter = millis_timer_ReadCounter();
 
 	return tmp_time; 
 } // time_retreive()
