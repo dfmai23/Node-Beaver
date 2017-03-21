@@ -16,6 +16,6 @@
     
 CY_ISR_PROTO(xbee_isr);         //custom interrupt
 void    radio_init_UART (void);
-void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
+void 	xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
 
 #endif

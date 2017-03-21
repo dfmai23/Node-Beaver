@@ -173,8 +173,8 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 	short length = 0;
 	uint16_t pos;
 
-	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH)
-	{
+	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH) {
+        uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
 			(unsigned)data_queue[pos].id,
 			MILLI_PERIOD - (unsigned)data_queue[pos].millicounter,
@@ -188,6 +188,7 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 			(unsigned)data_queue[pos].data[7]);
 
 		FS_Write(pfile, buffer, length); // write to SD
+        CyExitCriticalSection(atomic_state);               // END ATOMICs
 	} // for all messages in data queue
 
 	FS_Sync(""); // sync to SD

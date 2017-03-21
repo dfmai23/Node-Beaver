@@ -5,7 +5,7 @@ volatile Time current_time;
 volatile uint8_t refresh_status = 1;
 
 /* CY_ISR(time_refresh_vector)
-	Runs every 5 seconds and retreives the current time from the RTC and the
+	Runs every X seconds and retreives the current time from the RTC and the
 	millisecond counter from millis_timer.
 	Sets the refresh_status flag, which will trigger time_announce() to inject a
 	message containing the current time to the data_queue.  */
