@@ -119,21 +119,22 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	temp.length = new_msg->length;
 	temp.millicounter = new_msg->millicounter;
 	
-	for(i=0; i<(new_msg->length/2); i++) {		//big endian
-		temp.data[i+offset] = new_msg->data[offset + new_msg->length/2 - i - 1];
+	//bytes received in little endian so have to reverse to big endian 32bits
+	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 0-3
+		new_msg->data[i+offset] = temp.data[offset + temp.length/2 - i - 1];
 	}//for
 	offset = 4;
-	for(i=0; i<(new_msg->length/2); i++) {
-		temp.data[i+offset] = new_msg->data[offset + new_msg->length/2 - i - 1];
+	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 4-7
+		new_msg->data[i+offset] = temp.data[offset + temp.length/2 - i - 1];
 	}//for
 	
-	for(i=0; i<temp.length; i++) {					//compare all 8 data bytes
-		if(prev_msg->data[i] != temp.data[i]) {		//update it if data[] has changed
-			prev_msg->id = temp.id;
-			prev_msg->length = temp.length;
-			prev_msg->millicounter = temp.millicounter;	
-			for(j=0; j<temp.length; j++) {
-				prev_msg->data[i] = temp.data[i];
+	for(i=0; i<new_msg->length; i++) {					//compare all 8 data bytes
+		if(prev_msg->data[i] != new_msg->data[i]) {		//update it if data[] has changed
+			prev_msg->id = new_msg->id;
+			prev_msg->length = new_msg->length;
+			prev_msg->millicounter = new_msg->millicounter;	
+			for(j=0; j<new_msg->length; j++) {
+				prev_msg->data[i] = new_msg->data[i];
 			}
 				
 			can_queue[can_tail] = *prev_msg;				//copy msg to can queue
@@ -168,7 +169,8 @@ void can_test_receive(DataPacket* data_queue, uint16_t* data_tail, uint16_t* dat
     uint8 i;
     //test packets
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-    for(i=101; i<102; i++) {  //start CAN ID at 100 
+    for(i=101; i<102; i++) { 
+	
 		data_queue[*data_tail].millicounter = millis_timer_ReadCounter();    
 		data_queue[*data_tail].id = 0x0999;
 		data_queue[*data_tail].length = 8;
@@ -180,7 +182,32 @@ void can_test_receive(DataPacket* data_queue, uint16_t* data_tail, uint16_t* dat
 		data_queue[*data_tail].data[5]= 6;
 		data_queue[*data_tail].data[6]= 7;
         data_queue[*data_tail].data[7]= 8;
-        
+		
+		/*
+		data_queue[*data_tail].millicounter = millis_timer_ReadCounter();    
+		data_queue[*data_tail].id = 0x0200;
+		data_queue[*data_tail].length = 8;
+		data_queue[*data_tail].data[0]= 0;
+		data_queue[*data_tail].data[1]= 0x7D;
+		data_queue[*data_tail].data[2]= 0x77;
+		data_queue[*data_tail].data[3]= 0;
+		data_queue[*data_tail].data[4]= 0;
+		data_queue[*data_tail].data[5]= 0;
+		data_queue[*data_tail].data[6]= 0;
+        data_queue[*data_tail].data[7]= 0;
+		
+		data_queue[*data_tail].millicounter = millis_timer_ReadCounter();    
+		data_queue[*data_tail].id = 0x0626;
+		data_queue[*data_tail].length = 8;
+		data_queue[*data_tail].data[0]= 1;
+		data_queue[*data_tail].data[1]= 0;
+		data_queue[*data_tail].data[2]= 0;
+		data_queue[*data_tail].data[3]= 0;
+		data_queue[*data_tail].data[4]= 0;
+		data_queue[*data_tail].data[5]= 0;
+		data_queue[*data_tail].data[6]= 0;
+        data_queue[*data_tail].data[7]= 0;
+        */
         *data_tail = (*data_tail + 1) % DATA_QUEUE_LENGTH;      // increment data tail
         if(*data_tail == *data_head) {                          // if data queue full
 			*data_head = (*data_head + 1) % DATA_QUEUE_LENGTH;  //wrap around

@@ -38,7 +38,7 @@ int main(void) {
         xbee_send(data_queue, data_head, data_tail);        //send message over xbee UART
 		data_head = data_tail = 0;                          //clear buffer       
         
-		CyDelay(100);                 //refresh intervaal
+		CyDelay(100);                 //sample rate
 	} // main loop
 
 	return 0;
