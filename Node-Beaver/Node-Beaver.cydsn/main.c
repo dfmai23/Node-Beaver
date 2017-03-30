@@ -34,7 +34,7 @@ int main(void) {
 	
         //save messages to external devices
 		usb_put(data_queue, data_head, data_tail);  		//send message over usb
-		sd_push(data_queue, data_head, data_tail);          //inject message into sd card
+		sd_write(data_queue, data_head, data_tail);          //write message into sd card
         xbee_send(data_queue, data_head, data_tail);        //send message over xbee UART
 		data_head = data_tail = 0;                          //clear buffer       
         

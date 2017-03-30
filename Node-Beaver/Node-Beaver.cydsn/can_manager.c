@@ -118,6 +118,9 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	temp.id = new_msg->id;
 	temp.length = new_msg->length;
 	temp.millicounter = new_msg->millicounter;
+	for(i=0; i<temp.length; i++) {
+		temp.data[i] = new_msg->data[i];
+	}
 	
 	//bytes received in little endian so have to reverse to big endian 32bits
 	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 0-3
@@ -134,7 +137,7 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 			prev_msg->length = new_msg->length;
 			prev_msg->millicounter = new_msg->millicounter;	
 			for(j=0; j<new_msg->length; j++) {
-				prev_msg->data[i] = new_msg->data[i];
+				prev_msg->data[j] = new_msg->data[j];
 			}
 				
 			can_queue[can_tail] = *prev_msg;				//copy msg to can queue

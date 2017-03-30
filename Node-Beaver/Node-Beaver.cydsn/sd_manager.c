@@ -5,6 +5,7 @@ FS_FILE* pfile;
 uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
+const char latest_SOC_file[] = "\\logs\\latest_SOC.txt";
 
 CY_ISR(power_interrupt) {
     LED_Write(1);
@@ -31,9 +32,7 @@ CY_ISR(power_interrupt) {
 void sd_init(Time time) {
 	/* power_isr note:
 		Triggers unexpectedly due to floating pin/environmental voltages and
-		capacitance. power isr is disabled for prototyping only.
-	*/
-    //probe_Write(0);
+		capacitance. power isr is disabled for prototyping only.	*/
 	power_comp_Start();
 	power_isr_ClearPending();
 	power_isr_StartEx(power_interrupt);
@@ -41,7 +40,7 @@ void sd_init(Time time) {
 	FS_Init();
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
 	sd_ok = 1;
-	char date_str[32], run_str[64];
+	char date_str[32], file_str[64];
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
@@ -66,9 +65,9 @@ void sd_init(Time time) {
         }
         
         // create log file
-        sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv",
+        sprintf(file_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv",
             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
-		pfile = FS_FOpen(run_str, "w"); //create and open new file for writing
+		pfile = FS_FOpen(file_str, "w"); //create and open new file for writing
 		if(pfile == NULL) {
 			sd_ok = 0;
 			return;
@@ -86,25 +85,9 @@ void sd_init(Time time) {
 		file_time.Second = time.second;
 
 		FS_FileTimeToTimeStamp(&file_time, &file_time_string);
-		FS_SetFileTime(run_str, file_time_string);
+		FS_SetFileTime(file_str, file_time_string);
 	} // if a single file volume exists
-  
     FS_Sync("");
-/*
-	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
-
-	// test data writing
-	char buffer[128];
-	short length = 0;
-
-	// test write
-	length = sprintf(buffer, "%u,%u,%llu,%u\n", 1,
-			0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 517);
-	FS_Write(pfile, buffer, length);
-
-	sd_stop(); // for testing
-	sd_ok = 0; // for testing
-	*/
 } // sd_init()
 
 
@@ -157,7 +140,7 @@ void sd_time_set(Time time) {
 		
 		FS_Remove(set_time_file); // delete file
 	} // try to find file and set time
-}
+} //sd_time_set()
 
 
 /* sd_push()
@@ -166,7 +149,7 @@ void sd_time_set(Time time) {
 
 	Writes all messages in data_queue to the SD card. Synchronizes the filesystem
 	after all messages are written. */
-void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) {
+void sd_write(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) {
 	if(!sd_ok) return;
 
 	char buffer[128];
@@ -192,9 +175,17 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 	} // for all messages in data queue
 
 	FS_Sync(""); // sync to SD
-} // sd_push()
+} // sd_write()
 
-
+void sd_read() {
+	if((pfile = FS_FOpen("filenamehere", "r"))) {	//open file for reading
+		char buffer[64];
+		Time time;
+		DataPacket msg;
+		FS_Read(pfile, buffer, 64); // read entire file
+		FS_FClose(pfile);
+	}
+}
 
 /* sd_stop()
 	Takes and returns nothing.
@@ -206,3 +197,18 @@ void sd_stop(void) {
 	FS_Unmount("");
 } // sd_stop()
 
+
+void sd_writetest() {
+	// test data writing
+	char buffer[128];
+	short length = 0;
+
+	// test write
+	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
+	length = sprintf(buffer, "%u,%u,%llu,%u\n",
+		1,0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 517);
+	FS_Write(pfile, buffer, length);
+
+	sd_stop(); // for testing
+	sd_ok = 0; // for testing
+}//test_push
