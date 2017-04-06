@@ -407,7 +407,7 @@ uint32 millis_timer_ReadPeriod(void)
    #if(millis_timer_UsingFixedFunction)
        return ((uint32)CY_GET_REG16(millis_timer_PERIOD_LSB_PTR));
    #else
-       return (CY_GET_REG24(millis_timer_PERIOD_LSB_PTR));
+       return (CY_GET_REG32(millis_timer_PERIOD_LSB_PTR));
    #endif /* (millis_timer_UsingFixedFunction) */
 }
 
@@ -434,7 +434,7 @@ void millis_timer_WritePeriod(uint32 period)
         uint16 period_temp = (uint16)period;
         CY_SET_REG16(millis_timer_PERIOD_LSB_PTR, period_temp);
     #else
-        CY_SET_REG24(millis_timer_PERIOD_LSB_PTR, period);
+        CY_SET_REG32(millis_timer_PERIOD_LSB_PTR, period);
     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed function implementation */
 }
 
@@ -458,7 +458,7 @@ uint32 millis_timer_ReadCapture(void)
    #if(millis_timer_UsingFixedFunction)
        return ((uint32)CY_GET_REG16(millis_timer_CAPTURE_LSB_PTR));
    #else
-       return (CY_GET_REG24(millis_timer_CAPTURE_LSB_PTR));
+       return (CY_GET_REG32(millis_timer_CAPTURE_LSB_PTR));
    #endif /* (millis_timer_UsingFixedFunction) */
 }
 
@@ -486,7 +486,7 @@ void millis_timer_WriteCounter(uint32 counter)
         CY_SET_REG16(millis_timer_COUNTER_LSB_PTR, (uint16)counter);
         
     #else
-        CY_SET_REG24(millis_timer_COUNTER_LSB_PTR, counter);
+        CY_SET_REG32(millis_timer_COUNTER_LSB_PTR, counter);
     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fixed function Timer */
 }
 
@@ -520,7 +520,7 @@ uint32 millis_timer_ReadCounter(void)
     #if(millis_timer_UsingFixedFunction)
         return ((uint32)CY_GET_REG16(millis_timer_CAPTURE_LSB_PTR));
     #else
-        return (CY_GET_REG24(millis_timer_CAPTURE_LSB_PTR));
+        return (CY_GET_REG32(millis_timer_CAPTURE_LSB_PTR));
     #endif /* (millis_timer_UsingFixedFunction) */
 }
 

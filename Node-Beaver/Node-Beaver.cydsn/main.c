@@ -18,11 +18,10 @@ int main(void) {
 	usb_init();
 	sd_init(time_get());
     radio_init_UART();          //xbee UART
-    
+
 	for(;;)	{
-        time_announce();  		//time of current message interval
 	    //can_test_send();
-		can_test_receive();
+		//can_test_receive();
 		CyDelay(1000);
 	} // main loop
 
@@ -36,7 +35,7 @@ int main(void) {
 void msg_recieve(DataPacket * msg) {
 	if(can_process(msg)) {	//if message is new data value
 		xbee_send(msg);
-		sd_write(msg);
+		sd_buffer(msg);
 		usb_write(msg);
 	}
 }

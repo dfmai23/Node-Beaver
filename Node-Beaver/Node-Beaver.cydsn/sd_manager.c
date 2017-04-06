@@ -6,7 +6,10 @@ uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
 
+DataPacket sd_queue[SD_QUEUE_LENGTH];
+uint16_t sd_head = 0, sd_tail = 0;
 
+	
 CY_ISR(power_interrupt) {
     LED_Write(1);
 	sd_stop();
@@ -16,6 +19,10 @@ CY_ISR(power_interrupt) {
     for(;;); // halt program
 } // CY_ISR(power_interrupt)
 
+//triggers every second
+CY_ISR(sd_interrupt) {
+	sd_write();
+}
 
 /* sd_init()
 	Takes Time struct (time). Returns nothing.
@@ -36,6 +43,8 @@ void sd_init(Time time) {
 	power_comp_Start();
 	power_isr_ClearPending();
 	power_isr_StartEx(power_interrupt);
+	sd_timer_Start();
+	sd_isr_StartEx(sd_interrupt);
     
 	FS_Init();
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
@@ -149,29 +158,31 @@ void sd_time_set(Time time) {
 /* sd_write()
 	Writes current to the SD card. 
 	Synchronizes the filesystem after it is  written. */
-void sd_write(DataPacket * msg) {
+void sd_write() {
 	if(!sd_ok) return;
 
 	char buffer[64];
 	short length = 0;
-
+	
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-	length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
-		(unsigned)msg->id,
-		MILLI_PERIOD - (unsigned)msg->millicounter,
-		(unsigned)msg->data[0],
-		(unsigned)msg->data[1],
-		(unsigned)msg->data[2],
-		(unsigned)msg->data[3],
-		(unsigned)msg->data[4],
-		(unsigned)msg->data[5],
-		(unsigned)msg->data[6],
-		(unsigned)msg->data[7]);
+	for(sd_head=0; sd_head<sd_tail; sd_head++) {
+		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+			(unsigned)sd_queue[sd_head].id,
+			MILLI_PERIOD - (unsigned)sd_queue[sd_head].millicounter,
+			(unsigned)sd_queue[sd_head].data[0],
+			(unsigned)sd_queue[sd_head].data[1],
+			(unsigned)sd_queue[sd_head].data[2],
+			(unsigned)sd_queue[sd_head].data[3],
+			(unsigned)sd_queue[sd_head].data[4],
+			(unsigned)sd_queue[sd_head].data[5],
+			(unsigned)sd_queue[sd_head].data[6],
+			(unsigned)sd_queue[sd_head].data[7]);
 
-	FS_Write(pfile, buffer, length); // write to SD
+		FS_Write(pfile, buffer, length); // write to SD
+	}
 	FS_Sync(""); // sync to SD
+	sd_head=0; sd_tail=0;
     CyExitCriticalSection(atomic_state);               // END ATOMICs
-
 } // sd_write()
 
 
@@ -185,11 +196,17 @@ void sd_read() {
 	}
 }
 
+void sd_buffer(DataPacket * msg) {
+	sd_queue[sd_tail] = *msg;
+	sd_tail++;
+	//sd_tail = sd_tail == SD_QUEUE_LENGTH ? sd_tail:sd_tail++;
+}
 /* sd_stop()
 	Takes and returns nothing.
 	Closes the file, synchronizes, and unmounts SD card to prevent corruption.
 */
 void sd_stop(void) {
+	sd_write();
 	FS_FClose(pfile);
 	FS_Sync("");
 	FS_Unmount("");

@@ -636,7 +636,7 @@ void CAN_1_ReceiveMsg(uint8 rxMailbox)
         if ((CAN_1_RX_CMD_REG(rxMailbox) & CAN_1_RX_ACK_MSG) != 0u)
     #endif /* CY_PSOC3 || CY_PSOC5 */
         {
-        /* `#START MESSAGE_BASIC_RECEIVED` */
+            /* `#START MESSAGE_BASIC_RECEIVED` */
 		uint8_t i;
 		DataPacket can_msg;
         can_msg.id = CAN_1_GET_RX_ID(rxMailbox);
@@ -647,17 +647,17 @@ void CAN_1_ReceiveMsg(uint8 rxMailbox)
 				
 		DataPacket* can_msg_ptr = &can_msg;	  
 		msg_recieve(can_msg_ptr);
-        /* `#END` */
+            /* `#END` */
 
-        #ifdef CAN_1_RECEIVE_MSG_CALLBACK
-            CAN_1_ReceiveMsg_Callback();
-        #endif /* CAN_1_RECEIVE_MSG_CALLBACK */
+            #ifdef CAN_1_RECEIVE_MSG_CALLBACK
+                CAN_1_ReceiveMsg_Callback();
+            #endif /* CAN_1_RECEIVE_MSG_CALLBACK */
 
-        #if (CY_PSOC3 || CY_PSOC5)
-            CAN_1_RX[rxMailbox].rxcmd.byte[0u] |= CAN_1_RX_ACK_MSG;
-        #else  /* CY_PSOC4 */
-            CAN_1_RX_CMD_REG(rxMailbox) |= CAN_1_RX_ACK_MSG;
-        #endif /* CY_PSOC3 || CY_PSOC5 */
+            #if (CY_PSOC3 || CY_PSOC5)
+                CAN_1_RX[rxMailbox].rxcmd.byte[0u] |= CAN_1_RX_ACK_MSG;
+            #else  /* CY_PSOC4 */
+                CAN_1_RX_CMD_REG(rxMailbox) |= CAN_1_RX_ACK_MSG;
+            #endif /* CY_PSOC3 || CY_PSOC5 */
         }
 }
 

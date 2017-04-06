@@ -2,7 +2,7 @@
 
 
 volatile Time current_time;
-volatile uint8_t refresh_status = 1;
+
 
 /* CY_ISR(time_refresh_vector)
 	Runs every X seconds and retreives the current time from the RTC
@@ -10,7 +10,7 @@ volatile uint8_t refresh_status = 1;
 	message containing the current time to the data_queue.  */
 CY_ISR(time_refresh_vector) {
 	current_time = time_retreive(); // get time from rtc
-	refresh_status = 1;
+	time_announce();
 } // CY_ISR(time_refresh_vector)
 
 
@@ -30,54 +30,52 @@ void time_init(void) {
 
 	// Set 24 hour
 	uint8_t byte;
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Move to hours register.
+	rtc_i2c_MasterSendStart(RTC_ADDR, 0);	// Move to hours register.
 	rtc_i2c_MasterWriteByte(RTC_HOURS);     //set register pointer
 	rtc_i2c_MasterSendStop();
 
-	rtc_i2c_MasterSendStart(RTC_ADDR, 1); // save hours register
-	byte = rtc_i2c_MasterReadByte(0);     // Zero, response with NACK
+	rtc_i2c_MasterSendStart(RTC_ADDR, 1); 	// save hours register
+	byte = rtc_i2c_MasterReadByte(0);		// Zero, response with NACK
 	rtc_i2c_MasterSendStop();
 
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Set 24 hour bit
+	rtc_i2c_MasterSendStart(RTC_ADDR, 0); 	// Set 24 hour bit
 	rtc_i2c_MasterWriteByte(RTC_HOURS);
 	rtc_i2c_MasterWriteByte(0x40 | byte);   //bit number 6 defines 12/24 hours
 	rtc_i2c_MasterSendStop();
 
-	time_refresh_isr_StartEx(time_refresh_vector);  // enable 5 second isr
+	time_refresh_isr_StartEx(time_refresh_vector);  // enable 1 second isr
     
 	// Start timers
 	millis_timer_Start();
 	time_refresh_timer_Start();
+	current_time = time_retreive(); // get time from rtc
+	time_announce();
 } // time_init()
 
 
 
 /* time_announce()
-	Takes time and puts into a DataPacket queue.
 	Returns nothing.
-    The actual time and millisecond counter is set by the refresh_vector interrupts.
+    The actual time is set by the refresh_vector interrupts.
 */
 void time_announce() {
 	DataPacket msg_time;
 	/* Time Frame for serial data
 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-	if(refresh_status)  { //if refresh_status=1 (set by time_refresh isr every 10secs), will push time
-        msg_time.id = ID_TIME;
-		msg_time.length = 8;
-		msg_time.millicounter = current_time.millicounter;
-		msg_time.data[0] = 0;
-		msg_time.data[1] = current_time.year >> 8;
-		msg_time.data[2] = current_time.year;
-		msg_time.data[3] = current_time.month;
-		msg_time.data[4] = current_time.day;
-		msg_time.data[5] = current_time.hour;
-		msg_time.data[6] = current_time.minute;
-		msg_time.data[7] = current_time.second;
-	
-		msg_recieve(&msg_time);
-		refresh_status = 0;
-	} //if
+    msg_time.id = ID_TIME;
+	msg_time.length = 8;
+	msg_time.millicounter = current_time.millicounter;
+	msg_time.data[0] = 0;
+	msg_time.data[1] = current_time.year >> 8;
+	msg_time.data[2] = current_time.year;
+	msg_time.data[3] = current_time.month;
+	msg_time.data[4] = current_time.day;
+	msg_time.data[5] = current_time.hour;
+	msg_time.data[6] = current_time.minute;
+	msg_time.data[7] = current_time.second;
+
+	msg_recieve(&msg_time);
     CyExitCriticalSection(atomic_state); // END ATOMIC
 } // time_announce()
 

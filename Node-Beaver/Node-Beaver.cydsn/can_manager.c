@@ -138,7 +138,7 @@ void can_test_receive() {
     uint8 i;
 	
     //test packets
-    for(i=100; i<101; i++) { 
+    for(i=100; i<110; i++) { 
 		test_msg.millicounter = millis_timer_ReadCounter();    
 		test_msg.id = 0x0999;
 		test_msg.length = 8;
