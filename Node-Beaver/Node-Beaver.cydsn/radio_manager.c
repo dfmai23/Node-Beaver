@@ -1,10 +1,9 @@
-/* Enables xbee transmission to another xbee wirelessly
-    UART and SPI Operation
+/* Enables xbee transmission to another xbee wirelessly UART Operation
 */
 
 #include "radio_manager.h"
 
-extern uint8 command_received;  //in xbee_Rx_int.c     CY_ISR(xbee_isr_Interrupt) fn
+uint8_t command_received;  //in xbee_Rx_int.c     CY_ISR(xbee_isr_Interrupt) fn
 
 //isr if xbee receives commands from arduino xbee
 CY_ISR(xbee_isr) { 
@@ -21,47 +20,41 @@ CY_ISR(xbee_isr) {
 
 void radio_init_UART(void) {
     xbee_UART_Start();
-    //xbee_UART_EnableRxInt();         //enable Rx interrupts 5bytes RX buffer size on Xbee_UART
-    //xbee_Rx_int_StartEx(xbee_isr);   //start custom Rx isr
-    //xbee_Rx_int_Start();           //start Rx interrupt service
+    //xbee_UART_EnableRxInt();			//enable Rx interrupts 5bytes RX buffer size on Xbee_UART
+    //xbee_Rx_int_StartEx(xbee_isr);	//start custom Rx isr
 }
 
 
 // UART -------------------------------------------------------------------------------------
 //sends data packets over xbee
-void xbee_send(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) { 
+void xbee_send(DataPacket * msg) { 
     uint8_t xbee_msg[16];   //16bytes per message
-    uint16_t pos;
-    uint8_t i;
 	
-	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH)   {   //for all messages in data queue
-        uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
-        xbee_msg[0] = (data_queue[pos].id>>8) & 0xff;       //CAN ID 2bytes
-        xbee_msg[1] = data_queue[pos].id & 0xff;
-        
-        uint32_t milliseconds = MILLI_PERIOD - data_queue[pos].millicounter;
-        xbee_msg[2] = milliseconds>>24;                     //timestamp 4bytes
-        xbee_msg[3] = milliseconds>>16;
-        xbee_msg[4] = milliseconds>>8;
-        xbee_msg[5] = milliseconds;
-        
-        xbee_msg[6]  = data_queue[pos].data[0];             //payload 8bytes
-        xbee_msg[7]  = data_queue[pos].data[1];
-        xbee_msg[8]  = data_queue[pos].data[2];
-        xbee_msg[9]  = data_queue[pos].data[3];
-        xbee_msg[10] = data_queue[pos].data[4];
-        xbee_msg[11] = data_queue[pos].data[5];
-        xbee_msg[12] = data_queue[pos].data[6];
-        xbee_msg[13] = data_queue[pos].data[7];
-        
-        xbee_msg[14] = 0xFF;                                //delimited 0xFF10 2bytes
-        xbee_msg[15] = 0x0A;
+    uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
+    xbee_msg[0] = (msg->id>>8) & 0xff;       //CAN ID 2bytes
+    xbee_msg[1] = msg->id & 0xff;
+    
+    uint32_t milliseconds = MILLI_PERIOD - msg->millicounter;
+    xbee_msg[2] = milliseconds>>24;         //timestamp 4bytes
+    xbee_msg[3] = milliseconds>>16;
+    xbee_msg[4] = milliseconds>>8;
+    xbee_msg[5] = milliseconds;
+    
+    xbee_msg[6]  = msg->data[0];             //payload 8bytes
+    xbee_msg[7]  = msg->data[1];
+    xbee_msg[8]  = msg->data[2];
+    xbee_msg[9]  = msg->data[3];
+    xbee_msg[10] = msg->data[4];
+    xbee_msg[11] = msg->data[5];
+    xbee_msg[12] = msg->data[6];
+    xbee_msg[13] = msg->data[7];
+    
+    xbee_msg[14] = 0xFF;                         //delimited 0xFF10 2bytes
+    xbee_msg[15] = 0x0A;
 
-        xbee_UART_PutArray(xbee_msg, 16);
-        CyExitCriticalSection(atomic_state);             	// END ATOMIC
+    xbee_UART_PutArray(xbee_msg, 16);
+    CyExitCriticalSection(atomic_state);    	// END ATOMIC
         
-        //CyDelay(100);
-	} //for
 }
 
 

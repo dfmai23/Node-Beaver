@@ -11,26 +11,11 @@
 #include "data.h"
 #include "time_manager.h"
 
-
-/*
-#define CAN_UNKNOWN 0x000 // 0
-#define CAN_THROTTLE 0x205 // 517
-
-#define ID_UNKNOWN CAN_UNKNOWN
-#define ID_THROTTLE_1 CAN_THROTTLE
-
-enum Types
-{
-	TYPE_UNKNOWN,
-	TYPE_THROTTLE_1
-};
-*/
-
 CY_ISR_PROTO(power_interrupt);
 
 void sd_init(Time time);
 void sd_time_set(Time time);
-void sd_write(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail);
+void sd_write(DataPacket * msg);
 void sd_read();
 void sd_stop(void);
 void sd_writetest();

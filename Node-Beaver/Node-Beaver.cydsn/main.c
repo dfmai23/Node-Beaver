@@ -10,13 +10,8 @@
 #include "sd_manager.h"
 #include "radio_manager.h"
 
-
 int main(void) {
-	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts
-    
-	DataPacket data_queue[DATA_QUEUE_LENGTH];
-	uint16_t data_head, data_tail;
-	data_head = data_tail = 0;
+	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts 
 
 	time_init();                //init everything
 	can_init();
@@ -25,21 +20,23 @@ int main(void) {
     radio_init_UART();          //xbee UART
     
 	for(;;)	{
-        //can_test_send();
-        //usb_get();
-        
-        time_announce(data_queue, &data_head, &data_tail);  //time of current message interval
-        can_test_receive(data_queue, &data_tail, &data_head);
-		can_get(data_queue, &data_head, &data_tail);        //gets received messages from the CAN network,
-	
-        //save messages to external devices
-		usb_put(data_queue, data_head, data_tail);  		//send message over usb
-		sd_write(data_queue, data_head, data_tail);          //write message into sd card
-        xbee_send(data_queue, data_head, data_tail);        //send message over xbee UART
-		data_head = data_tail = 0;                          //clear buffer       
-        
-		CyDelay(100);                 //sample rate
+        time_announce();  		//time of current message interval
+	    //can_test_send();
+		can_test_receive();
+		CyDelay(1000);
 	} // main loop
 
 	return 0;
 } // main()
+
+/* when a can message is recieved will immediately save messages to external devices
+	- transmit over xbee
+	- write to sd
+	- write to usb	*/
+void msg_recieve(DataPacket * msg) {
+	if(can_process(msg)) {	//if message is new data value
+		xbee_send(msg);
+		sd_write(msg);
+		usb_write(msg);
+	}
+}

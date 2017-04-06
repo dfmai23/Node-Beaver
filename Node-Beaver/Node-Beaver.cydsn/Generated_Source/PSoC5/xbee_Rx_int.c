@@ -27,7 +27,7 @@
 *  Place your includes, defines and code here 
 ********************************************************************************/
 /* `#START xbee_Rx_int_intc` */
-    
+extern uint8_t command_received;
 /* `#END` */
 
 #ifndef CYINT_IRQ_BASE

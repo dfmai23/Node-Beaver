@@ -3,7 +3,7 @@
 
 #include <project.h>
 #include "data.h"
-
+	
 // RTC (DS3231) I2C address
 #define RTC_ADDR 0x68
 
@@ -25,7 +25,7 @@ CY_ISR_PROTO(time_refresh_vector);
 void time_init(void);
 Time time_get(void);
 void time_set(Time now);
-void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_tail);
+void time_announce();
 Time time_retreive(void); // retreives full time from RTC
 
 

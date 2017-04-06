@@ -5,8 +5,7 @@ volatile Time current_time;
 volatile uint8_t refresh_status = 1;
 
 /* CY_ISR(time_refresh_vector)
-	Runs every X seconds and retreives the current time from the RTC and the
-	millisecond counter from millis_timer.
+	Runs every X seconds and retreives the current time from the RTC
 	Sets the refresh_status flag, which will trigger time_announce() to inject a
 	message containing the current time to the data_queue.  */
 CY_ISR(time_refresh_vector) {
@@ -58,27 +57,25 @@ void time_init(void) {
 	Returns nothing.
     The actual time and millisecond counter is set by the refresh_vector interrupts.
 */
-void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_tail) {
+void time_announce() {
+	DataPacket msg_time;
 	/* Time Frame for serial data
 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-	if(refresh_status)  { //if refresh_status = 1 (set by time_refresh isr every 10secs), will insert time into queue
-        data_queue[*data_tail].id = ID_TIME;
-		data_queue[*data_tail].length = 8;
-		data_queue[*data_tail].millicounter = current_time.millicounter;
-		data_queue[*data_tail].data[0] = 0;
-		data_queue[*data_tail].data[1] = current_time.year >> 8;
-		data_queue[*data_tail].data[2] = current_time.year;
-		data_queue[*data_tail].data[3] = current_time.month;
-		data_queue[*data_tail].data[4] = current_time.day;
-		data_queue[*data_tail].data[5] = current_time.hour;
-		data_queue[*data_tail].data[6] = current_time.minute;
-		data_queue[*data_tail].data[7] = current_time.second;
+	if(refresh_status)  { //if refresh_status=1 (set by time_refresh isr every 10secs), will push time
+        msg_time.id = ID_TIME;
+		msg_time.length = 8;
+		msg_time.millicounter = current_time.millicounter;
+		msg_time.data[0] = 0;
+		msg_time.data[1] = current_time.year >> 8;
+		msg_time.data[2] = current_time.year;
+		msg_time.data[3] = current_time.month;
+		msg_time.data[4] = current_time.day;
+		msg_time.data[5] = current_time.hour;
+		msg_time.data[6] = current_time.minute;
+		msg_time.data[7] = current_time.second;
 	
-		*data_tail = (*data_tail + 1) % DATA_QUEUE_LENGTH; // increment data tail
-		if(*data_tail == *data_head) // if need to roll data queue
-			*data_head = (*data_head + 1) % DATA_QUEUE_LENGTH;
-
+		msg_recieve(&msg_time);
 		refresh_status = 0;
 	} //if
     CyExitCriticalSection(atomic_state); // END ATOMIC

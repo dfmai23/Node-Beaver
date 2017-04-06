@@ -5,7 +5,7 @@ FS_FILE* pfile;
 uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
-const char latest_SOC_file[] = "\\logs\\latest_SOC.txt";
+
 
 CY_ISR(power_interrupt) {
     LED_Write(1);
@@ -75,17 +75,20 @@ void sd_init(Time time) {
 
 		// Set file time here
 		FS_FILETIME file_time;
-		unsigned long file_time_string;
+		unsigned long file_timestamp;
 		
-		file_time.Year = 2000 + (uint16_t)time.year;
+		file_time.Year = time.year;
 		file_time.Month = time.month;
 		file_time.Day = time.day;
 		file_time.Hour = time.hour;
 		file_time.Minute = time.minute;
 		file_time.Second = time.second;
 
-		FS_FileTimeToTimeStamp(&file_time, &file_time_string);
-		FS_SetFileTime(file_str, file_time_string);
+		FS_FileTimeToTimeStamp(&file_time, &file_timestamp);
+		FS_SetFileTime(file_str, file_timestamp);
+		/*FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_CREATE);	//doesnt work
+		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_ACCESS);
+		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_MODIFY);*/
 	} // if a single file volume exists
     FS_Sync("");
 } // sd_init()
@@ -97,8 +100,8 @@ void sd_init(Time time) {
 	the /LOGS folder to set the time. The line breaks can consist of \r or
 	\n characters.
 	
-	[month]/[day]/[year]
-	[24-hour]:[minute]:[second] */
+	month/day/year
+	24-hour:minute:second */
 void sd_time_set(Time time) {
 	if((pfile = FS_FOpen(set_time_file, "r"))) {
 		char buffer[64];
@@ -143,45 +146,40 @@ void sd_time_set(Time time) {
 } //sd_time_set()
 
 
-/* sd_push()
-	Takes DataPacket queue (data_queue) with its head and tail indices.
-	Returns nothing.
-
-	Writes all messages in data_queue to the SD card. Synchronizes the filesystem
-	after all messages are written. */
-void sd_write(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) {
+/* sd_write()
+	Writes current to the SD card. 
+	Synchronizes the filesystem after it is  written. */
+void sd_write(DataPacket * msg) {
 	if(!sd_ok) return;
 
-	char buffer[128];
+	char buffer[64];
 	short length = 0;
-	uint16_t pos;
 
-	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH) {
-        uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
-			(unsigned)data_queue[pos].id,
-			MILLI_PERIOD - (unsigned)data_queue[pos].millicounter,
-			(unsigned)data_queue[pos].data[0],
-			(unsigned)data_queue[pos].data[1],
-			(unsigned)data_queue[pos].data[2],
-			(unsigned)data_queue[pos].data[3],
-			(unsigned)data_queue[pos].data[4],
-			(unsigned)data_queue[pos].data[5],
-			(unsigned)data_queue[pos].data[6],
-			(unsigned)data_queue[pos].data[7]);
+    uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
+	length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+		(unsigned)msg->id,
+		MILLI_PERIOD - (unsigned)msg->millicounter,
+		(unsigned)msg->data[0],
+		(unsigned)msg->data[1],
+		(unsigned)msg->data[2],
+		(unsigned)msg->data[3],
+		(unsigned)msg->data[4],
+		(unsigned)msg->data[5],
+		(unsigned)msg->data[6],
+		(unsigned)msg->data[7]);
 
-		FS_Write(pfile, buffer, length); // write to SD
-        CyExitCriticalSection(atomic_state);               // END ATOMICs
-	} // for all messages in data queue
-
+	FS_Write(pfile, buffer, length); // write to SD
 	FS_Sync(""); // sync to SD
+    CyExitCriticalSection(atomic_state);               // END ATOMICs
+
 } // sd_write()
+
 
 void sd_read() {
 	if((pfile = FS_FOpen("filenamehere", "r"))) {	//open file for reading
 		char buffer[64];
-		Time time;
-		DataPacket msg;
+		//Time time;
+		//DataPacket msg;
 		FS_Read(pfile, buffer, 64); // read entire file
 		FS_FClose(pfile);
 	}

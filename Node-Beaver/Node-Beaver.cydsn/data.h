@@ -2,7 +2,6 @@
 #define DATA_H
 
 #include <project.h>
-#include <stdlib.h>
 	
 #define CAN_QUEUE_LENGTH 1024
 #define DATA_QUEUE_LENGTH 1024    //can have up to 1024 data packets stored in buffer
@@ -16,4 +15,5 @@ typedef struct {
 	uint8_t data[8];            //8bytes for each data packet
 } DataPacket;
 
+void msg_recieve(DataPacket * msg);
 #endif
