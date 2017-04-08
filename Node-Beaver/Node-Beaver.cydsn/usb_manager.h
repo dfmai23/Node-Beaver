@@ -15,7 +15,4 @@ void usb_init();
 void usb_write(DataPacket * msg);
 void usb_get();
 inline void usb_escape(uint8_t* buffer, uint16_t* buff_end, uint8_t byte);
-
-
-
 #endif

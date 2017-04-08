@@ -25,14 +25,8 @@
 
 
 /* `#START TX_RX_FUNCTION` */
-#include "can_manager.h"
 #include "data.h"
-
-extern DataPacket can_queue[];
-extern uint16_t can_head, can_tail;
-
 // ReceiveMsg() at around line 533
-
 /* `#END` */
 
 

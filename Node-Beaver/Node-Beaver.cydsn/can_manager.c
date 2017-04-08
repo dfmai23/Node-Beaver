@@ -152,34 +152,5 @@ void can_test_receive() {
         test_msg.data[7]= 8;
 		
 		msg_recieve(&test_msg);
-		/*
-		
-		test_msg.millicounter = millis_timer_ReadCounter();    
-		test_msg.id = 0x0200;
-		test_msg.length = 8;
-		test_msg.data[0]= 0;
-		test_msg.data[1]= 0x4D;
-		test_msg.data[2]= 0x77;
-		test_msg.data[3]= 0;
-		test_msg.data[4]= 0;
-		test_msg.data[5]= 0;
-		test_msg.data[6]= 0;
-        test_msg.data[7]= 0;
-		
-		msg_recieve(&test_msg);
-		
-		test_msg.millicounter = millis_timer_ReadCounter();    
-		test_msg.id = 0x0626;
-		test_msg.length = 8;
-		test_msg.data[0]= 3;
-		test_msg.data[1]= 0;
-		test_msg.data[2]= 0;
-		test_msg.data[3]= 0;
-		test_msg.data[4]= 0;
-		test_msg.data[5]= 0;
-		test_msg.data[6]= 0;
-        test_msg.data[7]= 0;
-		
-		*/
     } //for
 }

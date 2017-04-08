@@ -31,8 +31,8 @@ void xbee_send(DataPacket * msg) {
     uint8_t xbee_msg[16];   //16bytes per message
 	
     uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
-    xbee_msg[0] = (msg->id>>8) & 0xff;       //CAN ID 2bytes
-    xbee_msg[1] = msg->id & 0xff;
+    xbee_msg[0] = (msg->id>>8) & 0xFF;       //CAN ID 2bytes
+    xbee_msg[1] = msg->id & 0xFF;
     
     uint32_t milliseconds = MILLI_PERIOD - msg->millicounter;
     xbee_msg[2] = milliseconds>>24;         //timestamp 4bytes
@@ -49,10 +49,10 @@ void xbee_send(DataPacket * msg) {
     xbee_msg[12] = msg->data[6];
     xbee_msg[13] = msg->data[7];
     
-    xbee_msg[14] = 0xFF;                         //delimited 0xFF10 2bytes
+    xbee_msg[14] = 0xFF;                         //delimited 0xFF0A 2bytes
     xbee_msg[15] = 0x0A;
 
-    xbee_UART_PutArray(xbee_msg, 16);
+    xbee_UART_PutArray(xbee_msg, 16);			//send message
     CyExitCriticalSection(atomic_state);    	// END ATOMIC
         
 }
