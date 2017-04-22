@@ -53,6 +53,8 @@
 #include "xbee_Rx_int.h"
 #include "sd_timer.h"
 #include "sd_isr.h"
+#include "watchdog_timer.h"
+#include "wdt_reset_isr.h"
 #include "emFile_1_SPI0.h"
 #include "emFile_1_SPI0_PVT.h"
 #include "emFile_1_mosi0_aliases.h"

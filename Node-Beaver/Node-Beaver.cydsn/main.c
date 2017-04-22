@@ -10,6 +10,7 @@
 #include "sd_manager.h"
 #include "radio_manager.h"
 
+
 int main(void) {
 	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts 
 
@@ -18,7 +19,8 @@ int main(void) {
 	usb_init();
 	sd_init(time_get());
     radio_init_UART();          //xbee UART
-
+	wdt_init();
+	
 	for(;;)	{
 	    //can_test_send();
 		//can_test_receive();

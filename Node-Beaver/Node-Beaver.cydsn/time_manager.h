@@ -22,7 +22,9 @@ typedef struct {
 } Time;
 
 CY_ISR_PROTO(time_refresh_vector);
+CY_ISR_PROTO(wdt_reset_interupt);
 void time_init(void);
+void wdt_init();
 Time time_get(void);
 void time_set(Time now);
 void time_announce();

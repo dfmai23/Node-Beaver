@@ -196,10 +196,11 @@ void sd_read() {
 	}
 }
 
+
 void sd_buffer(DataPacket * msg) {
 	sd_queue[sd_tail] = *msg;
 	sd_tail++;
-	//sd_tail = sd_tail == SD_QUEUE_LENGTH ? sd_tail:sd_tail++;
+	//sd_tail = sd_tail == SD_QUEUE_LENGTH-1 ? sd_tail:sd_tail++;	//if buffer full stay at tail
 }
 /* sd_stop()
 	Takes and returns nothing.

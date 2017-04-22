@@ -13,6 +13,9 @@ CY_ISR(time_refresh_vector) {
 	time_announce();
 } // CY_ISR(time_refresh_vector)
 
+CY_ISR(wdt_reset_interupt) {
+	CyWdtClear();
+}
 
 /* time_init()
 	Takes and Returns nothing.
@@ -52,7 +55,11 @@ void time_init(void) {
 	time_announce();
 } // time_init()
 
-
+void wdt_init() {
+	CyWdtStart(CYWDT_1024_TICKS, CYWDT_LPMODE_NOCHANGE);
+	watchdog_timer_Start();
+	wdt_reset_isr_StartEx(wdt_reset_interupt);
+}
 
 /* time_announce()
 	Returns nothing.
