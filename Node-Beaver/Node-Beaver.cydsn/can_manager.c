@@ -1,4 +1,6 @@
 #include "can_manager.h"
+#include "radio_manager.h"
+#include "sd_manager.h"
 
 #define DASH_ID				0x626
 #define CURTIS_DEBUG_ID		0x466
@@ -8,7 +10,11 @@
 #define CURTIS_VOLTAGE_ID	0x866
 #define THROTTLE_ID			0x200
 #define BRAKE_ID			0x201
+#define BMS_STATUS_ID 		0x188
+#define BMS_VOLTAGE_ID		0x388
+#define BMS_TEMP_ID			0x488
 
+DataPacket LOGGER_HEARTBEAT;//0x123
 DataPacket DASH;			//0x0626
 DataPacket CURTIS_DEBUG;	//0x466
 DataPacket CURTIS_STATUS;	//0x566
@@ -17,7 +23,38 @@ DataPacket CURTIS_RCV;		//0x766
 DataPacket CURTIS_VOLTAGE;	//0x866
 DataPacket THROTTLE;		//0x200
 DataPacket BRAKE;			//0x201
+DataPacket BMS_STATUS;		//0x188
+DataPacket BMS_VOLTAGE;		//0x388
+DataPacket BMS_TEMP;		//0x488
 
+CY_ISR(car_state_interrupt) {	//will send out every second
+	DASH.millicounter = millis_timer_ReadCounter();
+	BMS_STATUS.millicounter = millis_timer_ReadCounter();
+	BMS_TEMP.millicounter = millis_timer_ReadCounter();
+	xbee_send(&DASH);
+	sd_buffer(&DASH);
+	xbee_send(&BMS_STATUS);
+	sd_buffer(&BMS_STATUS);
+	xbee_send(&BMS_TEMP);
+	sd_buffer(&BMS_TEMP);
+}
+CY_ISR(heartbeat_interrupt) {
+	CAN_1_TX_MSG LOGGER_HEARTBEAT;
+	CAN_1_DATA_BYTES_MSG data;
+ 	LOGGER_HEARTBEAT.id = 0x123;
+	LOGGER_HEARTBEAT.rtr = 0;
+	LOGGER_HEARTBEAT.ide = 0;
+	LOGGER_HEARTBEAT.dlc = 0x08;
+	LOGGER_HEARTBEAT.irq = 1;
+	LOGGER_HEARTBEAT.msg = &data;
+
+	uint8_t i;
+	for(i=0; i<LOGGER_HEARTBEAT.dlc; i++)
+		data.byte[i] = 0x00;
+	data.byte[0] = 0x01;		//may have to switch endianness
+	
+	CAN_1_SendMsg(&LOGGER_HEARTBEAT);
+}
 
 void can_init() {
 	CAN_1_GlobalIntEnable(); // CAN Initialization
@@ -32,6 +69,16 @@ void can_init() {
 	can_msg_init(&CURTIS_VOLTAGE, CURTIS_VOLTAGE_ID);
 	can_msg_init(&THROTTLE, THROTTLE_ID);
 	can_msg_init(&BRAKE, BRAKE_ID);
+	can_msg_init(&BMS_STATUS, BMS_STATUS_ID); 
+	can_msg_init(&BMS_VOLTAGE, BMS_VOLTAGE_ID);
+	can_msg_init(&BMS_TEMP, BMS_TEMP_ID);
+	
+	
+	heartbeat_timer_Start();
+	heartbeat_isr_StartEx(heartbeat_interrupt);
+	car_state_timer_Start();
+	car_state_isr_StartEx(car_state_interrupt);
+
 } // can_init()
 
 
@@ -67,6 +114,12 @@ int can_process(DataPacket* can_msg){
 		status = can_compare(&THROTTLE, can_msg);	break;
 	case BRAKE_ID:			//0x201
 		status = can_compare(&THROTTLE, can_msg);	break;
+	case BMS_STATUS_ID:		//0x188
+		status = can_compare(&BMS_STATUS, can_msg);	break;
+	case BMS_VOLTAGE_ID:	//0x388
+		status = can_compare(&BMS_VOLTAGE, can_msg);	break;
+	case BMS_TEMP_ID:		//0x488
+		status = can_compare(&BMS_TEMP, can_msg);	break;
     default:
 		status = 1;
         break;

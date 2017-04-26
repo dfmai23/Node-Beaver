@@ -13,7 +13,7 @@
 #define RTC_DATE 0x04
 
 // This is a "CAN ID" but it is never anounced to the CAN network
-#define ID_TIME 0x100      
+#define ID_TIME 0x223      
 
 typedef struct {
 	uint8_t month, day, hour, minute, second;

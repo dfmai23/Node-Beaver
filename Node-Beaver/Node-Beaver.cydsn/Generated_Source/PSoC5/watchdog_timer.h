@@ -168,7 +168,7 @@ void watchdog_timer_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define watchdog_timer_INIT_PERIOD             2499u
+#define watchdog_timer_INIT_PERIOD             999u
 #define watchdog_timer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << watchdog_timer_CTRL_CAP_MODE_SHIFT))
 #define watchdog_timer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << watchdog_timer_CTRL_TRIG_MODE_SHIFT))
 #if (watchdog_timer_UsingFixedFunction)

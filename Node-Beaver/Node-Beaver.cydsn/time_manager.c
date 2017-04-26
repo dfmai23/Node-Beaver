@@ -17,6 +17,7 @@ CY_ISR(wdt_reset_interupt) {
 	CyWdtClear();
 }
 
+
 /* time_init()
 	Takes and Returns nothing.
 	Initializes i2c with RTC and configures the RTC. Starts the timers and
@@ -55,7 +56,7 @@ void time_init(void) {
 	time_announce();
 } // time_init()
 
-void wdt_init() {
+void wdt_init() {	//start watchdog timer
 	CyWdtStart(CYWDT_1024_TICKS, CYWDT_LPMODE_NOCHANGE);
 	watchdog_timer_Start();
 	wdt_reset_isr_StartEx(wdt_reset_interupt);

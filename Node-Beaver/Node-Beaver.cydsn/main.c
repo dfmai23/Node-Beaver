@@ -19,12 +19,12 @@ int main(void) {
 	usb_init();
 	sd_init(time_get());
     radio_init_UART();          //xbee UART
-	wdt_init();
+	//wdt_init();
 	
 	for(;;)	{
 	    //can_test_send();
 		//can_test_receive();
-		CyDelay(1000);
+		//CyDelay(1000);
 	} // main loop
 
 	return 0;

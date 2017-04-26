@@ -15,7 +15,7 @@ CY_ISR(power_interrupt) {
 	sd_stop();
 	power_isr_ClearPending();
     CyDelay(3000);
-    CySoftwareReset();
+    //CySoftwareReset();
     for(;;); // halt program
 } // CY_ISR(power_interrupt)
 
