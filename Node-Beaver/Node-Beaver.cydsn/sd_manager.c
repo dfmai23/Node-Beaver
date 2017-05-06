@@ -5,6 +5,7 @@ FS_FILE* pfile;
 uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
+const char format_file[] = "\\logs\\format.txt";
 
 DataPacket sd_queue[SD_QUEUE_LENGTH];
 uint16_t sd_head = 0, sd_tail = 0;
@@ -53,7 +54,10 @@ void sd_init(Time time) {
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
-        
+		if((pfile = FS_FOpen(format_file, "r")))
+			FS_FormatSD("");
+        sd_time_set(time);          //set time from a file
+		
         //create logs folder
 		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes("logs")) { // if logs not a dir
 			if(FS_MkDir("logs")) {
@@ -62,7 +66,7 @@ void sd_init(Time time) {
 			} // if logs folder can't be created
         }
 
-        sd_time_set(time);          //set time from a file
+
 
 		// create date folder 
         sprintf(date_str, "\\logs\\%04u-%02u-%02u", time.year, time.month, time.day);
@@ -109,7 +113,7 @@ void sd_init(Time time) {
 	the /LOGS folder to set the time. The line breaks can consist of \r or
 	\n characters.
 	
-	month/day/year
+	year/month/day
 	24-hour:minute:second */
 void sd_time_set(Time time) {
 	if((pfile = FS_FOpen(set_time_file, "r"))) {
@@ -119,19 +123,19 @@ void sd_time_set(Time time) {
 		Time tmp_time;
 
 		FS_Read(pfile, buffer, 64); // read entire file
+		
+		ptr = strtok(buffer, "/: \r\n"); // year
+		num = atoi(ptr);
+		if(num <= 99) tmp_time.year = num;  // 2 digit year
+		else if(num >= 1900) tmp_time.year = num % 100; // 4 digit year
 
-		ptr = strtok(buffer, "/: \r\n"); // month
+		ptr = strtok(NULL, "/: \r\n"); // month
 		num = atoi(ptr);
 		if(num <= 12) tmp_time.month = num;
 		
 		ptr = strtok(NULL, "/: \r\n"); // day
 		num = atoi(ptr);
 		if(num <= 31) tmp_time.day = num;
-		
-		ptr = strtok(NULL, "/: \r\n"); // year
-		num = atoi(ptr);
-		if(num <= 99) tmp_time.year = num;  // 2 digit year
-		else if(num >= 1900) tmp_time.year = num % 100; // 4 digit year
 			
 		ptr = strtok(NULL, "/: \r\n"); // 24-hour
 		num = atoi(ptr);
@@ -182,7 +186,7 @@ void sd_write() {
 	}
 	FS_Sync(""); // sync to SD
 	sd_head=0; sd_tail=0;
-    CyExitCriticalSection(atomic_state);               // END ATOMICs
+    CyExitCriticalSection(atomic_state);               // END ATOMIC
 } // sd_write()
 
 

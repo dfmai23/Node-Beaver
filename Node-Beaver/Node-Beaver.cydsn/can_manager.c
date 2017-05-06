@@ -2,6 +2,7 @@
 #include "radio_manager.h"
 #include "sd_manager.h"
 
+#define LOGGER_HEARTBEAT_ID	0x223
 #define DASH_ID				0x626
 #define CURTIS_DEBUG_ID		0x466
 #define CURTIS_STATUS_ID	0x566
@@ -14,7 +15,7 @@
 #define BMS_VOLTAGE_ID		0x388
 #define BMS_TEMP_ID			0x488
 
-DataPacket LOGGER_HEARTBEAT;//0x123
+DataPacket LOGGER_HEARTBEAT;//0x223
 DataPacket DASH;			//0x0626
 DataPacket CURTIS_DEBUG;	//0x466
 DataPacket CURTIS_STATUS;	//0x566
@@ -26,6 +27,9 @@ DataPacket BRAKE;			//0x201
 DataPacket BMS_STATUS;		//0x188
 DataPacket BMS_VOLTAGE;		//0x388
 DataPacket BMS_TEMP;		//0x488
+
+CAN_1_TX_MSG LGR_HB;		//0x223
+CAN_1_DATA_BYTES_MSG data;
 
 CY_ISR(car_state_interrupt) {	//will send out every second
 	DASH.millicounter = millis_timer_ReadCounter();
@@ -39,21 +43,11 @@ CY_ISR(car_state_interrupt) {	//will send out every second
 	sd_buffer(&BMS_TEMP);
 }
 CY_ISR(heartbeat_interrupt) {
-	CAN_1_TX_MSG LOGGER_HEARTBEAT;
-	CAN_1_DATA_BYTES_MSG data;
- 	LOGGER_HEARTBEAT.id = 0x123;
-	LOGGER_HEARTBEAT.rtr = 0;
-	LOGGER_HEARTBEAT.ide = 0;
-	LOGGER_HEARTBEAT.dlc = 0x08;
-	LOGGER_HEARTBEAT.irq = 1;
-	LOGGER_HEARTBEAT.msg = &data;
-
-	uint8_t i;
-	for(i=0; i<LOGGER_HEARTBEAT.dlc; i++)
-		data.byte[i] = 0x00;
-	data.byte[0] = 0x01;		//may have to switch endianness
-	
-	CAN_1_SendMsg(&LOGGER_HEARTBEAT);
+	LOGGER_HEARTBEAT.millicounter = millis_timer_ReadCounter();
+	DataPacket * LOGGER_HEARTBEAT_ptr = &LOGGER_HEARTBEAT;
+	CAN_1_SendMsg(&LGR_HB);
+	xbee_send(LOGGER_HEARTBEAT_ptr);
+	sd_buffer(LOGGER_HEARTBEAT_ptr);
 }
 
 void can_init() {
@@ -62,6 +56,7 @@ void can_init() {
 	CAN_1_Start();
 	
 	//initialize all the can messages 
+	can_msg_init(&LOGGER_HEARTBEAT, LOGGER_HEARTBEAT_ID); 
 	can_msg_init(&DASH, DASH_ID);
 	can_msg_init(&CURTIS_DEBUG, CURTIS_DEBUG_ID);
 	can_msg_init(&CURTIS_STATUS, CURTIS_STATUS_ID);
@@ -72,7 +67,6 @@ void can_init() {
 	can_msg_init(&BMS_STATUS, BMS_STATUS_ID); 
 	can_msg_init(&BMS_VOLTAGE, BMS_VOLTAGE_ID);
 	can_msg_init(&BMS_TEMP, BMS_TEMP_ID);
-	
 	
 	heartbeat_timer_Start();
 	heartbeat_isr_StartEx(heartbeat_interrupt);
@@ -92,6 +86,20 @@ void can_msg_init(DataPacket* can_msg, uint16_t id) {
 		can_msg->data[i] = 0xFF;
 	}
 	
+	if(id == LOGGER_HEARTBEAT_ID) {		//set up heartbeat message to send to CAN bus
+		LGR_HB.id = LOGGER_HEARTBEAT_ID;
+		LGR_HB.rtr = 0;
+		LGR_HB.ide = 0;
+		LGR_HB.dlc = 0x08;
+		LGR_HB.irq = 1;
+		LGR_HB.msg = &data;
+		for(i=0; i<LGR_HB.dlc; i++) {
+			LOGGER_HEARTBEAT.data[i] = 0x00;
+			data.byte[i] = 0x00;
+		}
+		LOGGER_HEARTBEAT.data[0] = 0x01;
+		data.byte[0] = 0x01;
+	}
 } //can_msg_init()
 
 /*  recieves can message from bus can compares it with is respective id*/
@@ -191,9 +199,9 @@ void can_test_receive() {
     uint8 i;
 	
     //test packets
-    for(i=100; i<110; i++) { 
+    for(i=100; i<115; i++) { 
 		test_msg.millicounter = millis_timer_ReadCounter();    
-		test_msg.id = 0x0999;
+		test_msg.id = 0x0923;
 		test_msg.length = 8;
 		test_msg.data[0]= 1;
 		test_msg.data[1]= 2;

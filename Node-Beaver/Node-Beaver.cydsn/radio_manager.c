@@ -3,6 +3,7 @@
 
 #include "radio_manager.h"
 
+/*
 uint8_t command_received;  //in xbee_Rx_int.c     CY_ISR(xbee_isr_Interrupt) fn
 
 //isr if xbee receives commands from arduino xbee
@@ -17,7 +18,7 @@ CY_ISR(xbee_isr) {
         LED_Write(0);
     }
 }
-
+*/
 void radio_init_UART(void) {
     xbee_UART_Start();
     //xbee_UART_EnableRxInt();			//enable Rx interrupts 5bytes RX buffer size on Xbee_UART
@@ -28,11 +29,11 @@ void radio_init_UART(void) {
 // UART -------------------------------------------------------------------------------------
 //sends data packets over xbee
 void xbee_send(DataPacket * msg) { 
+	uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
     uint8_t xbee_msg[16];   //16bytes per message
 	
-    uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
     xbee_msg[0] = (msg->id>>8) & 0xFF;       //CAN ID 2bytes
-    xbee_msg[1] = msg->id & 0xFF;
+    xbee_msg[1] = msg->id	   & 0xFF;
     
     uint32_t milliseconds = MILLI_PERIOD - msg->millicounter;
     xbee_msg[2] = milliseconds>>24;         //timestamp 4bytes

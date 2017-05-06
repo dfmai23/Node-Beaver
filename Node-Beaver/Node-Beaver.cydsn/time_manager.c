@@ -186,10 +186,10 @@ Time time_retreive(void) {
 	tmp_time.month += 10 * ((byte & 0x01) >> 4); // 10 Month
 
 	byte = rtc_i2c_MasterReadByte(0);
+	rtc_i2c_MasterSendStop(); // End Receiving
 	tmp_time.year = byte & 0x0F; // Year
 	tmp_time.year += 10 * (byte >> 4); // 10 Years
     tmp_time.year += 0x7D0;     // add year 2000;
-	rtc_i2c_MasterSendStop(); // End Receiving
 
     tmp_time.millicounter = millis_timer_ReadCounter();
 

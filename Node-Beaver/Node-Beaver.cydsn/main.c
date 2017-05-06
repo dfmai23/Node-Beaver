@@ -14,17 +14,20 @@
 int main(void) {
 	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts 
 
+	uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
 	time_init();                //init everything
 	can_init();
 	usb_init();
 	sd_init(time_get());
     radio_init_UART();          //xbee UART
 	//wdt_init();
+	CyDelay(1000);				//give some time to finish setup
+	CyExitCriticalSection(atomic_state);               // END ATOMIC
 	
 	for(;;)	{
 	    //can_test_send();
-		//can_test_receive();
-		//CyDelay(1000);
+		can_test_receive();
+		CyDelay(1000);
 	} // main loop
 
 	return 0;
