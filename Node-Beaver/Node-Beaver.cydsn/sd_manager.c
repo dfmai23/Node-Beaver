@@ -4,8 +4,8 @@
 FS_FILE* pfile;
 uint8_t sd_ok = 0;
 
-const char set_time_file[] = "\\logs\\set_time.txt";
-const char format_file[] = "\\logs\\format.txt";
+const char set_time_file[] = "\\set_time.txt";
+const char format_file[] = "\\format.txt";
 
 DataPacket sd_queue[SD_QUEUE_LENGTH];
 uint16_t sd_head = 0, sd_tail = 0;
@@ -15,9 +15,8 @@ CY_ISR(power_interrupt) {
     LED_Write(1);
 	sd_stop();
 	power_isr_ClearPending();
-    CyDelay(3000);
-    //CySoftwareReset();
-    for(;;); // halt program
+    CyDelay(1000);
+    for(;;); // halt program until IC shuts down
 } // CY_ISR(power_interrupt)
 
 //triggers every second
@@ -203,8 +202,7 @@ void sd_read() {
 
 void sd_buffer(DataPacket * msg) {
 	sd_queue[sd_tail] = *msg;
-	sd_tail++;
-	//sd_tail = sd_tail == SD_QUEUE_LENGTH-1 ? sd_tail:sd_tail++;	//if buffer full stay at tail
+	sd_tail = ((sd_tail == SD_QUEUE_LENGTH-1) ? sd_tail:sd_tail++);	//if buffer full stay at tail
 }
 /* sd_stop()
 	Takes and returns nothing.

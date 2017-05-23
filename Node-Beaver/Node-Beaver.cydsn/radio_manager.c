@@ -29,7 +29,7 @@ void radio_init_UART(void) {
 // UART -------------------------------------------------------------------------------------
 //sends data packets over xbee
 void xbee_send(DataPacket * msg) { 
-	uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
+	//uint8_t atomic_state = CyEnterCriticalSection(); 	//BEGIN ATOMIC
     uint8_t xbee_msg[16];   //16bytes per message
 	
     xbee_msg[0] = (msg->id>>8) & 0xFF;       //CAN ID 2bytes
@@ -54,7 +54,7 @@ void xbee_send(DataPacket * msg) {
     xbee_msg[15] = 0x0A;
 
     xbee_UART_PutArray(xbee_msg, 16);			//send message
-    CyExitCriticalSection(atomic_state);    	// END ATOMIC
+    //CyExitCriticalSection(atomic_state);    	// END ATOMIC
         
 }
 

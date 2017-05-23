@@ -33,32 +33,7 @@ CY_ISR(time_refresh_vector) {
 	RTC PART: MAXIM DS3231  */
 void time_init(void) {
 	rtc_i2c_Start(); // start i2c to RTC
-
-	// configure RTC
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0);   // 0, send write command
-	rtc_i2c_MasterWriteByte(RTC_CONFIG);
-	rtc_i2c_MasterWriteByte(0x40); // 1Hz clock
-	rtc_i2c_MasterSendStop();
-
-	// Set 24 hour
-	uint8_t byte;
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Move to hours register.
-	rtc_i2c_MasterWriteByte(RTC_HOURS);     //set register pointer
-	rtc_i2c_MasterSendStop();
-
-	rtc_i2c_MasterSendStart(RTC_ADDR, 1); // save hours register
-	byte = rtc_i2c_MasterReadByte(0);     // Zero, response with NACK
-	rtc_i2c_MasterSendStop();
-
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Set 24 hour bit
-	rtc_i2c_MasterWriteByte(RTC_HOURS);
-	rtc_i2c_MasterWriteByte(0x40 | byte);   //bit number 6 defines 12/24 hours
-	rtc_i2c_MasterSendStop();
-
-	//time_one_sec_isr_StartEx(time_one_sec_vector); // enable rtc isr
-	//while(!init_status); // wait for second synchronization
-
-	time_refresh_isr_StartEx(time_refresh_vector); // enable 10 second isr
+	time_refresh_isr_StartEx(time_refresh_vector); // enable 1 second isr
 
 	// Start timers
 	millis_timer_Start();
@@ -89,6 +64,12 @@ Time time_get(void) {
 
 
 void time_set(Time now) {
+	// configure RTC
+	rtc_i2c_MasterSendStart(RTC_ADDR, 0);   // 0, send write command
+	rtc_i2c_MasterWriteByte(RTC_CONFIG);
+	rtc_i2c_MasterWriteByte(0x40); // 1Hz clock
+	rtc_i2c_MasterSendStop();
+	
 	// Set 24 hour
 	uint8_t byte;
 
@@ -104,7 +85,8 @@ void time_set(Time now) {
 	rtc_i2c_MasterWriteByte(byte);
 
 	byte = now.hour % 10; // hour
-	byte |= (now.hour / 10) << 4; // 10 hour
+	byte |= (now.hour / 10) << 4;       // 10 hour      0-23, bit4=10hr, bit5=20hr, bit6=set 24hr time
+	rtc_i2c_MasterWriteByte(0x00 | byte);		//set bit6 low = 24hr time
 	rtc_i2c_MasterWriteByte(byte);
 
 	rtc_i2c_MasterSendStop(); // End Receiving

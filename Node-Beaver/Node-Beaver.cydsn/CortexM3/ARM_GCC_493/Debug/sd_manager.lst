@@ -1,0 +1,2909 @@
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"sd_manager.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.comm	pfile,4,4
+  19              		.global	sd_ok
+  20              		.bss
+  21              		.type	sd_ok, %object
+  22              		.size	sd_ok, 1
+  23              	sd_ok:
+  24 0000 00       		.space	1
+  25              		.global	set_time_file
+  26              		.section	.rodata
+  27              		.align	2
+  28              		.type	set_time_file, %object
+  29              		.size	set_time_file, 14
+  30              	set_time_file:
+  31 0000 5C736574 		.ascii	"\\set_time.txt\000"
+  31      5F74696D 
+  31      652E7478 
+  31      7400
+  32              		.global	format_file
+  33 000e 0000     		.align	2
+  34              		.type	format_file, %object
+  35              		.size	format_file, 12
+  36              	format_file:
+  37 0010 5C666F72 		.ascii	"\\format.txt\000"
+  37      6D61742E 
+  37      74787400 
+  38              		.comm	sd_queue,16384,4
+  39              		.global	sd_head
+  40              		.bss
+  41 0001 00       		.align	1
+  42              		.type	sd_head, %object
+  43              		.size	sd_head, 2
+  44              	sd_head:
+  45 0002 0000     		.space	2
+  46              		.global	sd_tail
+  47              		.align	1
+  48              		.type	sd_tail, %object
+  49              		.size	sd_tail, 2
+  50              	sd_tail:
+  51 0004 0000     		.space	2
+  52              		.section	.text.power_interrupt,"ax",%progbits
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 2
+
+
+  53              		.align	2
+  54              		.global	power_interrupt
+  55              		.thumb
+  56              		.thumb_func
+  57              		.type	power_interrupt, %function
+  58              	power_interrupt:
+  59              	.LFB63:
+  60              		.file 1 "sd_manager.c"
+   1:sd_manager.c  **** #include "sd_manager.h"
+   2:sd_manager.c  **** 
+   3:sd_manager.c  **** 
+   4:sd_manager.c  **** FS_FILE* pfile;
+   5:sd_manager.c  **** uint8_t sd_ok = 0;
+   6:sd_manager.c  **** 
+   7:sd_manager.c  **** const char set_time_file[] = "\\set_time.txt";
+   8:sd_manager.c  **** const char format_file[] = "\\format.txt";
+   9:sd_manager.c  **** 
+  10:sd_manager.c  **** DataPacket sd_queue[SD_QUEUE_LENGTH];
+  11:sd_manager.c  **** uint16_t sd_head = 0, sd_tail = 0;
+  12:sd_manager.c  **** 
+  13:sd_manager.c  **** 	
+  14:sd_manager.c  **** CY_ISR(power_interrupt) {
+  61              		.loc 1 14 0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 1, uses_anonymous_args = 0
+  65 0000 80B5     		push	{r7, lr}
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 7, -8
+  68              		.cfi_offset 14, -4
+  69 0002 00AF     		add	r7, sp, #0
+  70              		.cfi_def_cfa_register 7
+  15:sd_manager.c  ****     LED_Write(1);
+  71              		.loc 1 15 0
+  72 0004 0120     		movs	r0, #1
+  73 0006 FFF7FEFF 		bl	LED_Write
+  16:sd_manager.c  **** 	sd_stop();
+  74              		.loc 1 16 0
+  75 000a FFF7FEFF 		bl	sd_stop
+  17:sd_manager.c  **** 	power_isr_ClearPending();
+  76              		.loc 1 17 0
+  77 000e FFF7FEFF 		bl	power_isr_ClearPending
+  18:sd_manager.c  ****     CyDelay(1000);
+  78              		.loc 1 18 0
+  79 0012 4FF47A70 		mov	r0, #1000
+  80 0016 FFF7FEFF 		bl	CyDelay
+  81              	.L2:
+  19:sd_manager.c  ****     for(;;); // halt program until IC shuts down
+  82              		.loc 1 19 0 discriminator 1
+  83 001a FEE7     		b	.L2
+  84              		.cfi_endproc
+  85              	.LFE63:
+  86              		.size	power_interrupt, .-power_interrupt
+  87              		.section	.text.sd_interrupt,"ax",%progbits
+  88              		.align	2
+  89              		.global	sd_interrupt
+  90              		.thumb
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 3
+
+
+  91              		.thumb_func
+  92              		.type	sd_interrupt, %function
+  93              	sd_interrupt:
+  94              	.LFB64:
+  20:sd_manager.c  **** } // CY_ISR(power_interrupt)
+  21:sd_manager.c  **** 
+  22:sd_manager.c  **** //triggers every second
+  23:sd_manager.c  **** CY_ISR(sd_interrupt) {
+  95              		.loc 1 23 0
+  96              		.cfi_startproc
+  97              		@ args = 0, pretend = 0, frame = 0
+  98              		@ frame_needed = 1, uses_anonymous_args = 0
+  99 0000 80B5     		push	{r7, lr}
+ 100              		.cfi_def_cfa_offset 8
+ 101              		.cfi_offset 7, -8
+ 102              		.cfi_offset 14, -4
+ 103 0002 00AF     		add	r7, sp, #0
+ 104              		.cfi_def_cfa_register 7
+  24:sd_manager.c  **** 	sd_write();
+ 105              		.loc 1 24 0
+ 106 0004 FFF7FEFF 		bl	sd_write
+  25:sd_manager.c  **** }
+ 107              		.loc 1 25 0
+ 108 0008 80BD     		pop	{r7, pc}
+ 109              		.cfi_endproc
+ 110              	.LFE64:
+ 111              		.size	sd_interrupt, .-sd_interrupt
+ 112 000a 00BF     		.section	.rodata
+ 113              		.align	2
+ 114              	.LC0:
+ 115 001c 7200     		.ascii	"r\000"
+ 116 001e 0000     		.align	2
+ 117              	.LC1:
+ 118 0020 00       		.ascii	"\000"
+ 119 0021 000000   		.align	2
+ 120              	.LC2:
+ 121 0024 6C6F6773 		.ascii	"logs\000"
+ 121      00
+ 122 0029 000000   		.align	2
+ 123              	.LC3:
+ 124 002c 5C6C6F67 		.ascii	"\\logs\\%04u-%02u-%02u\000"
+ 124      735C2530 
+ 124      34752D25 
+ 124      3032752D 
+ 124      25303275 
+ 125 0041 000000   		.align	2
+ 126              	.LC4:
+ 127 0044 25735C28 		.ascii	"%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv\000"
+ 127      25303475 
+ 127      2D253032 
+ 127      752D2530 
+ 127      3275295F 
+ 128 006b 00       		.align	2
+ 129              	.LC5:
+ 130 006c 7700     		.ascii	"w\000"
+ 131              		.section	.text.sd_init,"ax",%progbits
+ 132              		.align	2
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 4
+
+
+ 133              		.global	sd_init
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.type	sd_init, %function
+ 137              	sd_init:
+ 138              	.LFB65:
+  26:sd_manager.c  **** 
+  27:sd_manager.c  **** /* sd_init()
+  28:sd_manager.c  **** 	Takes Time struct (time). Returns nothing.
+  29:sd_manager.c  **** 
+  30:sd_manager.c  **** 	Initializes SD card filesystem.
+  31:sd_manager.c  **** 	The following events will cause the sd_ok flag to be reset, which aborts all
+  32:sd_manager.c  **** 	SD functions:
+  33:sd_manager.c  **** 		- the SD card is not found
+  34:sd_manager.c  **** 		- unable to create the "LOGS" directory
+  35:sd_manager.c  **** 		- unable to create a directory named after the date
+  36:sd_manager.c  **** 		- unable to create and open file for writing
+  37:sd_manager.c  **** 
+  38:sd_manager.c  **** 	sd_ok is set when the SD card is functional */
+  39:sd_manager.c  **** void sd_init(Time time) {
+ 139              		.loc 1 39 0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 128
+ 142              		@ frame_needed = 1, uses_anonymous_args = 0
+ 143 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 144              		.cfi_def_cfa_offset 20
+ 145              		.cfi_offset 4, -20
+ 146              		.cfi_offset 5, -16
+ 147              		.cfi_offset 6, -12
+ 148              		.cfi_offset 7, -8
+ 149              		.cfi_offset 14, -4
+ 150 0002 A7B0     		sub	sp, sp, #156
+ 151              		.cfi_def_cfa_offset 176
+ 152 0004 06AF     		add	r7, sp, #24
+ 153              		.cfi_def_cfa 7, 152
+ 154 0006 3C46     		mov	r4, r7
+ 155 0008 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  40:sd_manager.c  **** 	/* power_isr note:
+  41:sd_manager.c  **** 		Triggers unexpectedly due to floating pin/environmental voltages and
+  42:sd_manager.c  **** 		capacitance. power isr is disabled for prototyping only.	*/
+  43:sd_manager.c  **** 	power_comp_Start();
+ 156              		.loc 1 43 0
+ 157 000c FFF7FEFF 		bl	power_comp_Start
+  44:sd_manager.c  **** 	power_isr_ClearPending();
+ 158              		.loc 1 44 0
+ 159 0010 FFF7FEFF 		bl	power_isr_ClearPending
+  45:sd_manager.c  **** 	power_isr_StartEx(power_interrupt);
+ 160              		.loc 1 45 0
+ 161 0014 5748     		ldr	r0, .L12
+ 162 0016 FFF7FEFF 		bl	power_isr_StartEx
+  46:sd_manager.c  **** 	sd_timer_Start();
+ 163              		.loc 1 46 0
+ 164 001a FFF7FEFF 		bl	sd_timer_Start
+  47:sd_manager.c  **** 	sd_isr_StartEx(sd_interrupt);
+ 165              		.loc 1 47 0
+ 166 001e 5648     		ldr	r0, .L12+4
+ 167 0020 FFF7FEFF 		bl	sd_isr_StartEx
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 5
+
+
+  48:sd_manager.c  ****     
+  49:sd_manager.c  **** 	FS_Init();
+ 168              		.loc 1 49 0
+ 169 0024 FFF7FEFF 		bl	FS_Init
+  50:sd_manager.c  ****     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
+ 170              		.loc 1 50 0
+ 171 0028 FFF7FEFF 		bl	FS_FAT_SupportLFN
+  51:sd_manager.c  **** 	sd_ok = 1;
+ 172              		.loc 1 51 0
+ 173 002c 534B     		ldr	r3, .L12+8
+ 174 002e 0122     		movs	r2, #1
+ 175 0030 1A70     		strb	r2, [r3]
+  52:sd_manager.c  **** 	char date_str[32], file_str[64];
+  53:sd_manager.c  **** 
+  54:sd_manager.c  **** 	if(FS_GetNumVolumes() == 1) {
+ 176              		.loc 1 54 0
+ 177 0032 FFF7FEFF 		bl	FS_GetNumVolumes
+ 178 0036 0346     		mov	r3, r0
+ 179 0038 012B     		cmp	r3, #1
+ 180 003a 40F09580 		bne	.L5
+ 181              	.LBB2:
+  55:sd_manager.c  **** 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
+ 182              		.loc 1 55 0
+ 183 003e 0220     		movs	r0, #2
+ 184 0040 FFF7FEFF 		bl	FS_SetFileWriteMode
+  56:sd_manager.c  **** 		if((pfile = FS_FOpen(format_file, "r")))
+ 185              		.loc 1 56 0
+ 186 0044 4E48     		ldr	r0, .L12+12
+ 187 0046 4F49     		ldr	r1, .L12+16
+ 188 0048 FFF7FEFF 		bl	FS_FOpen
+ 189 004c 0246     		mov	r2, r0
+ 190 004e 4E4B     		ldr	r3, .L12+20
+ 191 0050 1A60     		str	r2, [r3]
+ 192 0052 4D4B     		ldr	r3, .L12+20
+ 193 0054 1B68     		ldr	r3, [r3]
+ 194 0056 002B     		cmp	r3, #0
+ 195 0058 02D0     		beq	.L6
+  57:sd_manager.c  **** 			FS_FormatSD("");
+ 196              		.loc 1 57 0
+ 197 005a 4C48     		ldr	r0, .L12+24
+ 198 005c FFF7FEFF 		bl	FS_FormatSD
+ 199              	.L6:
+  58:sd_manager.c  ****         sd_time_set(time);          //set time from a file
+ 200              		.loc 1 58 0
+ 201 0060 3B46     		mov	r3, r7
+ 202 0062 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 203 0064 FFF7FEFF 		bl	sd_time_set
+  59:sd_manager.c  **** 		
+  60:sd_manager.c  ****         //create logs folder
+  61:sd_manager.c  **** 		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes("logs")) { // if logs not a dir
+ 204              		.loc 1 61 0
+ 205 0068 4948     		ldr	r0, .L12+28
+ 206 006a FFF7FEFF 		bl	FS_GetFileAttributes
+ 207 006e 0346     		mov	r3, r0
+ 208 0070 102B     		cmp	r3, #16
+ 209 0072 09D0     		beq	.L7
+  62:sd_manager.c  **** 			if(FS_MkDir("logs")) {
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 6
+
+
+ 210              		.loc 1 62 0
+ 211 0074 4648     		ldr	r0, .L12+28
+ 212 0076 FFF7FEFF 		bl	FS_MkDir
+ 213 007a 0346     		mov	r3, r0
+ 214 007c 002B     		cmp	r3, #0
+ 215 007e 03D0     		beq	.L7
+  63:sd_manager.c  **** 				sd_ok = 0;
+ 216              		.loc 1 63 0
+ 217 0080 3E4B     		ldr	r3, .L12+8
+ 218 0082 0022     		movs	r2, #0
+ 219 0084 1A70     		strb	r2, [r3]
+  64:sd_manager.c  **** 				return;
+ 220              		.loc 1 64 0
+ 221 0086 72E0     		b	.L4
+ 222              	.L7:
+  65:sd_manager.c  **** 			} // if logs folder can't be created
+  66:sd_manager.c  ****         }
+  67:sd_manager.c  **** 
+  68:sd_manager.c  **** 
+  69:sd_manager.c  **** 
+  70:sd_manager.c  **** 		// create date folder 
+  71:sd_manager.c  ****         sprintf(date_str, "\\logs\\%04u-%02u-%02u", time.year, time.month, time.day);
+ 223              		.loc 1 71 0
+ 224 0088 BB89     		ldrh	r3, [r7, #12]
+ 225 008a 1D46     		mov	r5, r3
+ 226 008c 3B78     		ldrb	r3, [r7]	@ zero_extendqisi2
+ 227 008e 1C46     		mov	r4, r3
+ 228 0090 7B78     		ldrb	r3, [r7, #1]	@ zero_extendqisi2
+ 229 0092 1A46     		mov	r2, r3
+ 230 0094 07F16003 		add	r3, r7, #96
+ 231 0098 0092     		str	r2, [sp]
+ 232 009a 1846     		mov	r0, r3
+ 233 009c 3D49     		ldr	r1, .L12+32
+ 234 009e 2A46     		mov	r2, r5
+ 235 00a0 2346     		mov	r3, r4
+ 236 00a2 FFF7FEFF 		bl	sprintf
+  72:sd_manager.c  **** 		if(FS_ATTR_DIRECTORY != FS_GetFileAttributes(date_str)) { // if day not a dir
+ 237              		.loc 1 72 0
+ 238 00a6 07F16003 		add	r3, r7, #96
+ 239 00aa 1846     		mov	r0, r3
+ 240 00ac FFF7FEFF 		bl	FS_GetFileAttributes
+ 241 00b0 0346     		mov	r3, r0
+ 242 00b2 102B     		cmp	r3, #16
+ 243 00b4 0BD0     		beq	.L9
+  73:sd_manager.c  **** 			if(FS_MkDir(date_str)) {
+ 244              		.loc 1 73 0
+ 245 00b6 07F16003 		add	r3, r7, #96
+ 246 00ba 1846     		mov	r0, r3
+ 247 00bc FFF7FEFF 		bl	FS_MkDir
+ 248 00c0 0346     		mov	r3, r0
+ 249 00c2 002B     		cmp	r3, #0
+ 250 00c4 03D0     		beq	.L9
+  74:sd_manager.c  **** 				sd_ok = 0;
+ 251              		.loc 1 74 0
+ 252 00c6 2D4B     		ldr	r3, .L12+8
+ 253 00c8 0022     		movs	r2, #0
+ 254 00ca 1A70     		strb	r2, [r3]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 7
+
+
+  75:sd_manager.c  **** 				return;
+ 255              		.loc 1 75 0
+ 256 00cc 4FE0     		b	.L4
+ 257              	.L9:
+  76:sd_manager.c  **** 			} // if day folder can't be created
+  77:sd_manager.c  ****         }
+  78:sd_manager.c  ****         
+  79:sd_manager.c  ****         // create log file
+  80:sd_manager.c  ****         sprintf(file_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv",
+  81:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 258              		.loc 1 81 0
+ 259 00ce BB89     		ldrh	r3, [r7, #12]
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 260              		.loc 1 80 0
+ 261 00d0 9E46     		mov	lr, r3
+ 262              		.loc 1 81 0
+ 263 00d2 3B78     		ldrb	r3, [r7]	@ zero_extendqisi2
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 264              		.loc 1 80 0
+ 265 00d4 1E46     		mov	r6, r3
+ 266              		.loc 1 81 0
+ 267 00d6 7B78     		ldrb	r3, [r7, #1]	@ zero_extendqisi2
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 268              		.loc 1 80 0
+ 269 00d8 1D46     		mov	r5, r3
+ 270              		.loc 1 81 0
+ 271 00da BB78     		ldrb	r3, [r7, #2]	@ zero_extendqisi2
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 272              		.loc 1 80 0
+ 273 00dc 1C46     		mov	r4, r3
+ 274              		.loc 1 81 0
+ 275 00de FB78     		ldrb	r3, [r7, #3]	@ zero_extendqisi2
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 276              		.loc 1 80 0
+ 277 00e0 1846     		mov	r0, r3
+ 278              		.loc 1 81 0
+ 279 00e2 3B79     		ldrb	r3, [r7, #4]	@ zero_extendqisi2
+  80:sd_manager.c  ****             date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+ 280              		.loc 1 80 0
+ 281 00e4 1946     		mov	r1, r3
+ 282 00e6 07F12002 		add	r2, r7, #32
+ 283 00ea 07F16003 		add	r3, r7, #96
+ 284 00ee 0096     		str	r6, [sp]
+ 285 00f0 0195     		str	r5, [sp, #4]
+ 286 00f2 0294     		str	r4, [sp, #8]
+ 287 00f4 0390     		str	r0, [sp, #12]
+ 288 00f6 0491     		str	r1, [sp, #16]
+ 289 00f8 1046     		mov	r0, r2
+ 290 00fa 2749     		ldr	r1, .L12+36
+ 291 00fc 1A46     		mov	r2, r3
+ 292 00fe 7346     		mov	r3, lr
+ 293 0100 FFF7FEFF 		bl	sprintf
+  82:sd_manager.c  **** 		pfile = FS_FOpen(file_str, "w"); //create and open new file for writing
+ 294              		.loc 1 82 0
+ 295 0104 07F12003 		add	r3, r7, #32
+ 296 0108 1846     		mov	r0, r3
+ 297 010a 2449     		ldr	r1, .L12+40
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 8
+
+
+ 298 010c FFF7FEFF 		bl	FS_FOpen
+ 299 0110 0246     		mov	r2, r0
+ 300 0112 1D4B     		ldr	r3, .L12+20
+ 301 0114 1A60     		str	r2, [r3]
+  83:sd_manager.c  **** 		if(pfile == NULL) {
+ 302              		.loc 1 83 0
+ 303 0116 1C4B     		ldr	r3, .L12+20
+ 304 0118 1B68     		ldr	r3, [r3]
+ 305 011a 002B     		cmp	r3, #0
+ 306 011c 04D1     		bne	.L10
+  84:sd_manager.c  **** 			sd_ok = 0;
+ 307              		.loc 1 84 0
+ 308 011e 174B     		ldr	r3, .L12+8
+ 309 0120 0022     		movs	r2, #0
+ 310 0122 1A70     		strb	r2, [r3]
+  85:sd_manager.c  **** 			return;
+ 311              		.loc 1 85 0
+ 312 0124 00BF     		nop
+ 313 0126 22E0     		b	.L4
+ 314              	.L10:
+  86:sd_manager.c  **** 		} // if file does not exist
+  87:sd_manager.c  **** 
+  88:sd_manager.c  **** 		// Set file time here
+  89:sd_manager.c  **** 		FS_FILETIME file_time;
+  90:sd_manager.c  **** 		unsigned long file_timestamp;
+  91:sd_manager.c  **** 		
+  92:sd_manager.c  **** 		file_time.Year = time.year;
+ 315              		.loc 1 92 0
+ 316 0128 BB89     		ldrh	r3, [r7, #12]
+ 317 012a BB82     		strh	r3, [r7, #20]	@ movhi
+  93:sd_manager.c  **** 		file_time.Month = time.month;
+ 318              		.loc 1 93 0
+ 319 012c 3B78     		ldrb	r3, [r7]	@ zero_extendqisi2
+ 320 012e 9BB2     		uxth	r3, r3
+ 321 0130 FB82     		strh	r3, [r7, #22]	@ movhi
+  94:sd_manager.c  **** 		file_time.Day = time.day;
+ 322              		.loc 1 94 0
+ 323 0132 7B78     		ldrb	r3, [r7, #1]	@ zero_extendqisi2
+ 324 0134 9BB2     		uxth	r3, r3
+ 325 0136 3B83     		strh	r3, [r7, #24]	@ movhi
+  95:sd_manager.c  **** 		file_time.Hour = time.hour;
+ 326              		.loc 1 95 0
+ 327 0138 BB78     		ldrb	r3, [r7, #2]	@ zero_extendqisi2
+ 328 013a 9BB2     		uxth	r3, r3
+ 329 013c 7B83     		strh	r3, [r7, #26]	@ movhi
+  96:sd_manager.c  **** 		file_time.Minute = time.minute;
+ 330              		.loc 1 96 0
+ 331 013e FB78     		ldrb	r3, [r7, #3]	@ zero_extendqisi2
+ 332 0140 9BB2     		uxth	r3, r3
+ 333 0142 BB83     		strh	r3, [r7, #28]	@ movhi
+  97:sd_manager.c  **** 		file_time.Second = time.second;
+ 334              		.loc 1 97 0
+ 335 0144 3B79     		ldrb	r3, [r7, #4]	@ zero_extendqisi2
+ 336 0146 9BB2     		uxth	r3, r3
+ 337 0148 FB83     		strh	r3, [r7, #30]	@ movhi
+  98:sd_manager.c  **** 
+  99:sd_manager.c  **** 		FS_FileTimeToTimeStamp(&file_time, &file_timestamp);
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 9
+
+
+ 338              		.loc 1 99 0
+ 339 014a 07F11402 		add	r2, r7, #20
+ 340 014e 07F11003 		add	r3, r7, #16
+ 341 0152 1046     		mov	r0, r2
+ 342 0154 1946     		mov	r1, r3
+ 343 0156 FFF7FEFF 		bl	FS_FileTimeToTimeStamp
+ 100:sd_manager.c  **** 		FS_SetFileTime(file_str, file_timestamp);
+ 344              		.loc 1 100 0
+ 345 015a 3B69     		ldr	r3, [r7, #16]
+ 346 015c 07F12002 		add	r2, r7, #32
+ 347 0160 1046     		mov	r0, r2
+ 348 0162 1946     		mov	r1, r3
+ 349 0164 FFF7FEFF 		bl	FS_SetFileTime
+ 350              	.L5:
+ 351              	.LBE2:
+ 101:sd_manager.c  **** 		/*FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_CREATE);	//doesnt work
+ 102:sd_manager.c  **** 		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_ACCESS);
+ 103:sd_manager.c  **** 		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_MODIFY);*/
+ 104:sd_manager.c  **** 	} // if a single file volume exists
+ 105:sd_manager.c  ****     FS_Sync("");
+ 352              		.loc 1 105 0 discriminator 1
+ 353 0168 0848     		ldr	r0, .L12+24
+ 354 016a FFF7FEFF 		bl	FS_Sync
+ 355              	.L4:
+ 106:sd_manager.c  **** } // sd_init()
+ 356              		.loc 1 106 0
+ 357 016e 8437     		adds	r7, r7, #132
+ 358              		.cfi_def_cfa_offset 20
+ 359 0170 BD46     		mov	sp, r7
+ 360              		.cfi_def_cfa_register 13
+ 361              		@ sp needed
+ 362 0172 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 363              	.L13:
+ 364              		.align	2
+ 365              	.L12:
+ 366 0174 00000000 		.word	power_interrupt
+ 367 0178 00000000 		.word	sd_interrupt
+ 368 017c 00000000 		.word	sd_ok
+ 369 0180 00000000 		.word	format_file
+ 370 0184 1C000000 		.word	.LC0
+ 371 0188 00000000 		.word	pfile
+ 372 018c 20000000 		.word	.LC1
+ 373 0190 24000000 		.word	.LC2
+ 374 0194 2C000000 		.word	.LC3
+ 375 0198 44000000 		.word	.LC4
+ 376 019c 6C000000 		.word	.LC5
+ 377              		.cfi_endproc
+ 378              	.LFE65:
+ 379              		.size	sd_init, .-sd_init
+ 380              		.section	.rodata
+ 381 006e 0000     		.align	2
+ 382              	.LC6:
+ 383 0070 2F3A200D 		.ascii	"/: \015\012\000"
+ 383      0A00
+ 384              		.section	.text.sd_time_set,"ax",%progbits
+ 385              		.align	2
+ 386              		.global	sd_time_set
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 10
+
+
+ 387              		.thumb
+ 388              		.thumb_func
+ 389              		.type	sd_time_set, %function
+ 390              	sd_time_set:
+ 391              	.LFB66:
+ 107:sd_manager.c  **** 
+ 108:sd_manager.c  **** 
+ 109:sd_manager.c  **** /*  Sets the RTC time from a file called set_time.txt if it exists
+ 110:sd_manager.c  ****     
+ 111:sd_manager.c  **** 	Enter the following two lines of text in a file called "set_time.txt" in
+ 112:sd_manager.c  **** 	the /LOGS folder to set the time. The line breaks can consist of \r or
+ 113:sd_manager.c  **** 	\n characters.
+ 114:sd_manager.c  **** 	
+ 115:sd_manager.c  **** 	year/month/day
+ 116:sd_manager.c  **** 	24-hour:minute:second */
+ 117:sd_manager.c  **** void sd_time_set(Time time) {
+ 392              		.loc 1 117 0
+ 393              		.cfi_startproc
+ 394              		@ args = 0, pretend = 0, frame = 104
+ 395              		@ frame_needed = 1, uses_anonymous_args = 0
+ 396 0000 90B5     		push	{r4, r7, lr}
+ 397              		.cfi_def_cfa_offset 12
+ 398              		.cfi_offset 4, -12
+ 399              		.cfi_offset 7, -8
+ 400              		.cfi_offset 14, -4
+ 401 0002 9BB0     		sub	sp, sp, #108
+ 402              		.cfi_def_cfa_offset 120
+ 403 0004 00AF     		add	r7, sp, #0
+ 404              		.cfi_def_cfa_register 7
+ 405 0006 3C46     		mov	r4, r7
+ 406 0008 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+ 118:sd_manager.c  **** 	if((pfile = FS_FOpen(set_time_file, "r"))) {
+ 407              		.loc 1 118 0
+ 408 000c 5B48     		ldr	r0, .L23
+ 409 000e 5C49     		ldr	r1, .L23+4
+ 410 0010 FFF7FEFF 		bl	FS_FOpen
+ 411 0014 0246     		mov	r2, r0
+ 412 0016 5B4B     		ldr	r3, .L23+8
+ 413 0018 1A60     		str	r2, [r3]
+ 414 001a 5A4B     		ldr	r3, .L23+8
+ 415 001c 1B68     		ldr	r3, [r3]
+ 416 001e 002B     		cmp	r3, #0
+ 417 0020 00F0A980 		beq	.L14
+ 418              	.LBB3:
+ 119:sd_manager.c  **** 		char buffer[64];
+ 120:sd_manager.c  **** 		char *ptr;
+ 121:sd_manager.c  **** 		uint16_t num;
+ 122:sd_manager.c  **** 		Time tmp_time;
+ 123:sd_manager.c  **** 
+ 124:sd_manager.c  **** 		FS_Read(pfile, buffer, 64); // read entire file
+ 419              		.loc 1 124 0
+ 420 0024 574B     		ldr	r3, .L23+8
+ 421 0026 1A68     		ldr	r2, [r3]
+ 422 0028 07F11003 		add	r3, r7, #16
+ 423 002c 1046     		mov	r0, r2
+ 424 002e 1946     		mov	r1, r3
+ 425 0030 4022     		movs	r2, #64
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 11
+
+
+ 426 0032 FFF7FEFF 		bl	FS_Read
+ 125:sd_manager.c  **** 		
+ 126:sd_manager.c  **** 		ptr = strtok(buffer, "/: \r\n"); // year
+ 427              		.loc 1 126 0
+ 428 0036 07F11003 		add	r3, r7, #16
+ 429 003a 1846     		mov	r0, r3
+ 430 003c 5249     		ldr	r1, .L23+12
+ 431 003e FFF7FEFF 		bl	strtok
+ 432 0042 7866     		str	r0, [r7, #100]
+ 127:sd_manager.c  **** 		num = atoi(ptr);
+ 433              		.loc 1 127 0
+ 434 0044 786E     		ldr	r0, [r7, #100]
+ 435 0046 FFF7FEFF 		bl	atoi
+ 436 004a 0346     		mov	r3, r0
+ 437 004c A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 128:sd_manager.c  **** 		if(num <= 99) tmp_time.year = num;  // 2 digit year
+ 438              		.loc 1 128 0
+ 439 0050 B7F86230 		ldrh	r3, [r7, #98]
+ 440 0054 632B     		cmp	r3, #99
+ 441 0056 04D8     		bhi	.L16
+ 442              		.loc 1 128 0 is_stmt 0 discriminator 1
+ 443 0058 B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 444 005c A7F85C30 		strh	r3, [r7, #92]	@ movhi
+ 445 0060 12E0     		b	.L17
+ 446              	.L16:
+ 129:sd_manager.c  **** 		else if(num >= 1900) tmp_time.year = num % 100; // 4 digit year
+ 447              		.loc 1 129 0 is_stmt 1
+ 448 0062 B7F86230 		ldrh	r3, [r7, #98]
+ 449 0066 40F26B72 		movw	r2, #1899
+ 450 006a 9342     		cmp	r3, r2
+ 451 006c 0CD9     		bls	.L17
+ 452              		.loc 1 129 0 is_stmt 0 discriminator 1
+ 453 006e B7F86230 		ldrh	r3, [r7, #98]
+ 454 0072 464A     		ldr	r2, .L23+16
+ 455 0074 A2FB0312 		umull	r1, r2, r2, r3
+ 456 0078 5209     		lsrs	r2, r2, #5
+ 457 007a 6421     		movs	r1, #100
+ 458 007c 01FB02F2 		mul	r2, r1, r2
+ 459 0080 9B1A     		subs	r3, r3, r2
+ 460 0082 9BB2     		uxth	r3, r3
+ 461 0084 A7F85C30 		strh	r3, [r7, #92]	@ movhi
+ 462              	.L17:
+ 130:sd_manager.c  **** 
+ 131:sd_manager.c  **** 		ptr = strtok(NULL, "/: \r\n"); // month
+ 463              		.loc 1 131 0 is_stmt 1
+ 464 0088 0020     		movs	r0, #0
+ 465 008a 3F49     		ldr	r1, .L23+12
+ 466 008c FFF7FEFF 		bl	strtok
+ 467 0090 7866     		str	r0, [r7, #100]
+ 132:sd_manager.c  **** 		num = atoi(ptr);
+ 468              		.loc 1 132 0
+ 469 0092 786E     		ldr	r0, [r7, #100]
+ 470 0094 FFF7FEFF 		bl	atoi
+ 471 0098 0346     		mov	r3, r0
+ 472 009a A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 133:sd_manager.c  **** 		if(num <= 12) tmp_time.month = num;
+ 473              		.loc 1 133 0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 12
+
+
+ 474 009e B7F86230 		ldrh	r3, [r7, #98]
+ 475 00a2 0C2B     		cmp	r3, #12
+ 476 00a4 04D8     		bhi	.L18
+ 477              		.loc 1 133 0 is_stmt 0 discriminator 1
+ 478 00a6 B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 479 00aa DBB2     		uxtb	r3, r3
+ 480 00ac 87F85030 		strb	r3, [r7, #80]
+ 481              	.L18:
+ 134:sd_manager.c  **** 		
+ 135:sd_manager.c  **** 		ptr = strtok(NULL, "/: \r\n"); // day
+ 482              		.loc 1 135 0 is_stmt 1
+ 483 00b0 0020     		movs	r0, #0
+ 484 00b2 3549     		ldr	r1, .L23+12
+ 485 00b4 FFF7FEFF 		bl	strtok
+ 486 00b8 7866     		str	r0, [r7, #100]
+ 136:sd_manager.c  **** 		num = atoi(ptr);
+ 487              		.loc 1 136 0
+ 488 00ba 786E     		ldr	r0, [r7, #100]
+ 489 00bc FFF7FEFF 		bl	atoi
+ 490 00c0 0346     		mov	r3, r0
+ 491 00c2 A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 137:sd_manager.c  **** 		if(num <= 31) tmp_time.day = num;
+ 492              		.loc 1 137 0
+ 493 00c6 B7F86230 		ldrh	r3, [r7, #98]
+ 494 00ca 1F2B     		cmp	r3, #31
+ 495 00cc 04D8     		bhi	.L19
+ 496              		.loc 1 137 0 is_stmt 0 discriminator 1
+ 497 00ce B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 498 00d2 DBB2     		uxtb	r3, r3
+ 499 00d4 87F85130 		strb	r3, [r7, #81]
+ 500              	.L19:
+ 138:sd_manager.c  **** 			
+ 139:sd_manager.c  **** 		ptr = strtok(NULL, "/: \r\n"); // 24-hour
+ 501              		.loc 1 139 0 is_stmt 1
+ 502 00d8 0020     		movs	r0, #0
+ 503 00da 2B49     		ldr	r1, .L23+12
+ 504 00dc FFF7FEFF 		bl	strtok
+ 505 00e0 7866     		str	r0, [r7, #100]
+ 140:sd_manager.c  **** 		num = atoi(ptr);
+ 506              		.loc 1 140 0
+ 507 00e2 786E     		ldr	r0, [r7, #100]
+ 508 00e4 FFF7FEFF 		bl	atoi
+ 509 00e8 0346     		mov	r3, r0
+ 510 00ea A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 141:sd_manager.c  **** 		if(num <= 23) tmp_time.hour = num;
+ 511              		.loc 1 141 0
+ 512 00ee B7F86230 		ldrh	r3, [r7, #98]
+ 513 00f2 172B     		cmp	r3, #23
+ 514 00f4 04D8     		bhi	.L20
+ 515              		.loc 1 141 0 is_stmt 0 discriminator 1
+ 516 00f6 B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 517 00fa DBB2     		uxtb	r3, r3
+ 518 00fc 87F85230 		strb	r3, [r7, #82]
+ 519              	.L20:
+ 142:sd_manager.c  **** 
+ 143:sd_manager.c  **** 		ptr = strtok(NULL, "/: \r\n"); // minute
+ 520              		.loc 1 143 0 is_stmt 1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 13
+
+
+ 521 0100 0020     		movs	r0, #0
+ 522 0102 2149     		ldr	r1, .L23+12
+ 523 0104 FFF7FEFF 		bl	strtok
+ 524 0108 7866     		str	r0, [r7, #100]
+ 144:sd_manager.c  **** 		num = atoi(ptr);
+ 525              		.loc 1 144 0
+ 526 010a 786E     		ldr	r0, [r7, #100]
+ 527 010c FFF7FEFF 		bl	atoi
+ 528 0110 0346     		mov	r3, r0
+ 529 0112 A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 145:sd_manager.c  **** 		if(num <= 59) tmp_time.minute = num;
+ 530              		.loc 1 145 0
+ 531 0116 B7F86230 		ldrh	r3, [r7, #98]
+ 532 011a 3B2B     		cmp	r3, #59
+ 533 011c 04D8     		bhi	.L21
+ 534              		.loc 1 145 0 is_stmt 0 discriminator 1
+ 535 011e B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 536 0122 DBB2     		uxtb	r3, r3
+ 537 0124 87F85330 		strb	r3, [r7, #83]
+ 538              	.L21:
+ 146:sd_manager.c  **** 
+ 147:sd_manager.c  **** 		ptr = strtok(NULL, "/: \r\n"); // second 
+ 539              		.loc 1 147 0 is_stmt 1
+ 540 0128 0020     		movs	r0, #0
+ 541 012a 1749     		ldr	r1, .L23+12
+ 542 012c FFF7FEFF 		bl	strtok
+ 543 0130 7866     		str	r0, [r7, #100]
+ 148:sd_manager.c  **** 		num = atoi(ptr);
+ 544              		.loc 1 148 0
+ 545 0132 786E     		ldr	r0, [r7, #100]
+ 546 0134 FFF7FEFF 		bl	atoi
+ 547 0138 0346     		mov	r3, r0
+ 548 013a A7F86230 		strh	r3, [r7, #98]	@ movhi
+ 149:sd_manager.c  **** 		if(num <= 59) tmp_time.second = num;
+ 549              		.loc 1 149 0
+ 550 013e B7F86230 		ldrh	r3, [r7, #98]
+ 551 0142 3B2B     		cmp	r3, #59
+ 552 0144 04D8     		bhi	.L22
+ 553              		.loc 1 149 0 is_stmt 0 discriminator 1
+ 554 0146 B7F86230 		ldrh	r3, [r7, #98]	@ movhi
+ 555 014a DBB2     		uxtb	r3, r3
+ 556 014c 87F85430 		strb	r3, [r7, #84]
+ 557              	.L22:
+ 150:sd_manager.c  **** 
+ 151:sd_manager.c  **** 		FS_FClose(pfile);
+ 558              		.loc 1 151 0 is_stmt 1
+ 559 0150 0C4B     		ldr	r3, .L23+8
+ 560 0152 1B68     		ldr	r3, [r3]
+ 561 0154 1846     		mov	r0, r3
+ 562 0156 FFF7FEFF 		bl	FS_FClose
+ 152:sd_manager.c  **** 
+ 153:sd_manager.c  **** 		time_set(tmp_time); // set the new time
+ 563              		.loc 1 153 0
+ 564 015a 07F15003 		add	r3, r7, #80
+ 565 015e 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 566 0160 FFF7FEFF 		bl	time_set
+ 154:sd_manager.c  **** 		time = tmp_time; // use new time for file names
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 14
+
+
+ 567              		.loc 1 154 0
+ 568 0164 3C46     		mov	r4, r7
+ 569 0166 07F15003 		add	r3, r7, #80
+ 570 016a 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 571 016c 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+ 155:sd_manager.c  **** 		
+ 156:sd_manager.c  **** 		FS_Remove(set_time_file); // delete file
+ 572              		.loc 1 156 0
+ 573 0170 0248     		ldr	r0, .L23
+ 574 0172 FFF7FEFF 		bl	FS_Remove
+ 575              	.L14:
+ 576              	.LBE3:
+ 157:sd_manager.c  **** 	} // try to find file and set time
+ 158:sd_manager.c  **** } //sd_time_set()
+ 577              		.loc 1 158 0
+ 578 0176 6C37     		adds	r7, r7, #108
+ 579              		.cfi_def_cfa_offset 12
+ 580 0178 BD46     		mov	sp, r7
+ 581              		.cfi_def_cfa_register 13
+ 582              		@ sp needed
+ 583 017a 90BD     		pop	{r4, r7, pc}
+ 584              	.L24:
+ 585              		.align	2
+ 586              	.L23:
+ 587 017c 00000000 		.word	set_time_file
+ 588 0180 1C000000 		.word	.LC0
+ 589 0184 00000000 		.word	pfile
+ 590 0188 70000000 		.word	.LC6
+ 591 018c 1F85EB51 		.word	1374389535
+ 592              		.cfi_endproc
+ 593              	.LFE66:
+ 594              		.size	sd_time_set, .-sd_time_set
+ 595              		.section	.rodata
+ 596 0076 0000     		.align	2
+ 597              	.LC7:
+ 598 0078 25582C25 		.ascii	"%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\012\000"
+ 598      752C2558 
+ 598      2C25582C 
+ 598      25582C25 
+ 598      582C2558 
+ 599              		.section	.text.sd_write,"ax",%progbits
+ 600              		.align	2
+ 601              		.global	sd_write
+ 602              		.thumb
+ 603              		.thumb_func
+ 604              		.type	sd_write, %function
+ 605              	sd_write:
+ 606              	.LFB67:
+ 159:sd_manager.c  **** 
+ 160:sd_manager.c  **** 
+ 161:sd_manager.c  **** /* sd_write()
+ 162:sd_manager.c  **** 	Writes current to the SD card. 
+ 163:sd_manager.c  **** 	Synchronizes the filesystem after it is  written. */
+ 164:sd_manager.c  **** void sd_write() {
+ 607              		.loc 1 164 0
+ 608              		.cfi_startproc
+ 609              		@ args = 0, pretend = 0, frame = 72
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 15
+
+
+ 610              		@ frame_needed = 1, uses_anonymous_args = 0
+ 611 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 612              		.cfi_def_cfa_offset 28
+ 613              		.cfi_offset 4, -28
+ 614              		.cfi_offset 5, -24
+ 615              		.cfi_offset 6, -20
+ 616              		.cfi_offset 7, -16
+ 617              		.cfi_offset 8, -12
+ 618              		.cfi_offset 9, -8
+ 619              		.cfi_offset 14, -4
+ 620 0004 9BB0     		sub	sp, sp, #108
+ 621              		.cfi_def_cfa_offset 136
+ 622 0006 08AF     		add	r7, sp, #32
+ 623              		.cfi_def_cfa 7, 104
+ 165:sd_manager.c  **** 	if(!sd_ok) return;
+ 624              		.loc 1 165 0
+ 625 0008 4D4B     		ldr	r3, .L30
+ 626 000a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 627 000c 002B     		cmp	r3, #0
+ 628 000e 00F09280 		beq	.L25
+ 166:sd_manager.c  **** 
+ 167:sd_manager.c  **** 	char buffer[64];
+ 168:sd_manager.c  **** 	short length = 0;
+ 629              		.loc 1 168 0
+ 630 0012 0023     		movs	r3, #0
+ 631 0014 A7F84630 		strh	r3, [r7, #70]	@ movhi
+ 169:sd_manager.c  **** 	
+ 170:sd_manager.c  ****     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
+ 632              		.loc 1 170 0
+ 633 0018 FFF7FEFF 		bl	CyEnterCriticalSection
+ 634 001c 0346     		mov	r3, r0
+ 635 001e 87F84530 		strb	r3, [r7, #69]
+ 171:sd_manager.c  **** 	for(sd_head=0; sd_head<sd_tail; sd_head++) {
+ 636              		.loc 1 171 0
+ 637 0022 484B     		ldr	r3, .L30+4
+ 638 0024 0022     		movs	r2, #0
+ 639 0026 1A80     		strh	r2, [r3]	@ movhi
+ 640 0028 71E0     		b	.L28
+ 641              	.L29:
+ 172:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 173:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 642              		.loc 1 173 0 discriminator 3
+ 643 002a 464B     		ldr	r3, .L30+4
+ 644 002c 1B88     		ldrh	r3, [r3]
+ 645 002e 464A     		ldr	r2, .L30+8
+ 646 0030 1B01     		lsls	r3, r3, #4
+ 647 0032 1344     		add	r3, r3, r2
+ 648 0034 9B88     		ldrh	r3, [r3, #4]
+ 172:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 649              		.loc 1 172 0 discriminator 3
+ 650 0036 9946     		mov	r9, r3
+ 174:sd_manager.c  **** 			MILLI_PERIOD - (unsigned)sd_queue[sd_head].millicounter,
+ 651              		.loc 1 174 0 discriminator 3
+ 652 0038 424B     		ldr	r3, .L30+4
+ 653 003a 1B88     		ldrh	r3, [r3]
+ 654 003c 424A     		ldr	r2, .L30+8
+ 655 003e 1B01     		lsls	r3, r3, #4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 16
+
+
+ 656 0040 1344     		add	r3, r3, r2
+ 657 0042 1A68     		ldr	r2, [r3]
+ 172:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 658              		.loc 1 172 0 discriminator 3
+ 659 0044 414B     		ldr	r3, .L30+12
+ 660 0046 9B1A     		subs	r3, r3, r2
+ 175:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[0],
+ 661              		.loc 1 175 0 discriminator 3
+ 662 0048 3E4A     		ldr	r2, .L30+4
+ 663 004a 1288     		ldrh	r2, [r2]
+ 664 004c 3E49     		ldr	r1, .L30+8
+ 665 004e 1201     		lsls	r2, r2, #4
+ 666 0050 0A44     		add	r2, r2, r1
+ 667 0052 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 668              		.loc 1 172 0 discriminator 3
+ 669 0054 9046     		mov	r8, r2
+ 176:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[1],
+ 670              		.loc 1 176 0 discriminator 3
+ 671 0056 3B4A     		ldr	r2, .L30+4
+ 672 0058 1288     		ldrh	r2, [r2]
+ 673 005a 3B49     		ldr	r1, .L30+8
+ 674 005c 1201     		lsls	r2, r2, #4
+ 675 005e 0A44     		add	r2, r2, r1
+ 676 0060 0132     		adds	r2, r2, #1
+ 677 0062 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 678              		.loc 1 172 0 discriminator 3
+ 679 0064 9446     		mov	ip, r2
+ 177:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[2],
+ 680              		.loc 1 177 0 discriminator 3
+ 681 0066 374A     		ldr	r2, .L30+4
+ 682 0068 1288     		ldrh	r2, [r2]
+ 683 006a 3749     		ldr	r1, .L30+8
+ 684 006c 1201     		lsls	r2, r2, #4
+ 685 006e 0A44     		add	r2, r2, r1
+ 686 0070 0232     		adds	r2, r2, #2
+ 687 0072 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 688              		.loc 1 172 0 discriminator 3
+ 689 0074 9646     		mov	lr, r2
+ 178:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[3],
+ 690              		.loc 1 178 0 discriminator 3
+ 691 0076 334A     		ldr	r2, .L30+4
+ 692 0078 1288     		ldrh	r2, [r2]
+ 693 007a 3349     		ldr	r1, .L30+8
+ 694 007c 1201     		lsls	r2, r2, #4
+ 695 007e 0A44     		add	r2, r2, r1
+ 696 0080 0332     		adds	r2, r2, #3
+ 697 0082 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 698              		.loc 1 172 0 discriminator 3
+ 699 0084 1646     		mov	r6, r2
+ 179:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[4],
+ 700              		.loc 1 179 0 discriminator 3
+ 701 0086 2F4A     		ldr	r2, .L30+4
+ 702 0088 1288     		ldrh	r2, [r2]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 17
+
+
+ 703 008a 2F49     		ldr	r1, .L30+8
+ 704 008c 1201     		lsls	r2, r2, #4
+ 705 008e 0A44     		add	r2, r2, r1
+ 706 0090 0432     		adds	r2, r2, #4
+ 707 0092 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 708              		.loc 1 172 0 discriminator 3
+ 709 0094 1546     		mov	r5, r2
+ 180:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[5],
+ 710              		.loc 1 180 0 discriminator 3
+ 711 0096 2B4A     		ldr	r2, .L30+4
+ 712 0098 1288     		ldrh	r2, [r2]
+ 713 009a 2B49     		ldr	r1, .L30+8
+ 714 009c 1201     		lsls	r2, r2, #4
+ 715 009e 0A44     		add	r2, r2, r1
+ 716 00a0 0532     		adds	r2, r2, #5
+ 717 00a2 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 718              		.loc 1 172 0 discriminator 3
+ 719 00a4 1446     		mov	r4, r2
+ 181:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[6],
+ 720              		.loc 1 181 0 discriminator 3
+ 721 00a6 274A     		ldr	r2, .L30+4
+ 722 00a8 1288     		ldrh	r2, [r2]
+ 723 00aa 2749     		ldr	r1, .L30+8
+ 724 00ac 1201     		lsls	r2, r2, #4
+ 725 00ae 0A44     		add	r2, r2, r1
+ 726 00b0 0632     		adds	r2, r2, #6
+ 727 00b2 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 728              		.loc 1 172 0 discriminator 3
+ 729 00b4 1046     		mov	r0, r2
+ 182:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].data[7]);
+ 730              		.loc 1 182 0 discriminator 3
+ 731 00b6 234A     		ldr	r2, .L30+4
+ 732 00b8 1288     		ldrh	r2, [r2]
+ 733 00ba 2349     		ldr	r1, .L30+8
+ 734 00bc 1201     		lsls	r2, r2, #4
+ 735 00be 0A44     		add	r2, r2, r1
+ 736 00c0 0732     		adds	r2, r2, #7
+ 737 00c2 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 172:sd_manager.c  **** 			(unsigned)sd_queue[sd_head].id,
+ 738              		.loc 1 172 0 discriminator 3
+ 739 00c4 1146     		mov	r1, r2
+ 740 00c6 3A1D     		adds	r2, r7, #4
+ 741 00c8 CDF80080 		str	r8, [sp]
+ 742 00cc CDF804C0 		str	ip, [sp, #4]
+ 743 00d0 CDF808E0 		str	lr, [sp, #8]
+ 744 00d4 0396     		str	r6, [sp, #12]
+ 745 00d6 0495     		str	r5, [sp, #16]
+ 746 00d8 0594     		str	r4, [sp, #20]
+ 747 00da 0690     		str	r0, [sp, #24]
+ 748 00dc 0791     		str	r1, [sp, #28]
+ 749 00de 1046     		mov	r0, r2
+ 750 00e0 1B49     		ldr	r1, .L30+16
+ 751 00e2 4A46     		mov	r2, r9
+ 752 00e4 FFF7FEFF 		bl	sprintf
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 18
+
+
+ 753 00e8 0346     		mov	r3, r0
+ 754 00ea A7F84630 		strh	r3, [r7, #70]	@ movhi
+ 183:sd_manager.c  **** 
+ 184:sd_manager.c  **** 		FS_Write(pfile, buffer, length); // write to SD
+ 755              		.loc 1 184 0 discriminator 3
+ 756 00ee 194B     		ldr	r3, .L30+20
+ 757 00f0 1968     		ldr	r1, [r3]
+ 758 00f2 B7F94630 		ldrsh	r3, [r7, #70]
+ 759 00f6 3A1D     		adds	r2, r7, #4
+ 760 00f8 0846     		mov	r0, r1
+ 761 00fa 1146     		mov	r1, r2
+ 762 00fc 1A46     		mov	r2, r3
+ 763 00fe FFF7FEFF 		bl	FS_Write
+ 171:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 764              		.loc 1 171 0 discriminator 3
+ 765 0102 104B     		ldr	r3, .L30+4
+ 766 0104 1B88     		ldrh	r3, [r3]
+ 767 0106 0133     		adds	r3, r3, #1
+ 768 0108 9AB2     		uxth	r2, r3
+ 769 010a 0E4B     		ldr	r3, .L30+4
+ 770 010c 1A80     		strh	r2, [r3]	@ movhi
+ 771              	.L28:
+ 171:sd_manager.c  **** 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+ 772              		.loc 1 171 0 is_stmt 0 discriminator 1
+ 773 010e 0D4B     		ldr	r3, .L30+4
+ 774 0110 1A88     		ldrh	r2, [r3]
+ 775 0112 114B     		ldr	r3, .L30+24
+ 776 0114 1B88     		ldrh	r3, [r3]
+ 777 0116 9A42     		cmp	r2, r3
+ 778 0118 87D3     		bcc	.L29
+ 185:sd_manager.c  **** 	}
+ 186:sd_manager.c  **** 	FS_Sync(""); // sync to SD
+ 779              		.loc 1 186 0 is_stmt 1
+ 780 011a 1048     		ldr	r0, .L30+28
+ 781 011c FFF7FEFF 		bl	FS_Sync
+ 187:sd_manager.c  **** 	sd_head=0; sd_tail=0;
+ 782              		.loc 1 187 0
+ 783 0120 084B     		ldr	r3, .L30+4
+ 784 0122 0022     		movs	r2, #0
+ 785 0124 1A80     		strh	r2, [r3]	@ movhi
+ 786 0126 0C4B     		ldr	r3, .L30+24
+ 787 0128 0022     		movs	r2, #0
+ 788 012a 1A80     		strh	r2, [r3]	@ movhi
+ 188:sd_manager.c  ****     CyExitCriticalSection(atomic_state);               // END ATOMIC
+ 789              		.loc 1 188 0
+ 790 012c 97F84530 		ldrb	r3, [r7, #69]	@ zero_extendqisi2
+ 791 0130 1846     		mov	r0, r3
+ 792 0132 FFF7FEFF 		bl	CyExitCriticalSection
+ 793              	.L25:
+ 189:sd_manager.c  **** } // sd_write()
+ 794              		.loc 1 189 0
+ 795 0136 4C37     		adds	r7, r7, #76
+ 796              		.cfi_def_cfa_offset 28
+ 797 0138 BD46     		mov	sp, r7
+ 798              		.cfi_def_cfa_register 13
+ 799              		@ sp needed
+ 800 013a BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 19
+
+
+ 801              	.L31:
+ 802 013e 00BF     		.align	2
+ 803              	.L30:
+ 804 0140 00000000 		.word	sd_ok
+ 805 0144 00000000 		.word	sd_head
+ 806 0148 00000000 		.word	sd_queue
+ 807 014c 002E9302 		.word	43200000
+ 808 0150 78000000 		.word	.LC7
+ 809 0154 00000000 		.word	pfile
+ 810 0158 00000000 		.word	sd_tail
+ 811 015c 20000000 		.word	.LC1
+ 812              		.cfi_endproc
+ 813              	.LFE67:
+ 814              		.size	sd_write, .-sd_write
+ 815              		.section	.rodata
+ 816 0097 00       		.align	2
+ 817              	.LC8:
+ 818 0098 66696C65 		.ascii	"filenamehere\000"
+ 818      6E616D65 
+ 818      68657265 
+ 818      00
+ 819              		.section	.text.sd_read,"ax",%progbits
+ 820              		.align	2
+ 821              		.global	sd_read
+ 822              		.thumb
+ 823              		.thumb_func
+ 824              		.type	sd_read, %function
+ 825              	sd_read:
+ 826              	.LFB68:
+ 190:sd_manager.c  **** 
+ 191:sd_manager.c  **** 
+ 192:sd_manager.c  **** void sd_read() {
+ 827              		.loc 1 192 0
+ 828              		.cfi_startproc
+ 829              		@ args = 0, pretend = 0, frame = 64
+ 830              		@ frame_needed = 1, uses_anonymous_args = 0
+ 831 0000 80B5     		push	{r7, lr}
+ 832              		.cfi_def_cfa_offset 8
+ 833              		.cfi_offset 7, -8
+ 834              		.cfi_offset 14, -4
+ 835 0002 90B0     		sub	sp, sp, #64
+ 836              		.cfi_def_cfa_offset 72
+ 837 0004 00AF     		add	r7, sp, #0
+ 838              		.cfi_def_cfa_register 7
+ 193:sd_manager.c  **** 	if((pfile = FS_FOpen("filenamehere", "r"))) {	//open file for reading
+ 839              		.loc 1 193 0
+ 840 0006 0D48     		ldr	r0, .L34
+ 841 0008 0D49     		ldr	r1, .L34+4
+ 842 000a FFF7FEFF 		bl	FS_FOpen
+ 843 000e 0246     		mov	r2, r0
+ 844 0010 0C4B     		ldr	r3, .L34+8
+ 845 0012 1A60     		str	r2, [r3]
+ 846 0014 0B4B     		ldr	r3, .L34+8
+ 847 0016 1B68     		ldr	r3, [r3]
+ 848 0018 002B     		cmp	r3, #0
+ 849 001a 0CD0     		beq	.L32
+ 850              	.LBB4:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 20
+
+
+ 194:sd_manager.c  **** 		char buffer[64];
+ 195:sd_manager.c  **** 		//Time time;
+ 196:sd_manager.c  **** 		//DataPacket msg;
+ 197:sd_manager.c  **** 		FS_Read(pfile, buffer, 64); // read entire file
+ 851              		.loc 1 197 0
+ 852 001c 094B     		ldr	r3, .L34+8
+ 853 001e 1A68     		ldr	r2, [r3]
+ 854 0020 3B46     		mov	r3, r7
+ 855 0022 1046     		mov	r0, r2
+ 856 0024 1946     		mov	r1, r3
+ 857 0026 4022     		movs	r2, #64
+ 858 0028 FFF7FEFF 		bl	FS_Read
+ 198:sd_manager.c  **** 		FS_FClose(pfile);
+ 859              		.loc 1 198 0
+ 860 002c 054B     		ldr	r3, .L34+8
+ 861 002e 1B68     		ldr	r3, [r3]
+ 862 0030 1846     		mov	r0, r3
+ 863 0032 FFF7FEFF 		bl	FS_FClose
+ 864              	.L32:
+ 865              	.LBE4:
+ 199:sd_manager.c  **** 	}
+ 200:sd_manager.c  **** }
+ 866              		.loc 1 200 0
+ 867 0036 4037     		adds	r7, r7, #64
+ 868              		.cfi_def_cfa_offset 8
+ 869 0038 BD46     		mov	sp, r7
+ 870              		.cfi_def_cfa_register 13
+ 871              		@ sp needed
+ 872 003a 80BD     		pop	{r7, pc}
+ 873              	.L35:
+ 874              		.align	2
+ 875              	.L34:
+ 876 003c 98000000 		.word	.LC8
+ 877 0040 1C000000 		.word	.LC0
+ 878 0044 00000000 		.word	pfile
+ 879              		.cfi_endproc
+ 880              	.LFE68:
+ 881              		.size	sd_read, .-sd_read
+ 882              		.section	.text.sd_buffer,"ax",%progbits
+ 883              		.align	2
+ 884              		.global	sd_buffer
+ 885              		.thumb
+ 886              		.thumb_func
+ 887              		.type	sd_buffer, %function
+ 888              	sd_buffer:
+ 889              	.LFB69:
+ 201:sd_manager.c  **** 
+ 202:sd_manager.c  **** 
+ 203:sd_manager.c  **** void sd_buffer(DataPacket * msg) {
+ 890              		.loc 1 203 0
+ 891              		.cfi_startproc
+ 892              		@ args = 0, pretend = 0, frame = 8
+ 893              		@ frame_needed = 1, uses_anonymous_args = 0
+ 894              		@ link register save eliminated.
+ 895 0000 90B4     		push	{r4, r7}
+ 896              		.cfi_def_cfa_offset 8
+ 897              		.cfi_offset 4, -8
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 21
+
+
+ 898              		.cfi_offset 7, -4
+ 899 0002 82B0     		sub	sp, sp, #8
+ 900              		.cfi_def_cfa_offset 16
+ 901 0004 00AF     		add	r7, sp, #0
+ 902              		.cfi_def_cfa_register 7
+ 903 0006 7860     		str	r0, [r7, #4]
+ 204:sd_manager.c  **** 	sd_queue[sd_tail] = *msg;
+ 904              		.loc 1 204 0
+ 905 0008 0F4B     		ldr	r3, .L39
+ 906 000a 1B88     		ldrh	r3, [r3]
+ 907 000c 0F4A     		ldr	r2, .L39+4
+ 908 000e 1B01     		lsls	r3, r3, #4
+ 909 0010 1A44     		add	r2, r2, r3
+ 910 0012 7B68     		ldr	r3, [r7, #4]
+ 911 0014 1446     		mov	r4, r2
+ 912 0016 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 913 0018 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+ 205:sd_manager.c  **** 	sd_tail = ((sd_tail == SD_QUEUE_LENGTH-1) ? sd_tail:sd_tail++);	//if buffer full stay at tail
+ 914              		.loc 1 205 0
+ 915 001c 0A4B     		ldr	r3, .L39
+ 916 001e 1B88     		ldrh	r3, [r3]
+ 917 0020 40F2FF32 		movw	r2, #1023
+ 918 0024 9342     		cmp	r3, r2
+ 919 0026 06D0     		beq	.L37
+ 920              		.loc 1 205 0 is_stmt 0 discriminator 1
+ 921 0028 074B     		ldr	r3, .L39
+ 922 002a 1B88     		ldrh	r3, [r3]
+ 923 002c 5A1C     		adds	r2, r3, #1
+ 924 002e 91B2     		uxth	r1, r2
+ 925 0030 054A     		ldr	r2, .L39
+ 926 0032 1180     		strh	r1, [r2]	@ movhi
+ 927 0034 01E0     		b	.L38
+ 928              	.L37:
+ 929              		.loc 1 205 0 discriminator 2
+ 930 0036 044B     		ldr	r3, .L39
+ 931 0038 1B88     		ldrh	r3, [r3]
+ 932              	.L38:
+ 933              		.loc 1 205 0 discriminator 4
+ 934 003a 034A     		ldr	r2, .L39
+ 935 003c 1380     		strh	r3, [r2]	@ movhi
+ 206:sd_manager.c  **** }
+ 936              		.loc 1 206 0 is_stmt 1 discriminator 4
+ 937 003e 0837     		adds	r7, r7, #8
+ 938              		.cfi_def_cfa_offset 8
+ 939 0040 BD46     		mov	sp, r7
+ 940              		.cfi_def_cfa_register 13
+ 941              		@ sp needed
+ 942 0042 90BC     		pop	{r4, r7}
+ 943              		.cfi_restore 7
+ 944              		.cfi_restore 4
+ 945              		.cfi_def_cfa_offset 0
+ 946 0044 7047     		bx	lr
+ 947              	.L40:
+ 948 0046 00BF     		.align	2
+ 949              	.L39:
+ 950 0048 00000000 		.word	sd_tail
+ 951 004c 00000000 		.word	sd_queue
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 22
+
+
+ 952              		.cfi_endproc
+ 953              	.LFE69:
+ 954              		.size	sd_buffer, .-sd_buffer
+ 955              		.section	.text.sd_stop,"ax",%progbits
+ 956              		.align	2
+ 957              		.global	sd_stop
+ 958              		.thumb
+ 959              		.thumb_func
+ 960              		.type	sd_stop, %function
+ 961              	sd_stop:
+ 962              	.LFB70:
+ 207:sd_manager.c  **** /* sd_stop()
+ 208:sd_manager.c  **** 	Takes and returns nothing.
+ 209:sd_manager.c  **** 	Closes the file, synchronizes, and unmounts SD card to prevent corruption.
+ 210:sd_manager.c  **** */
+ 211:sd_manager.c  **** void sd_stop(void) {
+ 963              		.loc 1 211 0
+ 964              		.cfi_startproc
+ 965              		@ args = 0, pretend = 0, frame = 0
+ 966              		@ frame_needed = 1, uses_anonymous_args = 0
+ 967 0000 80B5     		push	{r7, lr}
+ 968              		.cfi_def_cfa_offset 8
+ 969              		.cfi_offset 7, -8
+ 970              		.cfi_offset 14, -4
+ 971 0002 00AF     		add	r7, sp, #0
+ 972              		.cfi_def_cfa_register 7
+ 212:sd_manager.c  **** 	sd_write();
+ 973              		.loc 1 212 0
+ 974 0004 FFF7FEFF 		bl	sd_write
+ 213:sd_manager.c  **** 	FS_FClose(pfile);
+ 975              		.loc 1 213 0
+ 976 0008 054B     		ldr	r3, .L42
+ 977 000a 1B68     		ldr	r3, [r3]
+ 978 000c 1846     		mov	r0, r3
+ 979 000e FFF7FEFF 		bl	FS_FClose
+ 214:sd_manager.c  **** 	FS_Sync("");
+ 980              		.loc 1 214 0
+ 981 0012 0448     		ldr	r0, .L42+4
+ 982 0014 FFF7FEFF 		bl	FS_Sync
+ 215:sd_manager.c  **** 	FS_Unmount("");
+ 983              		.loc 1 215 0
+ 984 0018 0248     		ldr	r0, .L42+4
+ 985 001a FFF7FEFF 		bl	FS_Unmount
+ 216:sd_manager.c  **** } // sd_stop()
+ 986              		.loc 1 216 0
+ 987 001e 80BD     		pop	{r7, pc}
+ 988              	.L43:
+ 989              		.align	2
+ 990              	.L42:
+ 991 0020 00000000 		.word	pfile
+ 992 0024 20000000 		.word	.LC1
+ 993              		.cfi_endproc
+ 994              	.LFE70:
+ 995              		.size	sd_stop, .-sd_stop
+ 996              		.section	.rodata
+ 997 00a5 000000   		.align	2
+ 998              	.LC9:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 23
+
+
+ 999 00a8 54797065 		.ascii	"Type,Time,Value,ID\012\000"
+ 999      2C54696D 
+ 999      652C5661 
+ 999      6C75652C 
+ 999      49440A00 
+ 1000              		.align	2
+ 1001              	.LC10:
+ 1002 00bc 25752C25 		.ascii	"%u,%u,%llu,%u\012\000"
+ 1002      752C256C 
+ 1002      6C752C25 
+ 1002      750A00
+ 1003 00cb 00       		.section	.text.sd_writetest,"ax",%progbits
+ 1004              		.align	2
+ 1005              		.global	sd_writetest
+ 1006              		.thumb
+ 1007              		.thumb_func
+ 1008              		.type	sd_writetest, %function
+ 1009              	sd_writetest:
+ 1010              	.LFB71:
+ 217:sd_manager.c  **** 
+ 218:sd_manager.c  **** 
+ 219:sd_manager.c  **** void sd_writetest() {
+ 1011              		.loc 1 219 0
+ 1012              		.cfi_startproc
+ 1013              		@ args = 0, pretend = 0, frame = 136
+ 1014              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1015 0000 80B5     		push	{r7, lr}
+ 1016              		.cfi_def_cfa_offset 8
+ 1017              		.cfi_offset 7, -8
+ 1018              		.cfi_offset 14, -4
+ 1019 0002 A6B0     		sub	sp, sp, #152
+ 1020              		.cfi_def_cfa_offset 160
+ 1021 0004 04AF     		add	r7, sp, #16
+ 1022              		.cfi_def_cfa 7, 144
+ 220:sd_manager.c  **** 	// test data writing
+ 221:sd_manager.c  **** 	char buffer[128];
+ 222:sd_manager.c  **** 	short length = 0;
+ 1023              		.loc 1 222 0
+ 1024 0006 0023     		movs	r3, #0
+ 1025 0008 A7F88630 		strh	r3, [r7, #134]	@ movhi
+ 223:sd_manager.c  **** 
+ 224:sd_manager.c  **** 	// test write
+ 225:sd_manager.c  **** 	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
+ 1026              		.loc 1 225 0
+ 1027 000c 164B     		ldr	r3, .L45
+ 1028 000e 1B68     		ldr	r3, [r3]
+ 1029 0010 1846     		mov	r0, r3
+ 1030 0012 1649     		ldr	r1, .L45+4
+ 1031 0014 1322     		movs	r2, #19
+ 1032 0016 FFF7FEFF 		bl	FS_Write
+ 226:sd_manager.c  **** 	length = sprintf(buffer, "%u,%u,%llu,%u\n",
+ 1033              		.loc 1 226 0
+ 1034 001a 391D     		adds	r1, r7, #4
+ 1035 001c 4FF0FF32 		mov	r2, #-1
+ 1036 0020 4FF0FF33 		mov	r3, #-1
+ 1037 0024 CDE90023 		strd	r2, [sp]
+ 1038 0028 40F20523 		movw	r3, #517
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 24
+
+
+ 1039 002c 0293     		str	r3, [sp, #8]
+ 1040 002e 0846     		mov	r0, r1
+ 1041 0030 0F49     		ldr	r1, .L45+8
+ 1042 0032 0122     		movs	r2, #1
+ 1043 0034 4FF0FF33 		mov	r3, #-1
+ 1044 0038 FFF7FEFF 		bl	sprintf
+ 1045 003c 0346     		mov	r3, r0
+ 1046 003e A7F88630 		strh	r3, [r7, #134]	@ movhi
+ 227:sd_manager.c  **** 		1,0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 517);
+ 228:sd_manager.c  **** 	FS_Write(pfile, buffer, length);
+ 1047              		.loc 1 228 0
+ 1048 0042 094B     		ldr	r3, .L45
+ 1049 0044 1968     		ldr	r1, [r3]
+ 1050 0046 B7F98630 		ldrsh	r3, [r7, #134]
+ 1051 004a 3A1D     		adds	r2, r7, #4
+ 1052 004c 0846     		mov	r0, r1
+ 1053 004e 1146     		mov	r1, r2
+ 1054 0050 1A46     		mov	r2, r3
+ 1055 0052 FFF7FEFF 		bl	FS_Write
+ 229:sd_manager.c  **** 
+ 230:sd_manager.c  **** 	sd_stop(); // for testing
+ 1056              		.loc 1 230 0
+ 1057 0056 FFF7FEFF 		bl	sd_stop
+ 231:sd_manager.c  **** 	sd_ok = 0; // for testing
+ 1058              		.loc 1 231 0
+ 1059 005a 064B     		ldr	r3, .L45+12
+ 1060 005c 0022     		movs	r2, #0
+ 1061 005e 1A70     		strb	r2, [r3]
+ 232:sd_manager.c  **** }//test_push
+ 1062              		.loc 1 232 0
+ 1063 0060 8837     		adds	r7, r7, #136
+ 1064              		.cfi_def_cfa_offset 8
+ 1065 0062 BD46     		mov	sp, r7
+ 1066              		.cfi_def_cfa_register 13
+ 1067              		@ sp needed
+ 1068 0064 80BD     		pop	{r7, pc}
+ 1069              	.L46:
+ 1070 0066 00BF     		.align	2
+ 1071              	.L45:
+ 1072 0068 00000000 		.word	pfile
+ 1073 006c A8000000 		.word	.LC9
+ 1074 0070 BC000000 		.word	.LC10
+ 1075 0074 00000000 		.word	sd_ok
+ 1076              		.cfi_endproc
+ 1077              	.LFE71:
+ 1078              		.size	sd_writetest, .-sd_writetest
+ 1079              		.text
+ 1080              	.Letext0:
+ 1081              		.file 2 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
+ 1082              		.file 3 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
+ 1083              		.file 4 ".\\emFile_V322c\\Code\\Include\\PSoC5/FS_Types.h"
+ 1084              		.file 5 ".\\emFile_V322c\\Code\\Include\\PSoC5/FS.h"
+ 1085              		.file 6 "data.h"
+ 1086              		.file 7 "time_manager.h"
+ 1087              		.file 8 "Generated_Source\\PSoC5/core_cm3.h"
+ 1088              		.section	.debug_info,"",%progbits
+ 1089              	.Ldebug_info0:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 25
+
+
+ 1090 0000 F5040000 		.4byte	0x4f5
+ 1091 0004 0400     		.2byte	0x4
+ 1092 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1093 000a 04       		.byte	0x4
+ 1094 000b 01       		.uleb128 0x1
+ 1095 000c F5010000 		.4byte	.LASF66
+ 1096 0010 01       		.byte	0x1
+ 1097 0011 DA020000 		.4byte	.LASF67
+ 1098 0015 96020000 		.4byte	.LASF68
+ 1099 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1100 001d 00000000 		.4byte	0
+ 1101 0021 00000000 		.4byte	.Ldebug_line0
+ 1102 0025 02       		.uleb128 0x2
+ 1103 0026 01       		.byte	0x1
+ 1104 0027 06       		.byte	0x6
+ 1105 0028 56010000 		.4byte	.LASF0
+ 1106 002c 03       		.uleb128 0x3
+ 1107 002d 1B010000 		.4byte	.LASF3
+ 1108 0031 02       		.byte	0x2
+ 1109 0032 1D       		.byte	0x1d
+ 1110 0033 37000000 		.4byte	0x37
+ 1111 0037 02       		.uleb128 0x2
+ 1112 0038 01       		.byte	0x1
+ 1113 0039 08       		.byte	0x8
+ 1114 003a 36010000 		.4byte	.LASF1
+ 1115 003e 02       		.uleb128 0x2
+ 1116 003f 02       		.byte	0x2
+ 1117 0040 05       		.byte	0x5
+ 1118 0041 3A000000 		.4byte	.LASF2
+ 1119 0045 03       		.uleb128 0x3
+ 1120 0046 81000000 		.4byte	.LASF4
+ 1121 004a 02       		.byte	0x2
+ 1122 004b 2B       		.byte	0x2b
+ 1123 004c 50000000 		.4byte	0x50
+ 1124 0050 02       		.uleb128 0x2
+ 1125 0051 02       		.byte	0x2
+ 1126 0052 07       		.byte	0x7
+ 1127 0053 B6010000 		.4byte	.LASF5
+ 1128 0057 03       		.uleb128 0x3
+ 1129 0058 0A030000 		.4byte	.LASF6
+ 1130 005c 02       		.byte	0x2
+ 1131 005d 3F       		.byte	0x3f
+ 1132 005e 62000000 		.4byte	0x62
+ 1133 0062 02       		.uleb128 0x2
+ 1134 0063 04       		.byte	0x4
+ 1135 0064 05       		.byte	0x5
+ 1136 0065 D3010000 		.4byte	.LASF7
+ 1137 0069 03       		.uleb128 0x3
+ 1138 006a 6E000000 		.4byte	.LASF8
+ 1139 006e 02       		.byte	0x2
+ 1140 006f 41       		.byte	0x41
+ 1141 0070 74000000 		.4byte	0x74
+ 1142 0074 02       		.uleb128 0x2
+ 1143 0075 04       		.byte	0x4
+ 1144 0076 07       		.byte	0x7
+ 1145 0077 9F010000 		.4byte	.LASF9
+ 1146 007b 02       		.uleb128 0x2
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 26
+
+
+ 1147 007c 08       		.byte	0x8
+ 1148 007d 05       		.byte	0x5
+ 1149 007e F4000000 		.4byte	.LASF10
+ 1150 0082 02       		.uleb128 0x2
+ 1151 0083 08       		.byte	0x8
+ 1152 0084 07       		.byte	0x7
+ 1153 0085 69010000 		.4byte	.LASF11
+ 1154 0089 04       		.uleb128 0x4
+ 1155 008a 04       		.byte	0x4
+ 1156 008b 05       		.byte	0x5
+ 1157 008c 696E7400 		.ascii	"int\000"
+ 1158 0090 02       		.uleb128 0x2
+ 1159 0091 04       		.byte	0x4
+ 1160 0092 07       		.byte	0x7
+ 1161 0093 89010000 		.4byte	.LASF12
+ 1162 0097 03       		.uleb128 0x3
+ 1163 0098 AE000000 		.4byte	.LASF13
+ 1164 009c 03       		.byte	0x3
+ 1165 009d 15       		.byte	0x15
+ 1166 009e 2C000000 		.4byte	0x2c
+ 1167 00a2 03       		.uleb128 0x3
+ 1168 00a3 96010000 		.4byte	.LASF14
+ 1169 00a7 03       		.byte	0x3
+ 1170 00a8 21       		.byte	0x21
+ 1171 00a9 45000000 		.4byte	0x45
+ 1172 00ad 03       		.uleb128 0x3
+ 1173 00ae DC010000 		.4byte	.LASF15
+ 1174 00b2 03       		.byte	0x3
+ 1175 00b3 2C       		.byte	0x2c
+ 1176 00b4 57000000 		.4byte	0x57
+ 1177 00b8 03       		.uleb128 0x3
+ 1178 00b9 80010000 		.4byte	.LASF16
+ 1179 00bd 03       		.byte	0x3
+ 1180 00be 2D       		.byte	0x2d
+ 1181 00bf 69000000 		.4byte	0x69
+ 1182 00c3 02       		.uleb128 0x2
+ 1183 00c4 04       		.byte	0x4
+ 1184 00c5 04       		.byte	0x4
+ 1185 00c6 DC000000 		.4byte	.LASF17
+ 1186 00ca 02       		.uleb128 0x2
+ 1187 00cb 08       		.byte	0x8
+ 1188 00cc 04       		.byte	0x4
+ 1189 00cd EF020000 		.4byte	.LASF18
+ 1190 00d1 02       		.uleb128 0x2
+ 1191 00d2 01       		.byte	0x1
+ 1192 00d3 08       		.byte	0x8
+ 1193 00d4 CE010000 		.4byte	.LASF19
+ 1194 00d8 02       		.uleb128 0x2
+ 1195 00d9 04       		.byte	0x4
+ 1196 00da 07       		.byte	0x7
+ 1197 00db 29030000 		.4byte	.LASF20
+ 1198 00df 05       		.uleb128 0x5
+ 1199 00e0 04       		.byte	0x4
+ 1200 00e1 D1000000 		.4byte	0xd1
+ 1201 00e5 03       		.uleb128 0x3
+ 1202 00e6 4E010000 		.4byte	.LASF21
+ 1203 00ea 04       		.byte	0x4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 27
+
+
+ 1204 00eb 7E       		.byte	0x7e
+ 1205 00ec F0000000 		.4byte	0xf0
+ 1206 00f0 06       		.uleb128 0x6
+ 1207 00f1 4E010000 		.4byte	.LASF21
+ 1208 00f5 07       		.uleb128 0x7
+ 1209 00f6 0C       		.byte	0xc
+ 1210 00f7 05       		.byte	0x5
+ 1211 00f8 FD       		.byte	0xfd
+ 1212 00f9 4A010000 		.4byte	0x14a
+ 1213 00fd 08       		.uleb128 0x8
+ 1214 00fe 16010000 		.4byte	.LASF22
+ 1215 0102 05       		.byte	0x5
+ 1216 0103 FE       		.byte	0xfe
+ 1217 0104 50000000 		.4byte	0x50
+ 1218 0108 00       		.byte	0
+ 1219 0109 08       		.uleb128 0x8
+ 1220 010a 54030000 		.4byte	.LASF23
+ 1221 010e 05       		.byte	0x5
+ 1222 010f FF       		.byte	0xff
+ 1223 0110 50000000 		.4byte	0x50
+ 1224 0114 02       		.byte	0x2
+ 1225 0115 09       		.uleb128 0x9
+ 1226 0116 44617900 		.ascii	"Day\000"
+ 1227 011a 05       		.byte	0x5
+ 1228 011b 0001     		.2byte	0x100
+ 1229 011d 50000000 		.4byte	0x50
+ 1230 0121 04       		.byte	0x4
+ 1231 0122 0A       		.uleb128 0xa
+ 1232 0123 C9010000 		.4byte	.LASF24
+ 1233 0127 05       		.byte	0x5
+ 1234 0128 0101     		.2byte	0x101
+ 1235 012a 50000000 		.4byte	0x50
+ 1236 012e 06       		.byte	0x6
+ 1237 012f 0A       		.uleb128 0xa
+ 1238 0130 5A030000 		.4byte	.LASF25
+ 1239 0134 05       		.byte	0x5
+ 1240 0135 0201     		.2byte	0x102
+ 1241 0137 50000000 		.4byte	0x50
+ 1242 013b 08       		.byte	0x8
+ 1243 013c 0A       		.uleb128 0xa
+ 1244 013d D3020000 		.4byte	.LASF26
+ 1245 0141 05       		.byte	0x5
+ 1246 0142 0301     		.2byte	0x103
+ 1247 0144 50000000 		.4byte	0x50
+ 1248 0148 0A       		.byte	0xa
+ 1249 0149 00       		.byte	0
+ 1250 014a 0B       		.uleb128 0xb
+ 1251 014b 59000000 		.4byte	.LASF27
+ 1252 014f 05       		.byte	0x5
+ 1253 0150 0401     		.2byte	0x104
+ 1254 0152 F5000000 		.4byte	0xf5
+ 1255 0156 0C       		.uleb128 0xc
+ 1256 0157 01       		.byte	0x1
+ 1257 0158 05       		.byte	0x5
+ 1258 0159 0601     		.2byte	0x106
+ 1259 015b 72010000 		.4byte	0x172
+ 1260 015f 0D       		.uleb128 0xd
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 28
+
+
+ 1261 0160 E2000000 		.4byte	.LASF28
+ 1262 0164 00       		.sleb128 0
+ 1263 0165 0D       		.uleb128 0xd
+ 1264 0166 F6020000 		.4byte	.LASF29
+ 1265 016a 01       		.sleb128 1
+ 1266 016b 0D       		.uleb128 0xd
+ 1267 016c 08000000 		.4byte	.LASF30
+ 1268 0170 02       		.sleb128 2
+ 1269 0171 00       		.byte	0
+ 1270 0172 05       		.uleb128 0x5
+ 1271 0173 04       		.byte	0x4
+ 1272 0174 E5000000 		.4byte	0xe5
+ 1273 0178 07       		.uleb128 0x7
+ 1274 0179 10       		.byte	0x10
+ 1275 017a 06       		.byte	0x6
+ 1276 017b 0A       		.byte	0xa
+ 1277 017c B0010000 		.4byte	0x1b0
+ 1278 0180 08       		.uleb128 0x8
+ 1279 0181 A1000000 		.4byte	.LASF31
+ 1280 0185 06       		.byte	0x6
+ 1281 0186 0B       		.byte	0xb
+ 1282 0187 B8000000 		.4byte	0xb8
+ 1283 018b 00       		.byte	0
+ 1284 018c 0E       		.uleb128 0xe
+ 1285 018d 696400   		.ascii	"id\000"
+ 1286 0190 06       		.byte	0x6
+ 1287 0191 0C       		.byte	0xc
+ 1288 0192 A2000000 		.4byte	0xa2
+ 1289 0196 04       		.byte	0x4
+ 1290 0197 08       		.uleb128 0x8
+ 1291 0198 2F010000 		.4byte	.LASF32
+ 1292 019c 06       		.byte	0x6
+ 1293 019d 0D       		.byte	0xd
+ 1294 019e 97000000 		.4byte	0x97
+ 1295 01a2 06       		.byte	0x6
+ 1296 01a3 08       		.uleb128 0x8
+ 1297 01a4 83020000 		.4byte	.LASF33
+ 1298 01a8 06       		.byte	0x6
+ 1299 01a9 0E       		.byte	0xe
+ 1300 01aa B0010000 		.4byte	0x1b0
+ 1301 01ae 07       		.byte	0x7
+ 1302 01af 00       		.byte	0
+ 1303 01b0 0F       		.uleb128 0xf
+ 1304 01b1 97000000 		.4byte	0x97
+ 1305 01b5 C0010000 		.4byte	0x1c0
+ 1306 01b9 10       		.uleb128 0x10
+ 1307 01ba D8000000 		.4byte	0xd8
+ 1308 01be 07       		.byte	0x7
+ 1309 01bf 00       		.byte	0
+ 1310 01c0 03       		.uleb128 0x3
+ 1311 01c1 EA010000 		.4byte	.LASF34
+ 1312 01c5 06       		.byte	0x6
+ 1313 01c6 0F       		.byte	0xf
+ 1314 01c7 78010000 		.4byte	0x178
+ 1315 01cb 07       		.uleb128 0x7
+ 1316 01cc 10       		.byte	0x10
+ 1317 01cd 07       		.byte	0x7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 29
+
+
+ 1318 01ce 12       		.byte	0x12
+ 1319 01cf 28020000 		.4byte	0x228
+ 1320 01d3 08       		.uleb128 0x8
+ 1321 01d4 E4010000 		.4byte	.LASF35
+ 1322 01d8 07       		.byte	0x7
+ 1323 01d9 13       		.byte	0x13
+ 1324 01da 97000000 		.4byte	0x97
+ 1325 01de 00       		.byte	0
+ 1326 01df 0E       		.uleb128 0xe
+ 1327 01e0 64617900 		.ascii	"day\000"
+ 1328 01e4 07       		.byte	0x7
+ 1329 01e5 13       		.byte	0x13
+ 1330 01e6 97000000 		.4byte	0x97
+ 1331 01ea 01       		.byte	0x1
+ 1332 01eb 08       		.uleb128 0x8
+ 1333 01ec 2A010000 		.4byte	.LASF36
+ 1334 01f0 07       		.byte	0x7
+ 1335 01f1 13       		.byte	0x13
+ 1336 01f2 97000000 		.4byte	0x97
+ 1337 01f6 02       		.byte	0x2
+ 1338 01f7 08       		.uleb128 0x8
+ 1339 01f8 8F020000 		.4byte	.LASF37
+ 1340 01fc 07       		.byte	0x7
+ 1341 01fd 13       		.byte	0x13
+ 1342 01fe 97000000 		.4byte	0x97
+ 1343 0202 03       		.byte	0x3
+ 1344 0203 08       		.uleb128 0x8
+ 1345 0204 62010000 		.4byte	.LASF38
+ 1346 0208 07       		.byte	0x7
+ 1347 0209 13       		.byte	0x13
+ 1348 020a 97000000 		.4byte	0x97
+ 1349 020e 04       		.byte	0x4
+ 1350 020f 08       		.uleb128 0x8
+ 1351 0210 A1000000 		.4byte	.LASF31
+ 1352 0214 07       		.byte	0x7
+ 1353 0215 14       		.byte	0x14
+ 1354 0216 B8000000 		.4byte	0xb8
+ 1355 021a 08       		.byte	0x8
+ 1356 021b 08       		.uleb128 0x8
+ 1357 021c 9C000000 		.4byte	.LASF39
+ 1358 0220 07       		.byte	0x7
+ 1359 0221 15       		.byte	0x15
+ 1360 0222 A2000000 		.4byte	0xa2
+ 1361 0226 0C       		.byte	0xc
+ 1362 0227 00       		.byte	0
+ 1363 0228 03       		.uleb128 0x3
+ 1364 0229 25010000 		.4byte	.LASF40
+ 1365 022d 07       		.byte	0x7
+ 1366 022e 16       		.byte	0x16
+ 1367 022f CB010000 		.4byte	0x1cb
+ 1368 0233 11       		.uleb128 0x11
+ 1369 0234 8C000000 		.4byte	.LASF41
+ 1370 0238 01       		.byte	0x1
+ 1371 0239 0E       		.byte	0xe
+ 1372 023a 00000000 		.4byte	.LFB63
+ 1373 023e 1C000000 		.4byte	.LFE63-.LFB63
+ 1374 0242 01       		.uleb128 0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 30
+
+
+ 1375 0243 9C       		.byte	0x9c
+ 1376 0244 11       		.uleb128 0x11
+ 1377 0245 3A030000 		.4byte	.LASF42
+ 1378 0249 01       		.byte	0x1
+ 1379 024a 17       		.byte	0x17
+ 1380 024b 00000000 		.4byte	.LFB64
+ 1381 024f 0A000000 		.4byte	.LFE64-.LFB64
+ 1382 0253 01       		.uleb128 0x1
+ 1383 0254 9C       		.byte	0x9c
+ 1384 0255 12       		.uleb128 0x12
+ 1385 0256 00000000 		.4byte	.LASF47
+ 1386 025a 01       		.byte	0x1
+ 1387 025b 27       		.byte	0x27
+ 1388 025c 00000000 		.4byte	.LFB65
+ 1389 0260 A0010000 		.4byte	.LFE65-.LFB65
+ 1390 0264 01       		.uleb128 0x1
+ 1391 0265 9C       		.byte	0x9c
+ 1392 0266 BF020000 		.4byte	0x2bf
+ 1393 026a 13       		.uleb128 0x13
+ 1394 026b B1010000 		.4byte	.LASF49
+ 1395 026f 01       		.byte	0x1
+ 1396 0270 27       		.byte	0x27
+ 1397 0271 28020000 		.4byte	0x228
+ 1398 0275 03       		.uleb128 0x3
+ 1399 0276 91       		.byte	0x91
+ 1400 0277 E87E     		.sleb128 -152
+ 1401 0279 14       		.uleb128 0x14
+ 1402 027a 1A000000 		.4byte	.LASF43
+ 1403 027e 01       		.byte	0x1
+ 1404 027f 34       		.byte	0x34
+ 1405 0280 BF020000 		.4byte	0x2bf
+ 1406 0284 02       		.uleb128 0x2
+ 1407 0285 91       		.byte	0x91
+ 1408 0286 48       		.sleb128 -56
+ 1409 0287 14       		.uleb128 0x14
+ 1410 0288 50000000 		.4byte	.LASF44
+ 1411 028c 01       		.byte	0x1
+ 1412 028d 34       		.byte	0x34
+ 1413 028e CF020000 		.4byte	0x2cf
+ 1414 0292 03       		.uleb128 0x3
+ 1415 0293 91       		.byte	0x91
+ 1416 0294 887F     		.sleb128 -120
+ 1417 0296 15       		.uleb128 0x15
+ 1418 0297 3E000000 		.4byte	.LBB2
+ 1419 029b 2A010000 		.4byte	.LBE2-.LBB2
+ 1420 029f 14       		.uleb128 0x14
+ 1421 02a0 44010000 		.4byte	.LASF45
+ 1422 02a4 01       		.byte	0x1
+ 1423 02a5 59       		.byte	0x59
+ 1424 02a6 4A010000 		.4byte	0x14a
+ 1425 02aa 03       		.uleb128 0x3
+ 1426 02ab 91       		.byte	0x91
+ 1427 02ac FC7E     		.sleb128 -132
+ 1428 02ae 14       		.uleb128 0x14
+ 1429 02af B6000000 		.4byte	.LASF46
+ 1430 02b3 01       		.byte	0x1
+ 1431 02b4 5A       		.byte	0x5a
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 31
+
+
+ 1432 02b5 74000000 		.4byte	0x74
+ 1433 02b9 03       		.uleb128 0x3
+ 1434 02ba 91       		.byte	0x91
+ 1435 02bb F87E     		.sleb128 -136
+ 1436 02bd 00       		.byte	0
+ 1437 02be 00       		.byte	0
+ 1438 02bf 0F       		.uleb128 0xf
+ 1439 02c0 D1000000 		.4byte	0xd1
+ 1440 02c4 CF020000 		.4byte	0x2cf
+ 1441 02c8 10       		.uleb128 0x10
+ 1442 02c9 D8000000 		.4byte	0xd8
+ 1443 02cd 1F       		.byte	0x1f
+ 1444 02ce 00       		.byte	0
+ 1445 02cf 0F       		.uleb128 0xf
+ 1446 02d0 D1000000 		.4byte	0xd1
+ 1447 02d4 DF020000 		.4byte	0x2df
+ 1448 02d8 10       		.uleb128 0x10
+ 1449 02d9 D8000000 		.4byte	0xd8
+ 1450 02dd 3F       		.byte	0x3f
+ 1451 02de 00       		.byte	0
+ 1452 02df 12       		.uleb128 0x12
+ 1453 02e0 02010000 		.4byte	.LASF48
+ 1454 02e4 01       		.byte	0x1
+ 1455 02e5 75       		.byte	0x75
+ 1456 02e6 00000000 		.4byte	.LFB66
+ 1457 02ea 90010000 		.4byte	.LFE66-.LFB66
+ 1458 02ee 01       		.uleb128 0x1
+ 1459 02ef 9C       		.byte	0x9c
+ 1460 02f0 47030000 		.4byte	0x347
+ 1461 02f4 13       		.uleb128 0x13
+ 1462 02f5 B1010000 		.4byte	.LASF49
+ 1463 02f9 01       		.byte	0x1
+ 1464 02fa 75       		.byte	0x75
+ 1465 02fb 28020000 		.4byte	0x228
+ 1466 02ff 03       		.uleb128 0x3
+ 1467 0300 91       		.byte	0x91
+ 1468 0301 887F     		.sleb128 -120
+ 1469 0303 15       		.uleb128 0x15
+ 1470 0304 24000000 		.4byte	.LBB3
+ 1471 0308 52010000 		.4byte	.LBE3-.LBB3
+ 1472 030c 14       		.uleb128 0x14
+ 1473 030d 88020000 		.4byte	.LASF50
+ 1474 0311 01       		.byte	0x1
+ 1475 0312 77       		.byte	0x77
+ 1476 0313 CF020000 		.4byte	0x2cf
+ 1477 0317 03       		.uleb128 0x3
+ 1478 0318 91       		.byte	0x91
+ 1479 0319 987F     		.sleb128 -104
+ 1480 031b 16       		.uleb128 0x16
+ 1481 031c 70747200 		.ascii	"ptr\000"
+ 1482 0320 01       		.byte	0x1
+ 1483 0321 78       		.byte	0x78
+ 1484 0322 DF000000 		.4byte	0xdf
+ 1485 0326 02       		.uleb128 0x2
+ 1486 0327 91       		.byte	0x91
+ 1487 0328 6C       		.sleb128 -20
+ 1488 0329 16       		.uleb128 0x16
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 32
+
+
+ 1489 032a 6E756D00 		.ascii	"num\000"
+ 1490 032e 01       		.byte	0x1
+ 1491 032f 79       		.byte	0x79
+ 1492 0330 A2000000 		.4byte	0xa2
+ 1493 0334 02       		.uleb128 0x2
+ 1494 0335 91       		.byte	0x91
+ 1495 0336 6A       		.sleb128 -22
+ 1496 0337 14       		.uleb128 0x14
+ 1497 0338 65000000 		.4byte	.LASF51
+ 1498 033c 01       		.byte	0x1
+ 1499 033d 7A       		.byte	0x7a
+ 1500 033e 28020000 		.4byte	0x228
+ 1501 0342 02       		.uleb128 0x2
+ 1502 0343 91       		.byte	0x91
+ 1503 0344 58       		.sleb128 -40
+ 1504 0345 00       		.byte	0
+ 1505 0346 00       		.byte	0
+ 1506 0347 17       		.uleb128 0x17
+ 1507 0348 D3000000 		.4byte	.LASF53
+ 1508 034c 01       		.byte	0x1
+ 1509 034d A4       		.byte	0xa4
+ 1510 034e 00000000 		.4byte	.LFB67
+ 1511 0352 60010000 		.4byte	.LFE67-.LFB67
+ 1512 0356 01       		.uleb128 0x1
+ 1513 0357 9C       		.byte	0x9c
+ 1514 0358 88030000 		.4byte	0x388
+ 1515 035c 14       		.uleb128 0x14
+ 1516 035d 88020000 		.4byte	.LASF50
+ 1517 0361 01       		.byte	0x1
+ 1518 0362 A7       		.byte	0xa7
+ 1519 0363 CF020000 		.4byte	0x2cf
+ 1520 0367 03       		.uleb128 0x3
+ 1521 0368 91       		.byte	0x91
+ 1522 0369 9C7F     		.sleb128 -100
+ 1523 036b 14       		.uleb128 0x14
+ 1524 036c 2F010000 		.4byte	.LASF32
+ 1525 0370 01       		.byte	0x1
+ 1526 0371 A8       		.byte	0xa8
+ 1527 0372 3E000000 		.4byte	0x3e
+ 1528 0376 02       		.uleb128 0x2
+ 1529 0377 91       		.byte	0x91
+ 1530 0378 5E       		.sleb128 -34
+ 1531 0379 14       		.uleb128 0x14
+ 1532 037a 2D000000 		.4byte	.LASF52
+ 1533 037e 01       		.byte	0x1
+ 1534 037f AA       		.byte	0xaa
+ 1535 0380 97000000 		.4byte	0x97
+ 1536 0384 02       		.uleb128 0x2
+ 1537 0385 91       		.byte	0x91
+ 1538 0386 5D       		.sleb128 -35
+ 1539 0387 00       		.byte	0
+ 1540 0388 17       		.uleb128 0x17
+ 1541 0389 79000000 		.4byte	.LASF54
+ 1542 038d 01       		.byte	0x1
+ 1543 038e C0       		.byte	0xc0
+ 1544 038f 00000000 		.4byte	.LFB68
+ 1545 0393 48000000 		.4byte	.LFE68-.LFB68
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 33
+
+
+ 1546 0397 01       		.uleb128 0x1
+ 1547 0398 9C       		.byte	0x9c
+ 1548 0399 B7030000 		.4byte	0x3b7
+ 1549 039d 15       		.uleb128 0x15
+ 1550 039e 1C000000 		.4byte	.LBB4
+ 1551 03a2 1A000000 		.4byte	.LBE4-.LBB4
+ 1552 03a6 14       		.uleb128 0x14
+ 1553 03a7 88020000 		.4byte	.LASF50
+ 1554 03ab 01       		.byte	0x1
+ 1555 03ac C2       		.byte	0xc2
+ 1556 03ad CF020000 		.4byte	0x2cf
+ 1557 03b1 03       		.uleb128 0x3
+ 1558 03b2 91       		.byte	0x91
+ 1559 03b3 B87F     		.sleb128 -72
+ 1560 03b5 00       		.byte	0
+ 1561 03b6 00       		.byte	0
+ 1562 03b7 18       		.uleb128 0x18
+ 1563 03b8 23000000 		.4byte	.LASF55
+ 1564 03bc 01       		.byte	0x1
+ 1565 03bd CB       		.byte	0xcb
+ 1566 03be 00000000 		.4byte	.LFB69
+ 1567 03c2 50000000 		.4byte	.LFE69-.LFB69
+ 1568 03c6 01       		.uleb128 0x1
+ 1569 03c7 9C       		.byte	0x9c
+ 1570 03c8 DB030000 		.4byte	0x3db
+ 1571 03cc 19       		.uleb128 0x19
+ 1572 03cd 6D736700 		.ascii	"msg\000"
+ 1573 03d1 01       		.byte	0x1
+ 1574 03d2 CB       		.byte	0xcb
+ 1575 03d3 DB030000 		.4byte	0x3db
+ 1576 03d7 02       		.uleb128 0x2
+ 1577 03d8 91       		.byte	0x91
+ 1578 03d9 74       		.sleb128 -12
+ 1579 03da 00       		.byte	0
+ 1580 03db 05       		.uleb128 0x5
+ 1581 03dc 04       		.byte	0x4
+ 1582 03dd C0010000 		.4byte	0x1c0
+ 1583 03e1 11       		.uleb128 0x11
+ 1584 03e2 32030000 		.4byte	.LASF56
+ 1585 03e6 01       		.byte	0x1
+ 1586 03e7 D3       		.byte	0xd3
+ 1587 03e8 00000000 		.4byte	.LFB70
+ 1588 03ec 28000000 		.4byte	.LFE70-.LFB70
+ 1589 03f0 01       		.uleb128 0x1
+ 1590 03f1 9C       		.byte	0x9c
+ 1591 03f2 17       		.uleb128 0x17
+ 1592 03f3 61030000 		.4byte	.LASF57
+ 1593 03f7 01       		.byte	0x1
+ 1594 03f8 DB       		.byte	0xdb
+ 1595 03f9 00000000 		.4byte	.LFB71
+ 1596 03fd 78000000 		.4byte	.LFE71-.LFB71
+ 1597 0401 01       		.uleb128 0x1
+ 1598 0402 9C       		.byte	0x9c
+ 1599 0403 25040000 		.4byte	0x425
+ 1600 0407 14       		.uleb128 0x14
+ 1601 0408 88020000 		.4byte	.LASF50
+ 1602 040c 01       		.byte	0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 34
+
+
+ 1603 040d DD       		.byte	0xdd
+ 1604 040e 25040000 		.4byte	0x425
+ 1605 0412 03       		.uleb128 0x3
+ 1606 0413 91       		.byte	0x91
+ 1607 0414 F47E     		.sleb128 -140
+ 1608 0416 14       		.uleb128 0x14
+ 1609 0417 2F010000 		.4byte	.LASF32
+ 1610 041b 01       		.byte	0x1
+ 1611 041c DE       		.byte	0xde
+ 1612 041d 3E000000 		.4byte	0x3e
+ 1613 0421 02       		.uleb128 0x2
+ 1614 0422 91       		.byte	0x91
+ 1615 0423 76       		.sleb128 -10
+ 1616 0424 00       		.byte	0
+ 1617 0425 0F       		.uleb128 0xf
+ 1618 0426 D1000000 		.4byte	0xd1
+ 1619 042a 35040000 		.4byte	0x435
+ 1620 042e 10       		.uleb128 0x10
+ 1621 042f D8000000 		.4byte	0xd8
+ 1622 0433 7F       		.byte	0x7f
+ 1623 0434 00       		.byte	0
+ 1624 0435 1A       		.uleb128 0x1a
+ 1625 0436 47030000 		.4byte	.LASF58
+ 1626 043a 08       		.byte	0x8
+ 1627 043b 9606     		.2byte	0x696
+ 1628 043d 41040000 		.4byte	0x441
+ 1629 0441 1B       		.uleb128 0x1b
+ 1630 0442 AD000000 		.4byte	0xad
+ 1631 0446 1C       		.uleb128 0x1c
+ 1632 0447 14030000 		.4byte	.LASF59
+ 1633 044b 01       		.byte	0x1
+ 1634 044c 04       		.byte	0x4
+ 1635 044d 72010000 		.4byte	0x172
+ 1636 0451 05       		.uleb128 0x5
+ 1637 0452 03       		.byte	0x3
+ 1638 0453 00000000 		.4byte	pfile
+ 1639 0457 1C       		.uleb128 0x1c
+ 1640 0458 1A030000 		.4byte	.LASF60
+ 1641 045c 01       		.byte	0x1
+ 1642 045d 05       		.byte	0x5
+ 1643 045e 97000000 		.4byte	0x97
+ 1644 0462 05       		.uleb128 0x5
+ 1645 0463 03       		.byte	0x3
+ 1646 0464 00000000 		.4byte	sd_ok
+ 1647 0468 0F       		.uleb128 0xf
+ 1648 0469 D1000000 		.4byte	0xd1
+ 1649 046d 78040000 		.4byte	0x478
+ 1650 0471 10       		.uleb128 0x10
+ 1651 0472 D8000000 		.4byte	0xd8
+ 1652 0476 0D       		.byte	0xd
+ 1653 0477 00       		.byte	0
+ 1654 0478 1C       		.uleb128 0x1c
+ 1655 0479 C5000000 		.4byte	.LASF61
+ 1656 047d 01       		.byte	0x1
+ 1657 047e 07       		.byte	0x7
+ 1658 047f 89040000 		.4byte	0x489
+ 1659 0483 05       		.uleb128 0x5
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 35
+
+
+ 1660 0484 03       		.byte	0x3
+ 1661 0485 00000000 		.4byte	set_time_file
+ 1662 0489 1D       		.uleb128 0x1d
+ 1663 048a 68040000 		.4byte	0x468
+ 1664 048e 0F       		.uleb128 0xf
+ 1665 048f D1000000 		.4byte	0xd1
+ 1666 0493 9E040000 		.4byte	0x49e
+ 1667 0497 10       		.uleb128 0x10
+ 1668 0498 D8000000 		.4byte	0xd8
+ 1669 049c 0B       		.byte	0xb
+ 1670 049d 00       		.byte	0
+ 1671 049e 1C       		.uleb128 0x1c
+ 1672 049f 44000000 		.4byte	.LASF62
+ 1673 04a3 01       		.byte	0x1
+ 1674 04a4 08       		.byte	0x8
+ 1675 04a5 AF040000 		.4byte	0x4af
+ 1676 04a9 05       		.uleb128 0x5
+ 1677 04aa 03       		.byte	0x3
+ 1678 04ab 00000000 		.4byte	format_file
+ 1679 04af 1D       		.uleb128 0x1d
+ 1680 04b0 8E040000 		.4byte	0x48e
+ 1681 04b4 0F       		.uleb128 0xf
+ 1682 04b5 C0010000 		.4byte	0x1c0
+ 1683 04b9 C5040000 		.4byte	0x4c5
+ 1684 04bd 1E       		.uleb128 0x1e
+ 1685 04be D8000000 		.4byte	0xd8
+ 1686 04c2 FF03     		.2byte	0x3ff
+ 1687 04c4 00       		.byte	0
+ 1688 04c5 1C       		.uleb128 0x1c
+ 1689 04c6 20030000 		.4byte	.LASF63
+ 1690 04ca 01       		.byte	0x1
+ 1691 04cb 0A       		.byte	0xa
+ 1692 04cc B4040000 		.4byte	0x4b4
+ 1693 04d0 05       		.uleb128 0x5
+ 1694 04d1 03       		.byte	0x3
+ 1695 04d2 00000000 		.4byte	sd_queue
+ 1696 04d6 1C       		.uleb128 0x1c
+ 1697 04d7 E7020000 		.4byte	.LASF64
+ 1698 04db 01       		.byte	0x1
+ 1699 04dc 0B       		.byte	0xb
+ 1700 04dd A2000000 		.4byte	0xa2
+ 1701 04e1 05       		.uleb128 0x5
+ 1702 04e2 03       		.byte	0x3
+ 1703 04e3 00000000 		.4byte	sd_head
+ 1704 04e7 1C       		.uleb128 0x1c
+ 1705 04e8 0E010000 		.4byte	.LASF65
+ 1706 04ec 01       		.byte	0x1
+ 1707 04ed 0B       		.byte	0xb
+ 1708 04ee A2000000 		.4byte	0xa2
+ 1709 04f2 05       		.uleb128 0x5
+ 1710 04f3 03       		.byte	0x3
+ 1711 04f4 00000000 		.4byte	sd_tail
+ 1712 04f8 00       		.byte	0
+ 1713              		.section	.debug_abbrev,"",%progbits
+ 1714              	.Ldebug_abbrev0:
+ 1715 0000 01       		.uleb128 0x1
+ 1716 0001 11       		.uleb128 0x11
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 36
+
+
+ 1717 0002 01       		.byte	0x1
+ 1718 0003 25       		.uleb128 0x25
+ 1719 0004 0E       		.uleb128 0xe
+ 1720 0005 13       		.uleb128 0x13
+ 1721 0006 0B       		.uleb128 0xb
+ 1722 0007 03       		.uleb128 0x3
+ 1723 0008 0E       		.uleb128 0xe
+ 1724 0009 1B       		.uleb128 0x1b
+ 1725 000a 0E       		.uleb128 0xe
+ 1726 000b 55       		.uleb128 0x55
+ 1727 000c 17       		.uleb128 0x17
+ 1728 000d 11       		.uleb128 0x11
+ 1729 000e 01       		.uleb128 0x1
+ 1730 000f 10       		.uleb128 0x10
+ 1731 0010 17       		.uleb128 0x17
+ 1732 0011 00       		.byte	0
+ 1733 0012 00       		.byte	0
+ 1734 0013 02       		.uleb128 0x2
+ 1735 0014 24       		.uleb128 0x24
+ 1736 0015 00       		.byte	0
+ 1737 0016 0B       		.uleb128 0xb
+ 1738 0017 0B       		.uleb128 0xb
+ 1739 0018 3E       		.uleb128 0x3e
+ 1740 0019 0B       		.uleb128 0xb
+ 1741 001a 03       		.uleb128 0x3
+ 1742 001b 0E       		.uleb128 0xe
+ 1743 001c 00       		.byte	0
+ 1744 001d 00       		.byte	0
+ 1745 001e 03       		.uleb128 0x3
+ 1746 001f 16       		.uleb128 0x16
+ 1747 0020 00       		.byte	0
+ 1748 0021 03       		.uleb128 0x3
+ 1749 0022 0E       		.uleb128 0xe
+ 1750 0023 3A       		.uleb128 0x3a
+ 1751 0024 0B       		.uleb128 0xb
+ 1752 0025 3B       		.uleb128 0x3b
+ 1753 0026 0B       		.uleb128 0xb
+ 1754 0027 49       		.uleb128 0x49
+ 1755 0028 13       		.uleb128 0x13
+ 1756 0029 00       		.byte	0
+ 1757 002a 00       		.byte	0
+ 1758 002b 04       		.uleb128 0x4
+ 1759 002c 24       		.uleb128 0x24
+ 1760 002d 00       		.byte	0
+ 1761 002e 0B       		.uleb128 0xb
+ 1762 002f 0B       		.uleb128 0xb
+ 1763 0030 3E       		.uleb128 0x3e
+ 1764 0031 0B       		.uleb128 0xb
+ 1765 0032 03       		.uleb128 0x3
+ 1766 0033 08       		.uleb128 0x8
+ 1767 0034 00       		.byte	0
+ 1768 0035 00       		.byte	0
+ 1769 0036 05       		.uleb128 0x5
+ 1770 0037 0F       		.uleb128 0xf
+ 1771 0038 00       		.byte	0
+ 1772 0039 0B       		.uleb128 0xb
+ 1773 003a 0B       		.uleb128 0xb
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 37
+
+
+ 1774 003b 49       		.uleb128 0x49
+ 1775 003c 13       		.uleb128 0x13
+ 1776 003d 00       		.byte	0
+ 1777 003e 00       		.byte	0
+ 1778 003f 06       		.uleb128 0x6
+ 1779 0040 13       		.uleb128 0x13
+ 1780 0041 00       		.byte	0
+ 1781 0042 03       		.uleb128 0x3
+ 1782 0043 0E       		.uleb128 0xe
+ 1783 0044 3C       		.uleb128 0x3c
+ 1784 0045 19       		.uleb128 0x19
+ 1785 0046 00       		.byte	0
+ 1786 0047 00       		.byte	0
+ 1787 0048 07       		.uleb128 0x7
+ 1788 0049 13       		.uleb128 0x13
+ 1789 004a 01       		.byte	0x1
+ 1790 004b 0B       		.uleb128 0xb
+ 1791 004c 0B       		.uleb128 0xb
+ 1792 004d 3A       		.uleb128 0x3a
+ 1793 004e 0B       		.uleb128 0xb
+ 1794 004f 3B       		.uleb128 0x3b
+ 1795 0050 0B       		.uleb128 0xb
+ 1796 0051 01       		.uleb128 0x1
+ 1797 0052 13       		.uleb128 0x13
+ 1798 0053 00       		.byte	0
+ 1799 0054 00       		.byte	0
+ 1800 0055 08       		.uleb128 0x8
+ 1801 0056 0D       		.uleb128 0xd
+ 1802 0057 00       		.byte	0
+ 1803 0058 03       		.uleb128 0x3
+ 1804 0059 0E       		.uleb128 0xe
+ 1805 005a 3A       		.uleb128 0x3a
+ 1806 005b 0B       		.uleb128 0xb
+ 1807 005c 3B       		.uleb128 0x3b
+ 1808 005d 0B       		.uleb128 0xb
+ 1809 005e 49       		.uleb128 0x49
+ 1810 005f 13       		.uleb128 0x13
+ 1811 0060 38       		.uleb128 0x38
+ 1812 0061 0B       		.uleb128 0xb
+ 1813 0062 00       		.byte	0
+ 1814 0063 00       		.byte	0
+ 1815 0064 09       		.uleb128 0x9
+ 1816 0065 0D       		.uleb128 0xd
+ 1817 0066 00       		.byte	0
+ 1818 0067 03       		.uleb128 0x3
+ 1819 0068 08       		.uleb128 0x8
+ 1820 0069 3A       		.uleb128 0x3a
+ 1821 006a 0B       		.uleb128 0xb
+ 1822 006b 3B       		.uleb128 0x3b
+ 1823 006c 05       		.uleb128 0x5
+ 1824 006d 49       		.uleb128 0x49
+ 1825 006e 13       		.uleb128 0x13
+ 1826 006f 38       		.uleb128 0x38
+ 1827 0070 0B       		.uleb128 0xb
+ 1828 0071 00       		.byte	0
+ 1829 0072 00       		.byte	0
+ 1830 0073 0A       		.uleb128 0xa
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 38
+
+
+ 1831 0074 0D       		.uleb128 0xd
+ 1832 0075 00       		.byte	0
+ 1833 0076 03       		.uleb128 0x3
+ 1834 0077 0E       		.uleb128 0xe
+ 1835 0078 3A       		.uleb128 0x3a
+ 1836 0079 0B       		.uleb128 0xb
+ 1837 007a 3B       		.uleb128 0x3b
+ 1838 007b 05       		.uleb128 0x5
+ 1839 007c 49       		.uleb128 0x49
+ 1840 007d 13       		.uleb128 0x13
+ 1841 007e 38       		.uleb128 0x38
+ 1842 007f 0B       		.uleb128 0xb
+ 1843 0080 00       		.byte	0
+ 1844 0081 00       		.byte	0
+ 1845 0082 0B       		.uleb128 0xb
+ 1846 0083 16       		.uleb128 0x16
+ 1847 0084 00       		.byte	0
+ 1848 0085 03       		.uleb128 0x3
+ 1849 0086 0E       		.uleb128 0xe
+ 1850 0087 3A       		.uleb128 0x3a
+ 1851 0088 0B       		.uleb128 0xb
+ 1852 0089 3B       		.uleb128 0x3b
+ 1853 008a 05       		.uleb128 0x5
+ 1854 008b 49       		.uleb128 0x49
+ 1855 008c 13       		.uleb128 0x13
+ 1856 008d 00       		.byte	0
+ 1857 008e 00       		.byte	0
+ 1858 008f 0C       		.uleb128 0xc
+ 1859 0090 04       		.uleb128 0x4
+ 1860 0091 01       		.byte	0x1
+ 1861 0092 0B       		.uleb128 0xb
+ 1862 0093 0B       		.uleb128 0xb
+ 1863 0094 3A       		.uleb128 0x3a
+ 1864 0095 0B       		.uleb128 0xb
+ 1865 0096 3B       		.uleb128 0x3b
+ 1866 0097 05       		.uleb128 0x5
+ 1867 0098 01       		.uleb128 0x1
+ 1868 0099 13       		.uleb128 0x13
+ 1869 009a 00       		.byte	0
+ 1870 009b 00       		.byte	0
+ 1871 009c 0D       		.uleb128 0xd
+ 1872 009d 28       		.uleb128 0x28
+ 1873 009e 00       		.byte	0
+ 1874 009f 03       		.uleb128 0x3
+ 1875 00a0 0E       		.uleb128 0xe
+ 1876 00a1 1C       		.uleb128 0x1c
+ 1877 00a2 0D       		.uleb128 0xd
+ 1878 00a3 00       		.byte	0
+ 1879 00a4 00       		.byte	0
+ 1880 00a5 0E       		.uleb128 0xe
+ 1881 00a6 0D       		.uleb128 0xd
+ 1882 00a7 00       		.byte	0
+ 1883 00a8 03       		.uleb128 0x3
+ 1884 00a9 08       		.uleb128 0x8
+ 1885 00aa 3A       		.uleb128 0x3a
+ 1886 00ab 0B       		.uleb128 0xb
+ 1887 00ac 3B       		.uleb128 0x3b
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 39
+
+
+ 1888 00ad 0B       		.uleb128 0xb
+ 1889 00ae 49       		.uleb128 0x49
+ 1890 00af 13       		.uleb128 0x13
+ 1891 00b0 38       		.uleb128 0x38
+ 1892 00b1 0B       		.uleb128 0xb
+ 1893 00b2 00       		.byte	0
+ 1894 00b3 00       		.byte	0
+ 1895 00b4 0F       		.uleb128 0xf
+ 1896 00b5 01       		.uleb128 0x1
+ 1897 00b6 01       		.byte	0x1
+ 1898 00b7 49       		.uleb128 0x49
+ 1899 00b8 13       		.uleb128 0x13
+ 1900 00b9 01       		.uleb128 0x1
+ 1901 00ba 13       		.uleb128 0x13
+ 1902 00bb 00       		.byte	0
+ 1903 00bc 00       		.byte	0
+ 1904 00bd 10       		.uleb128 0x10
+ 1905 00be 21       		.uleb128 0x21
+ 1906 00bf 00       		.byte	0
+ 1907 00c0 49       		.uleb128 0x49
+ 1908 00c1 13       		.uleb128 0x13
+ 1909 00c2 2F       		.uleb128 0x2f
+ 1910 00c3 0B       		.uleb128 0xb
+ 1911 00c4 00       		.byte	0
+ 1912 00c5 00       		.byte	0
+ 1913 00c6 11       		.uleb128 0x11
+ 1914 00c7 2E       		.uleb128 0x2e
+ 1915 00c8 00       		.byte	0
+ 1916 00c9 3F       		.uleb128 0x3f
+ 1917 00ca 19       		.uleb128 0x19
+ 1918 00cb 03       		.uleb128 0x3
+ 1919 00cc 0E       		.uleb128 0xe
+ 1920 00cd 3A       		.uleb128 0x3a
+ 1921 00ce 0B       		.uleb128 0xb
+ 1922 00cf 3B       		.uleb128 0x3b
+ 1923 00d0 0B       		.uleb128 0xb
+ 1924 00d1 27       		.uleb128 0x27
+ 1925 00d2 19       		.uleb128 0x19
+ 1926 00d3 11       		.uleb128 0x11
+ 1927 00d4 01       		.uleb128 0x1
+ 1928 00d5 12       		.uleb128 0x12
+ 1929 00d6 06       		.uleb128 0x6
+ 1930 00d7 40       		.uleb128 0x40
+ 1931 00d8 18       		.uleb128 0x18
+ 1932 00d9 9642     		.uleb128 0x2116
+ 1933 00db 19       		.uleb128 0x19
+ 1934 00dc 00       		.byte	0
+ 1935 00dd 00       		.byte	0
+ 1936 00de 12       		.uleb128 0x12
+ 1937 00df 2E       		.uleb128 0x2e
+ 1938 00e0 01       		.byte	0x1
+ 1939 00e1 3F       		.uleb128 0x3f
+ 1940 00e2 19       		.uleb128 0x19
+ 1941 00e3 03       		.uleb128 0x3
+ 1942 00e4 0E       		.uleb128 0xe
+ 1943 00e5 3A       		.uleb128 0x3a
+ 1944 00e6 0B       		.uleb128 0xb
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 40
+
+
+ 1945 00e7 3B       		.uleb128 0x3b
+ 1946 00e8 0B       		.uleb128 0xb
+ 1947 00e9 27       		.uleb128 0x27
+ 1948 00ea 19       		.uleb128 0x19
+ 1949 00eb 11       		.uleb128 0x11
+ 1950 00ec 01       		.uleb128 0x1
+ 1951 00ed 12       		.uleb128 0x12
+ 1952 00ee 06       		.uleb128 0x6
+ 1953 00ef 40       		.uleb128 0x40
+ 1954 00f0 18       		.uleb128 0x18
+ 1955 00f1 9642     		.uleb128 0x2116
+ 1956 00f3 19       		.uleb128 0x19
+ 1957 00f4 01       		.uleb128 0x1
+ 1958 00f5 13       		.uleb128 0x13
+ 1959 00f6 00       		.byte	0
+ 1960 00f7 00       		.byte	0
+ 1961 00f8 13       		.uleb128 0x13
+ 1962 00f9 05       		.uleb128 0x5
+ 1963 00fa 00       		.byte	0
+ 1964 00fb 03       		.uleb128 0x3
+ 1965 00fc 0E       		.uleb128 0xe
+ 1966 00fd 3A       		.uleb128 0x3a
+ 1967 00fe 0B       		.uleb128 0xb
+ 1968 00ff 3B       		.uleb128 0x3b
+ 1969 0100 0B       		.uleb128 0xb
+ 1970 0101 49       		.uleb128 0x49
+ 1971 0102 13       		.uleb128 0x13
+ 1972 0103 02       		.uleb128 0x2
+ 1973 0104 18       		.uleb128 0x18
+ 1974 0105 00       		.byte	0
+ 1975 0106 00       		.byte	0
+ 1976 0107 14       		.uleb128 0x14
+ 1977 0108 34       		.uleb128 0x34
+ 1978 0109 00       		.byte	0
+ 1979 010a 03       		.uleb128 0x3
+ 1980 010b 0E       		.uleb128 0xe
+ 1981 010c 3A       		.uleb128 0x3a
+ 1982 010d 0B       		.uleb128 0xb
+ 1983 010e 3B       		.uleb128 0x3b
+ 1984 010f 0B       		.uleb128 0xb
+ 1985 0110 49       		.uleb128 0x49
+ 1986 0111 13       		.uleb128 0x13
+ 1987 0112 02       		.uleb128 0x2
+ 1988 0113 18       		.uleb128 0x18
+ 1989 0114 00       		.byte	0
+ 1990 0115 00       		.byte	0
+ 1991 0116 15       		.uleb128 0x15
+ 1992 0117 0B       		.uleb128 0xb
+ 1993 0118 01       		.byte	0x1
+ 1994 0119 11       		.uleb128 0x11
+ 1995 011a 01       		.uleb128 0x1
+ 1996 011b 12       		.uleb128 0x12
+ 1997 011c 06       		.uleb128 0x6
+ 1998 011d 00       		.byte	0
+ 1999 011e 00       		.byte	0
+ 2000 011f 16       		.uleb128 0x16
+ 2001 0120 34       		.uleb128 0x34
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 41
+
+
+ 2002 0121 00       		.byte	0
+ 2003 0122 03       		.uleb128 0x3
+ 2004 0123 08       		.uleb128 0x8
+ 2005 0124 3A       		.uleb128 0x3a
+ 2006 0125 0B       		.uleb128 0xb
+ 2007 0126 3B       		.uleb128 0x3b
+ 2008 0127 0B       		.uleb128 0xb
+ 2009 0128 49       		.uleb128 0x49
+ 2010 0129 13       		.uleb128 0x13
+ 2011 012a 02       		.uleb128 0x2
+ 2012 012b 18       		.uleb128 0x18
+ 2013 012c 00       		.byte	0
+ 2014 012d 00       		.byte	0
+ 2015 012e 17       		.uleb128 0x17
+ 2016 012f 2E       		.uleb128 0x2e
+ 2017 0130 01       		.byte	0x1
+ 2018 0131 3F       		.uleb128 0x3f
+ 2019 0132 19       		.uleb128 0x19
+ 2020 0133 03       		.uleb128 0x3
+ 2021 0134 0E       		.uleb128 0xe
+ 2022 0135 3A       		.uleb128 0x3a
+ 2023 0136 0B       		.uleb128 0xb
+ 2024 0137 3B       		.uleb128 0x3b
+ 2025 0138 0B       		.uleb128 0xb
+ 2026 0139 11       		.uleb128 0x11
+ 2027 013a 01       		.uleb128 0x1
+ 2028 013b 12       		.uleb128 0x12
+ 2029 013c 06       		.uleb128 0x6
+ 2030 013d 40       		.uleb128 0x40
+ 2031 013e 18       		.uleb128 0x18
+ 2032 013f 9642     		.uleb128 0x2116
+ 2033 0141 19       		.uleb128 0x19
+ 2034 0142 01       		.uleb128 0x1
+ 2035 0143 13       		.uleb128 0x13
+ 2036 0144 00       		.byte	0
+ 2037 0145 00       		.byte	0
+ 2038 0146 18       		.uleb128 0x18
+ 2039 0147 2E       		.uleb128 0x2e
+ 2040 0148 01       		.byte	0x1
+ 2041 0149 3F       		.uleb128 0x3f
+ 2042 014a 19       		.uleb128 0x19
+ 2043 014b 03       		.uleb128 0x3
+ 2044 014c 0E       		.uleb128 0xe
+ 2045 014d 3A       		.uleb128 0x3a
+ 2046 014e 0B       		.uleb128 0xb
+ 2047 014f 3B       		.uleb128 0x3b
+ 2048 0150 0B       		.uleb128 0xb
+ 2049 0151 27       		.uleb128 0x27
+ 2050 0152 19       		.uleb128 0x19
+ 2051 0153 11       		.uleb128 0x11
+ 2052 0154 01       		.uleb128 0x1
+ 2053 0155 12       		.uleb128 0x12
+ 2054 0156 06       		.uleb128 0x6
+ 2055 0157 40       		.uleb128 0x40
+ 2056 0158 18       		.uleb128 0x18
+ 2057 0159 9742     		.uleb128 0x2117
+ 2058 015b 19       		.uleb128 0x19
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 42
+
+
+ 2059 015c 01       		.uleb128 0x1
+ 2060 015d 13       		.uleb128 0x13
+ 2061 015e 00       		.byte	0
+ 2062 015f 00       		.byte	0
+ 2063 0160 19       		.uleb128 0x19
+ 2064 0161 05       		.uleb128 0x5
+ 2065 0162 00       		.byte	0
+ 2066 0163 03       		.uleb128 0x3
+ 2067 0164 08       		.uleb128 0x8
+ 2068 0165 3A       		.uleb128 0x3a
+ 2069 0166 0B       		.uleb128 0xb
+ 2070 0167 3B       		.uleb128 0x3b
+ 2071 0168 0B       		.uleb128 0xb
+ 2072 0169 49       		.uleb128 0x49
+ 2073 016a 13       		.uleb128 0x13
+ 2074 016b 02       		.uleb128 0x2
+ 2075 016c 18       		.uleb128 0x18
+ 2076 016d 00       		.byte	0
+ 2077 016e 00       		.byte	0
+ 2078 016f 1A       		.uleb128 0x1a
+ 2079 0170 34       		.uleb128 0x34
+ 2080 0171 00       		.byte	0
+ 2081 0172 03       		.uleb128 0x3
+ 2082 0173 0E       		.uleb128 0xe
+ 2083 0174 3A       		.uleb128 0x3a
+ 2084 0175 0B       		.uleb128 0xb
+ 2085 0176 3B       		.uleb128 0x3b
+ 2086 0177 05       		.uleb128 0x5
+ 2087 0178 49       		.uleb128 0x49
+ 2088 0179 13       		.uleb128 0x13
+ 2089 017a 3F       		.uleb128 0x3f
+ 2090 017b 19       		.uleb128 0x19
+ 2091 017c 3C       		.uleb128 0x3c
+ 2092 017d 19       		.uleb128 0x19
+ 2093 017e 00       		.byte	0
+ 2094 017f 00       		.byte	0
+ 2095 0180 1B       		.uleb128 0x1b
+ 2096 0181 35       		.uleb128 0x35
+ 2097 0182 00       		.byte	0
+ 2098 0183 49       		.uleb128 0x49
+ 2099 0184 13       		.uleb128 0x13
+ 2100 0185 00       		.byte	0
+ 2101 0186 00       		.byte	0
+ 2102 0187 1C       		.uleb128 0x1c
+ 2103 0188 34       		.uleb128 0x34
+ 2104 0189 00       		.byte	0
+ 2105 018a 03       		.uleb128 0x3
+ 2106 018b 0E       		.uleb128 0xe
+ 2107 018c 3A       		.uleb128 0x3a
+ 2108 018d 0B       		.uleb128 0xb
+ 2109 018e 3B       		.uleb128 0x3b
+ 2110 018f 0B       		.uleb128 0xb
+ 2111 0190 49       		.uleb128 0x49
+ 2112 0191 13       		.uleb128 0x13
+ 2113 0192 3F       		.uleb128 0x3f
+ 2114 0193 19       		.uleb128 0x19
+ 2115 0194 02       		.uleb128 0x2
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 43
+
+
+ 2116 0195 18       		.uleb128 0x18
+ 2117 0196 00       		.byte	0
+ 2118 0197 00       		.byte	0
+ 2119 0198 1D       		.uleb128 0x1d
+ 2120 0199 26       		.uleb128 0x26
+ 2121 019a 00       		.byte	0
+ 2122 019b 49       		.uleb128 0x49
+ 2123 019c 13       		.uleb128 0x13
+ 2124 019d 00       		.byte	0
+ 2125 019e 00       		.byte	0
+ 2126 019f 1E       		.uleb128 0x1e
+ 2127 01a0 21       		.uleb128 0x21
+ 2128 01a1 00       		.byte	0
+ 2129 01a2 49       		.uleb128 0x49
+ 2130 01a3 13       		.uleb128 0x13
+ 2131 01a4 2F       		.uleb128 0x2f
+ 2132 01a5 05       		.uleb128 0x5
+ 2133 01a6 00       		.byte	0
+ 2134 01a7 00       		.byte	0
+ 2135 01a8 00       		.byte	0
+ 2136              		.section	.debug_aranges,"",%progbits
+ 2137 0000 5C000000 		.4byte	0x5c
+ 2138 0004 0200     		.2byte	0x2
+ 2139 0006 00000000 		.4byte	.Ldebug_info0
+ 2140 000a 04       		.byte	0x4
+ 2141 000b 00       		.byte	0
+ 2142 000c 0000     		.2byte	0
+ 2143 000e 0000     		.2byte	0
+ 2144 0010 00000000 		.4byte	.LFB63
+ 2145 0014 1C000000 		.4byte	.LFE63-.LFB63
+ 2146 0018 00000000 		.4byte	.LFB64
+ 2147 001c 0A000000 		.4byte	.LFE64-.LFB64
+ 2148 0020 00000000 		.4byte	.LFB65
+ 2149 0024 A0010000 		.4byte	.LFE65-.LFB65
+ 2150 0028 00000000 		.4byte	.LFB66
+ 2151 002c 90010000 		.4byte	.LFE66-.LFB66
+ 2152 0030 00000000 		.4byte	.LFB67
+ 2153 0034 60010000 		.4byte	.LFE67-.LFB67
+ 2154 0038 00000000 		.4byte	.LFB68
+ 2155 003c 48000000 		.4byte	.LFE68-.LFB68
+ 2156 0040 00000000 		.4byte	.LFB69
+ 2157 0044 50000000 		.4byte	.LFE69-.LFB69
+ 2158 0048 00000000 		.4byte	.LFB70
+ 2159 004c 28000000 		.4byte	.LFE70-.LFB70
+ 2160 0050 00000000 		.4byte	.LFB71
+ 2161 0054 78000000 		.4byte	.LFE71-.LFB71
+ 2162 0058 00000000 		.4byte	0
+ 2163 005c 00000000 		.4byte	0
+ 2164              		.section	.debug_ranges,"",%progbits
+ 2165              	.Ldebug_ranges0:
+ 2166 0000 00000000 		.4byte	.LFB63
+ 2167 0004 1C000000 		.4byte	.LFE63
+ 2168 0008 00000000 		.4byte	.LFB64
+ 2169 000c 0A000000 		.4byte	.LFE64
+ 2170 0010 00000000 		.4byte	.LFB65
+ 2171 0014 A0010000 		.4byte	.LFE65
+ 2172 0018 00000000 		.4byte	.LFB66
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 44
+
+
+ 2173 001c 90010000 		.4byte	.LFE66
+ 2174 0020 00000000 		.4byte	.LFB67
+ 2175 0024 60010000 		.4byte	.LFE67
+ 2176 0028 00000000 		.4byte	.LFB68
+ 2177 002c 48000000 		.4byte	.LFE68
+ 2178 0030 00000000 		.4byte	.LFB69
+ 2179 0034 50000000 		.4byte	.LFE69
+ 2180 0038 00000000 		.4byte	.LFB70
+ 2181 003c 28000000 		.4byte	.LFE70
+ 2182 0040 00000000 		.4byte	.LFB71
+ 2183 0044 78000000 		.4byte	.LFE71
+ 2184 0048 00000000 		.4byte	0
+ 2185 004c 00000000 		.4byte	0
+ 2186              		.section	.debug_line,"",%progbits
+ 2187              	.Ldebug_line0:
+ 2188 0000 5C030000 		.section	.debug_str,"MS",%progbits,1
+ 2188      02008401 
+ 2188      00000201 
+ 2188      FB0E0D00 
+ 2188      01010101 
+ 2189              	.LASF47:
+ 2190 0000 73645F69 		.ascii	"sd_init\000"
+ 2190      6E697400 
+ 2191              	.LASF30:
+ 2192 0008 46535F57 		.ascii	"FS_WRITEMODE_FAST\000"
+ 2192      52495445 
+ 2192      4D4F4445 
+ 2192      5F464153 
+ 2192      5400
+ 2193              	.LASF43:
+ 2194 001a 64617465 		.ascii	"date_str\000"
+ 2194      5F737472 
+ 2194      00
+ 2195              	.LASF55:
+ 2196 0023 73645F62 		.ascii	"sd_buffer\000"
+ 2196      75666665 
+ 2196      7200
+ 2197              	.LASF52:
+ 2198 002d 61746F6D 		.ascii	"atomic_state\000"
+ 2198      69635F73 
+ 2198      74617465 
+ 2198      00
+ 2199              	.LASF2:
+ 2200 003a 73686F72 		.ascii	"short int\000"
+ 2200      7420696E 
+ 2200      7400
+ 2201              	.LASF62:
+ 2202 0044 666F726D 		.ascii	"format_file\000"
+ 2202      61745F66 
+ 2202      696C6500 
+ 2203              	.LASF44:
+ 2204 0050 66696C65 		.ascii	"file_str\000"
+ 2204      5F737472 
+ 2204      00
+ 2205              	.LASF27:
+ 2206 0059 46535F46 		.ascii	"FS_FILETIME\000"
+ 2206      494C4554 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 45
+
+
+ 2206      494D4500 
+ 2207              	.LASF51:
+ 2208 0065 746D705F 		.ascii	"tmp_time\000"
+ 2208      74696D65 
+ 2208      00
+ 2209              	.LASF8:
+ 2210 006e 5F5F7569 		.ascii	"__uint32_t\000"
+ 2210      6E743332 
+ 2210      5F7400
+ 2211              	.LASF54:
+ 2212 0079 73645F72 		.ascii	"sd_read\000"
+ 2212      65616400 
+ 2213              	.LASF4:
+ 2214 0081 5F5F7569 		.ascii	"__uint16_t\000"
+ 2214      6E743136 
+ 2214      5F7400
+ 2215              	.LASF41:
+ 2216 008c 706F7765 		.ascii	"power_interrupt\000"
+ 2216      725F696E 
+ 2216      74657272 
+ 2216      75707400 
+ 2217              	.LASF39:
+ 2218 009c 79656172 		.ascii	"year\000"
+ 2218      00
+ 2219              	.LASF31:
+ 2220 00a1 6D696C6C 		.ascii	"millicounter\000"
+ 2220      69636F75 
+ 2220      6E746572 
+ 2220      00
+ 2221              	.LASF13:
+ 2222 00ae 75696E74 		.ascii	"uint8_t\000"
+ 2222      385F7400 
+ 2223              	.LASF46:
+ 2224 00b6 66696C65 		.ascii	"file_timestamp\000"
+ 2224      5F74696D 
+ 2224      65737461 
+ 2224      6D7000
+ 2225              	.LASF61:
+ 2226 00c5 7365745F 		.ascii	"set_time_file\000"
+ 2226      74696D65 
+ 2226      5F66696C 
+ 2226      6500
+ 2227              	.LASF53:
+ 2228 00d3 73645F77 		.ascii	"sd_write\000"
+ 2228      72697465 
+ 2228      00
+ 2229              	.LASF17:
+ 2230 00dc 666C6F61 		.ascii	"float\000"
+ 2230      7400
+ 2231              	.LASF28:
+ 2232 00e2 46535F57 		.ascii	"FS_WRITEMODE_SAFE\000"
+ 2232      52495445 
+ 2232      4D4F4445 
+ 2232      5F534146 
+ 2232      4500
+ 2233              	.LASF10:
+ 2234 00f4 6C6F6E67 		.ascii	"long long int\000"
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 46
+
+
+ 2234      206C6F6E 
+ 2234      6720696E 
+ 2234      7400
+ 2235              	.LASF48:
+ 2236 0102 73645F74 		.ascii	"sd_time_set\000"
+ 2236      696D655F 
+ 2236      73657400 
+ 2237              	.LASF65:
+ 2238 010e 73645F74 		.ascii	"sd_tail\000"
+ 2238      61696C00 
+ 2239              	.LASF22:
+ 2240 0116 59656172 		.ascii	"Year\000"
+ 2240      00
+ 2241              	.LASF3:
+ 2242 011b 5F5F7569 		.ascii	"__uint8_t\000"
+ 2242      6E74385F 
+ 2242      7400
+ 2243              	.LASF40:
+ 2244 0125 54696D65 		.ascii	"Time\000"
+ 2244      00
+ 2245              	.LASF36:
+ 2246 012a 686F7572 		.ascii	"hour\000"
+ 2246      00
+ 2247              	.LASF32:
+ 2248 012f 6C656E67 		.ascii	"length\000"
+ 2248      746800
+ 2249              	.LASF1:
+ 2250 0136 756E7369 		.ascii	"unsigned char\000"
+ 2250      676E6564 
+ 2250      20636861 
+ 2250      7200
+ 2251              	.LASF45:
+ 2252 0144 66696C65 		.ascii	"file_time\000"
+ 2252      5F74696D 
+ 2252      6500
+ 2253              	.LASF21:
+ 2254 014e 46535F46 		.ascii	"FS_FILE\000"
+ 2254      494C4500 
+ 2255              	.LASF0:
+ 2256 0156 7369676E 		.ascii	"signed char\000"
+ 2256      65642063 
+ 2256      68617200 
+ 2257              	.LASF38:
+ 2258 0162 7365636F 		.ascii	"second\000"
+ 2258      6E6400
+ 2259              	.LASF11:
+ 2260 0169 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2260      206C6F6E 
+ 2260      6720756E 
+ 2260      7369676E 
+ 2260      65642069 
+ 2261              	.LASF16:
+ 2262 0180 75696E74 		.ascii	"uint32_t\000"
+ 2262      33325F74 
+ 2262      00
+ 2263              	.LASF12:
+ 2264 0189 756E7369 		.ascii	"unsigned int\000"
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 47
+
+
+ 2264      676E6564 
+ 2264      20696E74 
+ 2264      00
+ 2265              	.LASF14:
+ 2266 0196 75696E74 		.ascii	"uint16_t\000"
+ 2266      31365F74 
+ 2266      00
+ 2267              	.LASF9:
+ 2268 019f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2268      20756E73 
+ 2268      69676E65 
+ 2268      6420696E 
+ 2268      7400
+ 2269              	.LASF49:
+ 2270 01b1 74696D65 		.ascii	"time\000"
+ 2270      00
+ 2271              	.LASF5:
+ 2272 01b6 73686F72 		.ascii	"short unsigned int\000"
+ 2272      7420756E 
+ 2272      7369676E 
+ 2272      65642069 
+ 2272      6E7400
+ 2273              	.LASF24:
+ 2274 01c9 486F7572 		.ascii	"Hour\000"
+ 2274      00
+ 2275              	.LASF19:
+ 2276 01ce 63686172 		.ascii	"char\000"
+ 2276      00
+ 2277              	.LASF7:
+ 2278 01d3 6C6F6E67 		.ascii	"long int\000"
+ 2278      20696E74 
+ 2278      00
+ 2279              	.LASF15:
+ 2280 01dc 696E7433 		.ascii	"int32_t\000"
+ 2280      325F7400 
+ 2281              	.LASF35:
+ 2282 01e4 6D6F6E74 		.ascii	"month\000"
+ 2282      6800
+ 2283              	.LASF34:
+ 2284 01ea 44617461 		.ascii	"DataPacket\000"
+ 2284      5061636B 
+ 2284      657400
+ 2285              	.LASF66:
+ 2286 01f5 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2286      4320342E 
+ 2286      392E3320 
+ 2286      32303135 
+ 2286      30333033 
+ 2287 0228 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2287      20726576 
+ 2287      6973696F 
+ 2287      6E203232 
+ 2287      31323230 
+ 2288 025b 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 2288      66756E63 
+ 2288      74696F6E 
+ 2288      2D736563 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 48
+
+
+ 2288      74696F6E 
+ 2289              	.LASF33:
+ 2290 0283 64617461 		.ascii	"data\000"
+ 2290      00
+ 2291              	.LASF50:
+ 2292 0288 62756666 		.ascii	"buffer\000"
+ 2292      657200
+ 2293              	.LASF37:
+ 2294 028f 6D696E75 		.ascii	"minute\000"
+ 2294      746500
+ 2295              	.LASF68:
+ 2296 0296 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver\\Node-Beaver\\Nod"
+ 2296      6F776E6C 
+ 2296      6F616473 
+ 2296      5C465255 
+ 2296      43445C4E 
+ 2297 02c4 652D4265 		.ascii	"e-Beaver.cydsn\000"
+ 2297      61766572 
+ 2297      2E637964 
+ 2297      736E00
+ 2298              	.LASF26:
+ 2299 02d3 5365636F 		.ascii	"Second\000"
+ 2299      6E6400
+ 2300              	.LASF67:
+ 2301 02da 73645F6D 		.ascii	"sd_manager.c\000"
+ 2301      616E6167 
+ 2301      65722E63 
+ 2301      00
+ 2302              	.LASF64:
+ 2303 02e7 73645F68 		.ascii	"sd_head\000"
+ 2303      65616400 
+ 2304              	.LASF18:
+ 2305 02ef 646F7562 		.ascii	"double\000"
+ 2305      6C6500
+ 2306              	.LASF29:
+ 2307 02f6 46535F57 		.ascii	"FS_WRITEMODE_MEDIUM\000"
+ 2307      52495445 
+ 2307      4D4F4445 
+ 2307      5F4D4544 
+ 2307      49554D00 
+ 2308              	.LASF6:
+ 2309 030a 5F5F696E 		.ascii	"__int32_t\000"
+ 2309      7433325F 
+ 2309      7400
+ 2310              	.LASF59:
+ 2311 0314 7066696C 		.ascii	"pfile\000"
+ 2311      6500
+ 2312              	.LASF60:
+ 2313 031a 73645F6F 		.ascii	"sd_ok\000"
+ 2313      6B00
+ 2314              	.LASF63:
+ 2315 0320 73645F71 		.ascii	"sd_queue\000"
+ 2315      75657565 
+ 2315      00
+ 2316              	.LASF20:
+ 2317 0329 73697A65 		.ascii	"sizetype\000"
+ 2317      74797065 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc9Bphjc.s 			page 49
+
+
+ 2317      00
+ 2318              	.LASF56:
+ 2319 0332 73645F73 		.ascii	"sd_stop\000"
+ 2319      746F7000 
+ 2320              	.LASF42:
+ 2321 033a 73645F69 		.ascii	"sd_interrupt\000"
+ 2321      6E746572 
+ 2321      72757074 
+ 2321      00
+ 2322              	.LASF58:
+ 2323 0347 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2323      52784275 
+ 2323      66666572 
+ 2323      00
+ 2324              	.LASF23:
+ 2325 0354 4D6F6E74 		.ascii	"Month\000"
+ 2325      6800
+ 2326              	.LASF25:
+ 2327 035a 4D696E75 		.ascii	"Minute\000"
+ 2327      746500
+ 2328              	.LASF57:
+ 2329 0361 73645F77 		.ascii	"sd_writetest\000"
+ 2329      72697465 
+ 2329      74657374 
+ 2329      00
+ 2330              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

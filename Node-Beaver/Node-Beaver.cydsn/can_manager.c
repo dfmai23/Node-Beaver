@@ -100,6 +100,19 @@ void can_msg_init(DataPacket* can_msg, uint16_t id) {
 		LOGGER_HEARTBEAT.data[0] = 0x01;
 		data.byte[0] = 0x01;
 	}
+	if(id == BMS_TEMP_ID) {		//init BMS_Temp to 25 degrees DECIMAL each Byte
+		for(i=0; i<BMS_TEMP.length; i++) {
+			BMS_TEMP.data[i] = 0x24;
+		}
+		BMS_TEMP.data[6] = 0x00;
+	}
+	if(id == BRAKE_ID) {
+		for(i=0; i<BRAKE.length; i++) {
+			BRAKE.data[i] = 0x00;
+		}
+		BRAKE.data[6] = 0x01;
+		BRAKE.data[7] = 0x97;
+	}
 } //can_msg_init()
 
 /*  recieves can message from bus can compares it with is respective id*/
@@ -121,7 +134,7 @@ int can_process(DataPacket* can_msg){
 	case THROTTLE_ID:		//0x200
 		status = can_compare(&THROTTLE, can_msg);	break;
 	case BRAKE_ID:			//0x201
-		status = can_compare(&THROTTLE, can_msg);	break;
+		status = can_compare(&BRAKE, can_msg);	break;
 	case BMS_STATUS_ID:		//0x188
 		status = can_compare(&BMS_STATUS, can_msg);	break;
 	case BMS_VOLTAGE_ID:	//0x388
@@ -158,6 +171,23 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 4-7
 		new_msg->data[i+offset] = temp.data[offset + temp.length/2 - i - 1];
 	}//for
+	
+	//brake data oscillates around 0x0196 so keep brake val min = 0x0199
+	if(new_msg->id == BRAKE_ID) {				
+		uint16_t prev_brake_val = (prev_msg->data[6] << 8) | prev_msg->data[7];
+		uint16_t new_brake_val = (new_msg->data[6] << 8) | new_msg->data[7];
+	
+		if(new_brake_val != prev_brake_val && new_brake_val > 0x0199) { //0x0199 threshold
+			prev_msg->id = new_msg->id;
+			prev_msg->length = new_msg->length;
+			prev_msg->millicounter = new_msg->millicounter;	
+			for(j=0; j<new_msg->length; j++) {
+				prev_msg->data[j] = new_msg->data[j];
+			}
+			return 1;
+		}//if
+		return 0;
+	}
 	
 	for(i=0; i<new_msg->length; i++) {					//compare all 8 data bytes
 		if(prev_msg->data[i] != new_msg->data[i]) {		//update it if data[] has changed

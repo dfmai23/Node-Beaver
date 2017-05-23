@@ -1,18 +1,8 @@
-  /*
-
- The data can be sent from the Arduino serial monitor, or another
- program like Processing (see code below), Flash (via a serial-net
- proxy), PD, or Max/MSP.
-
- The circuit:
- * LED connected from digital pin 13 to ground
- MOSI: pin 11
- MISO: pin 12
- SCK: pin 13
+ /* Firmware to read wireless UART data from datalogger FE4
  */
 
-const int ledPin = 13; // the pin that the LED is attached to, internal is 13
-uint8_t incomingByte;      // a variable to read incoming serial data into
+const int ledPin = 13;    // the pin that the LED is attached to, internal is 13
+uint8_t incomingByte;     // a variable to read incoming serial data into
 uint8_t xbee_msg[16];
 
 uint16_t id;
