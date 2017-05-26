@@ -6,7 +6,7 @@
 
 #Build Date:         Apr 29 2016 09:00:55
 
-#File Generated:     May 23 2017 14:27:12
+#File Generated:     May 25 2017 18:35:33
 
 #Purpose:            
 
@@ -114,7 +114,7 @@ Clock: xbee_UART_IntClock   | Frequency:   1.3 MHz | Target:   0.1 MHz
 ======================================================================
                      End of Clock Summary
 ######################################################################
-D2088: Phase 7, elapsed time : 5.1 (sec)
+D2088: Phase 7, elapsed time : 4.8 (sec)
 
 Final Design Statistics
     Number of Combinational MCs 	:	22
@@ -164,5 +164,5 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
-I2076: Total run-time: 7.2 sec.
+I2076: Total run-time: 6.9 sec.
 

@@ -50,10 +50,11 @@ void sd_init(Time time) {
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
 	sd_ok = 1;
 	char date_str[32], file_str[64];
+	uint32_t vsize;
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
-		if((pfile = FS_FOpen(format_file, "r")))
+		if((pfile = FS_FOpen(format_file, "r")) && FS_GetVolumeSize("") <= 0xFFFFFFFF)	//for FAT only
 			FS_FormatSD("");
         sd_time_set(time);          //set time from a file
 		
@@ -64,7 +65,6 @@ void sd_init(Time time) {
 				return;
 			} // if logs folder can't be created
         }
-
 
 
 		// create date folder 
@@ -149,11 +149,10 @@ void sd_time_set(Time time) {
 		if(num <= 59) tmp_time.second = num;
 
 		FS_FClose(pfile);
-
+		FS_Remove(set_time_file); // delete file
+		
 		time_set(tmp_time); // set the new time
 		time = tmp_time; // use new time for file names
-		
-		FS_Remove(set_time_file); // delete file
 	} // try to find file and set time
 } //sd_time_set()
 
@@ -202,8 +201,12 @@ void sd_read() {
 
 void sd_buffer(DataPacket * msg) {
 	sd_queue[sd_tail] = *msg;
-	sd_tail = ((sd_tail == SD_QUEUE_LENGTH-1) ? sd_tail:sd_tail++);	//if buffer full stay at tail
+	if (sd_tail == SD_QUEUE_LENGTH-1)	//if buffer full stay at tail
+		sd_tail = sd_tail;
+	else
+		sd_tail++;	
 }
+
 /* sd_stop()
 	Takes and returns nothing.
 	Closes the file, synchronizes, and unmounts SD card to prevent corruption.
