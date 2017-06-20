@@ -1,4 +1,4 @@
---------------- Rebuild Started: 05/25/2017 18:35:15 Project: Node-Beaver, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+--------------- Rebuild Started: 06/20/2017 13:52:29 Project: Node-Beaver, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
 Deleting file ".\CortexM3\ARM_GCC_493\Debug\main.o"
 Deleting file ".\CortexM3\ARM_GCC_493\Debug\can_manager.o"
 Deleting file ".\CortexM3\ARM_GCC_493\Debug\sd_manager.o"
@@ -116,20 +116,6 @@ Cleanup...
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c main.c -o .\CortexM3\ARM_GCC_493\Debug\main.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/can_manager.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c can_manager.c -o .\CortexM3\ARM_GCC_493\Debug\can_manager.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/sd_manager.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c sd_manager.c -o .\CortexM3\ARM_GCC_493\Debug\sd_manager.o
-sd_manager.c: In function 'sd_init':
-sd_manager.c:53:26: warning: variable 'vmounted' set but not used [-Wunused-but-set-variable]
-  uint32_t vsize, vspace, vmounted;
-                          ^
-sd_manager.c:53:18: warning: unused variable 'vspace' [-Wunused-variable]
-  uint32_t vsize, vspace, vmounted;
-                  ^
-sd_manager.c:53:11: warning: variable 'vsize' set but not used [-Wunused-but-set-variable]
-  uint32_t vsize, vspace, vmounted;
-           ^
-sd_manager.c: In function 'sd_buffer':
-sd_manager.c:211:10: warning: operation on 'sd_tail' may be undefined [-Wsequence-point]
-  sd_tail = ((sd_tail == SD_QUEUE_LENGTH-1) ? sd_tail:sd_tail++); //if buffer full stay at tail
-          ^
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/usb_manager.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c usb_manager.c -o .\CortexM3\ARM_GCC_493\Debug\usb_manager.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/radio_manager.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c radio_manager.c -o .\CortexM3\ARM_GCC_493\Debug\radio_manager.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.\emFile_V322c\Code\Include\PSoC5 -I.\emFile_V322c\Code\Include\PSoC5\emf32nOS -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/time_manager.lst -g -D DEBUG -Wall -ffunction-sections -O0 -ffat-lto-objects -c time_manager.c -o .\CortexM3\ARM_GCC_493\Debug\time_manager.o
@@ -218,6 +204,6 @@ arm-none-eabi-ar.exe: creating .\CortexM3\ARM_GCC_493\Debug\Node-Beaver.a
 arm-none-eabi-gcc.exe -Wl,--start-group -o .\CortexM3\ARM_GCC_493\Debug\Node-Beaver.elf .\CortexM3\ARM_GCC_493\Debug\main.o .\CortexM3\ARM_GCC_493\Debug\can_manager.o .\CortexM3\ARM_GCC_493\Debug\sd_manager.o .\CortexM3\ARM_GCC_493\Debug\usb_manager.o .\CortexM3\ARM_GCC_493\Debug\radio_manager.o .\CortexM3\ARM_GCC_493\Debug\time_manager.o .\CortexM3\ARM_GCC_493\Debug\cymetadata.o .\CortexM3\ARM_GCC_493\Debug\Cm3Start.o .\CortexM3\ARM_GCC_493\Debug\Node-Beaver.a "D:\Programming\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_493\Debug\CyComponentLibrary.a" -mcpu=cortex-m3 -mthumb -g -ffunction-sections -O0 -ffat-lto-objects -l emf32noslfn -L Generated_Source\PSoC5 -L .\emFile_V322c\LinkLibrary\PSoC5\GCC -Wl,-Map,.\CortexM3\ARM_GCC_493\Debug/Node-Beaver.map -T D:\Downloads\FRUCD\Node-Beaver\Node-Beaver\Node-Beaver.cydsn\Generated_Source\PSoC5\cm3gcc.ld -specs=nano.specs -Wl,--gc-sections -Wl,--end-group
 cyelftool.exe -C D:\Downloads\FRUCD\Node-Beaver\Node-Beaver\Node-Beaver.cydsn\CortexM3\ARM_GCC_493\Debug\Node-Beaver.elf --flash_row_size 256 --flash_size 262144
 cyelftool.exe -S D:\Downloads\FRUCD\Node-Beaver\Node-Beaver\Node-Beaver.cydsn\CortexM3\ARM_GCC_493\Debug\Node-Beaver.elf
-Flash used: 44830 of 262144 bytes (17.1 %).
-SRAM used: 42101 of 65536 bytes (64.2 %). Stack: 16384 bytes. Heap: 4096 bytes.
---------------- Rebuild Succeeded: 05/25/2017 18:36:31 ---------------
+Flash used: 44814 of 262144 bytes (17.1 %).
+SRAM used: 42117 of 65536 bytes (64.3 %). Stack: 16384 bytes. Heap: 4096 bytes.
+--------------- Rebuild Succeeded: 06/20/2017 13:53:40 ---------------

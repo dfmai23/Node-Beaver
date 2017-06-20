@@ -1,4 +1,4 @@
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
   23:Generated_Source\PSoC5/heartbeat_timer.c **** 
   24:Generated_Source\PSoC5/heartbeat_timer.c **** #include "heartbeat_timer.h"
   25:Generated_Source\PSoC5/heartbeat_timer.c **** 
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 2
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 2
 
 
   26:Generated_Source\PSoC5/heartbeat_timer.c **** uint8 heartbeat_timer_initVar = 0u;
@@ -118,7 +118,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
   68:Generated_Source\PSoC5/heartbeat_timer.c **** 
   69:Generated_Source\PSoC5/heartbeat_timer.c ****         #if (heartbeat_timer_RunModeUsed == 2)
   70:Generated_Source\PSoC5/heartbeat_timer.c ****             #if (CY_PSOC5A)
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 3
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 3
 
 
   71:Generated_Source\PSoC5/heartbeat_timer.c ****                 /* Set last 2 bits of control2 register if one shot(halt on
@@ -178,7 +178,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
   50 0012 FFF7FEFF 		bl	heartbeat_timer_WriteCounter
  120:Generated_Source\PSoC5/heartbeat_timer.c **** 
  121:Generated_Source\PSoC5/heartbeat_timer.c ****     #if (heartbeat_timer_UsingHWCaptureCounter)/* Capture counter is enabled */
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 4
 
 
  122:Generated_Source\PSoC5/heartbeat_timer.c ****         heartbeat_timer_CAPTURE_COUNT_CTRL |= heartbeat_timer_CNTR_ENABLE;
@@ -238,7 +238,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
   67              		.loc 1 159 0
   68 0036 FFF7FEFF 		bl	heartbeat_timer_ClearFIFO
  160:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* Configure additional features of UDB implementation */
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 5
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 5
 
 
  161:Generated_Source\PSoC5/heartbeat_timer.c **** 
@@ -257,7 +257,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
   79              	.L3:
   80 0046 00BF     		.align	2
   81              	.L2:
-  82 0048 97650040 		.word	1073767831
+  82 0048 9B650040 		.word	1073767835
   83              		.cfi_endproc
   84              	.LFE0:
   85              		.size	heartbeat_timer_Init, .-heartbeat_timer_Init
@@ -298,7 +298,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  102 0002 00AF     		add	r7, sp, #0
  103              		.cfi_def_cfa_register 7
  182:Generated_Source\PSoC5/heartbeat_timer.c ****     /* Globally Enable the Fixed Function Block chosen */
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 6
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 6
 
 
  183:Generated_Source\PSoC5/heartbeat_timer.c ****     #if (heartbeat_timer_UsingFixedFunction)
@@ -330,7 +330,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  120              	.L6:
  121              		.align	2
  122              	.L5:
- 123 001c 75650040 		.word	1073767797
+ 123 001c 7B650040 		.word	1073767803
  124              		.cfi_endproc
  125              	.LFE1:
  126              		.size	heartbeat_timer_Enable, .-heartbeat_timer_Enable
@@ -358,7 +358,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  206:Generated_Source\PSoC5/heartbeat_timer.c **** *
  207:Generated_Source\PSoC5/heartbeat_timer.c **** * Return:
  208:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 7
 
 
  209:Generated_Source\PSoC5/heartbeat_timer.c **** *
@@ -418,7 +418,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  171              		.thumb
  172              		.thumb_func
  173              		.type	heartbeat_timer_Stop, %function
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 8
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 8
 
 
  174              	heartbeat_timer_Stop:
@@ -478,7 +478,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  195 0014 BD46     		mov	sp, r7
  196              		.cfi_def_cfa_register 13
  197              		@ sp needed
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 9
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 9
 
 
  198 0016 5DF8047B 		ldr	r7, [sp], #4
@@ -488,7 +488,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  202              	.L13:
  203              		.align	2
  204              	.L12:
- 205 001c 75650040 		.word	1073767797
+ 205 001c 7B650040 		.word	1073767803
  206              		.cfi_endproc
  207              	.LFE3:
  208              		.size	heartbeat_timer_Stop, .-heartbeat_timer_Stop
@@ -538,7 +538,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  281:Generated_Source\PSoC5/heartbeat_timer.c ****     heartbeat_timer_STATUS_MASK = interruptMode;
  231              		.loc 1 281 0
  232 000a 044A     		ldr	r2, .L15
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 10
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 10
 
 
  233 000c FB79     		ldrb	r3, [r7, #7]
@@ -557,7 +557,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  245              	.L16:
  246 001a 00BF     		.align	2
  247              	.L15:
- 248 001c 87650040 		.word	1073767815
+ 248 001c 8B650040 		.word	1073767819
  249              		.cfi_endproc
  250              	.LFE4:
  251              		.size	heartbeat_timer_SetInterruptMode, .-heartbeat_timer_SetInterruptMode
@@ -598,7 +598,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  265 0000 80B4     		push	{r7}
  266              		.cfi_def_cfa_offset 4
  267              		.cfi_offset 7, -4
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 11
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 11
 
 
  268 0002 00AF     		add	r7, sp, #0
@@ -625,7 +625,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  281              	.L19:
  282              		.align	2
  283              	.L18:
- 284 0010 04650040 		.word	1073767684
+ 284 0010 0A650040 		.word	1073767690
  285              		.cfi_endproc
  286              	.LFE5:
  287              		.size	heartbeat_timer_SoftwareCapture, .-heartbeat_timer_SoftwareCapture
@@ -658,7 +658,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  330:Generated_Source\PSoC5/heartbeat_timer.c **** *  Status register bits may be clear on read.
  331:Generated_Source\PSoC5/heartbeat_timer.c **** *
  332:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 12
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 12
 
 
  333:Generated_Source\PSoC5/heartbeat_timer.c **** uint8   heartbeat_timer_ReadStatusRegister(void) 
@@ -691,7 +691,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  319              	.L23:
  320              		.align	2
  321              	.L22:
- 322 0014 67650040 		.word	1073767783
+ 322 0014 6B650040 		.word	1073767787
  323              		.cfi_endproc
  324              	.LFE6:
  325              		.size	heartbeat_timer_ReadStatusRegister, .-heartbeat_timer_ReadStatusRegister
@@ -718,7 +718,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  349:Generated_Source\PSoC5/heartbeat_timer.c **** * Parameters:
  350:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
  351:Generated_Source\PSoC5/heartbeat_timer.c **** *
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 13
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 13
 
 
  352:Generated_Source\PSoC5/heartbeat_timer.c **** * Return:
@@ -759,7 +759,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  357              	.L27:
  358              		.align	2
  359              	.L26:
- 360 0014 75650040 		.word	1073767797
+ 360 0014 7B650040 		.word	1073767803
  361              		.cfi_endproc
  362              	.LFE7:
  363              		.size	heartbeat_timer_ReadControlRegister, .-heartbeat_timer_ReadControlRegister
@@ -778,7 +778,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  368:Generated_Source\PSoC5/heartbeat_timer.c **** ********************************************************************************
  369:Generated_Source\PSoC5/heartbeat_timer.c **** *
  370:Generated_Source\PSoC5/heartbeat_timer.c **** * Summary:
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 14
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 14
 
 
  371:Generated_Source\PSoC5/heartbeat_timer.c **** *  Sets the bit-field of the control register.
@@ -828,7 +828,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  400              	.L30:
  401 001a 00BF     		.align	2
  402              	.L29:
- 403 001c 75650040 		.word	1073767797
+ 403 001c 7B650040 		.word	1073767803
  404              		.cfi_endproc
  405              	.LFE8:
  406              		.size	heartbeat_timer_WriteControlRegister, .-heartbeat_timer_WriteControlRegister
@@ -838,7 +838,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  410              		.thumb
  411              		.thumb_func
  412              		.type	heartbeat_timer_ReadPeriod, %function
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 15
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 15
 
 
  413              	heartbeat_timer_ReadPeriod:
@@ -861,7 +861,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  402:Generated_Source\PSoC5/heartbeat_timer.c **** *  The present value of the counter.
  403:Generated_Source\PSoC5/heartbeat_timer.c **** *
  404:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
- 405:Generated_Source\PSoC5/heartbeat_timer.c **** uint32 heartbeat_timer_ReadPeriod(void) 
+ 405:Generated_Source\PSoC5/heartbeat_timer.c **** uint16 heartbeat_timer_ReadPeriod(void) 
  406:Generated_Source\PSoC5/heartbeat_timer.c **** {
  415              		.loc 1 406 0
  416              		.cfi_startproc
@@ -874,41 +874,42 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  423 0002 00AF     		add	r7, sp, #0
  424              		.cfi_def_cfa_register 7
  407:Generated_Source\PSoC5/heartbeat_timer.c ****    #if(heartbeat_timer_UsingFixedFunction)
- 408:Generated_Source\PSoC5/heartbeat_timer.c ****        return ((uint32)CY_GET_REG16(heartbeat_timer_PERIOD_LSB_PTR));
+ 408:Generated_Source\PSoC5/heartbeat_timer.c ****        return ((uint16)CY_GET_REG16(heartbeat_timer_PERIOD_LSB_PTR));
  409:Generated_Source\PSoC5/heartbeat_timer.c ****    #else
- 410:Generated_Source\PSoC5/heartbeat_timer.c ****        return (CY_GET_REG32(heartbeat_timer_PERIOD_LSB_PTR));
+ 410:Generated_Source\PSoC5/heartbeat_timer.c ****        return (CY_GET_REG16(heartbeat_timer_PERIOD_LSB_PTR));
  425              		.loc 1 410 0
  426 0004 034B     		ldr	r3, .L33
- 427 0006 1B68     		ldr	r3, [r3]
+ 427 0006 1B88     		ldrh	r3, [r3]	@ movhi
+ 428 0008 9BB2     		uxth	r3, r3
  411:Generated_Source\PSoC5/heartbeat_timer.c ****    #endif /* (heartbeat_timer_UsingFixedFunction) */
  412:Generated_Source\PSoC5/heartbeat_timer.c **** }
- 428              		.loc 1 412 0
- 429 0008 1846     		mov	r0, r3
- 430 000a BD46     		mov	sp, r7
- 431              		.cfi_def_cfa_register 13
- 432              		@ sp needed
- 433 000c 5DF8047B 		ldr	r7, [sp], #4
- 434              		.cfi_restore 7
- 435              		.cfi_def_cfa_offset 0
- 436 0010 7047     		bx	lr
- 437              	.L34:
- 438 0012 00BF     		.align	2
- 439              	.L33:
- 440 0014 24650040 		.word	1073767716
- 441              		.cfi_endproc
- 442              	.LFE9:
- 443              		.size	heartbeat_timer_ReadPeriod, .-heartbeat_timer_ReadPeriod
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 16
+ 429              		.loc 1 412 0
+ 430 000a 1846     		mov	r0, r3
+ 431 000c BD46     		mov	sp, r7
+ 432              		.cfi_def_cfa_register 13
+ 433              		@ sp needed
+ 434 000e 5DF8047B 		ldr	r7, [sp], #4
+ 435              		.cfi_restore 7
+ 436              		.cfi_def_cfa_offset 0
+ 437 0012 7047     		bx	lr
+ 438              	.L34:
+ 439              		.align	2
+ 440              	.L33:
+ 441 0014 546A0040 		.word	1073769044
+ 442              		.cfi_endproc
+ 443              	.LFE9:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 16
 
 
- 444              		.section	.text.heartbeat_timer_WritePeriod,"ax",%progbits
- 445              		.align	2
- 446              		.global	heartbeat_timer_WritePeriod
- 447              		.thumb
- 448              		.thumb_func
- 449              		.type	heartbeat_timer_WritePeriod, %function
- 450              	heartbeat_timer_WritePeriod:
- 451              	.LFB10:
+ 444              		.size	heartbeat_timer_ReadPeriod, .-heartbeat_timer_ReadPeriod
+ 445              		.section	.text.heartbeat_timer_WritePeriod,"ax",%progbits
+ 446              		.align	2
+ 447              		.global	heartbeat_timer_WritePeriod
+ 448              		.thumb
+ 449              		.thumb_func
+ 450              		.type	heartbeat_timer_WritePeriod, %function
+ 451              	heartbeat_timer_WritePeriod:
+ 452              	.LFB10:
  413:Generated_Source\PSoC5/heartbeat_timer.c **** 
  414:Generated_Source\PSoC5/heartbeat_timer.c **** 
  415:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
@@ -927,60 +928,61 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  428:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
  429:Generated_Source\PSoC5/heartbeat_timer.c **** *
  430:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
- 431:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_WritePeriod(uint32 period) 
+ 431:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_WritePeriod(uint16 period) 
  432:Generated_Source\PSoC5/heartbeat_timer.c **** {
- 452              		.loc 1 432 0
- 453              		.cfi_startproc
- 454              		@ args = 0, pretend = 0, frame = 8
- 455              		@ frame_needed = 1, uses_anonymous_args = 0
- 456              		@ link register save eliminated.
- 457 0000 80B4     		push	{r7}
- 458              		.cfi_def_cfa_offset 4
- 459              		.cfi_offset 7, -4
- 460 0002 83B0     		sub	sp, sp, #12
- 461              		.cfi_def_cfa_offset 16
- 462 0004 00AF     		add	r7, sp, #0
- 463              		.cfi_def_cfa_register 7
- 464 0006 7860     		str	r0, [r7, #4]
+ 453              		.loc 1 432 0
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 8
+ 456              		@ frame_needed = 1, uses_anonymous_args = 0
+ 457              		@ link register save eliminated.
+ 458 0000 80B4     		push	{r7}
+ 459              		.cfi_def_cfa_offset 4
+ 460              		.cfi_offset 7, -4
+ 461 0002 83B0     		sub	sp, sp, #12
+ 462              		.cfi_def_cfa_offset 16
+ 463 0004 00AF     		add	r7, sp, #0
+ 464              		.cfi_def_cfa_register 7
+ 465 0006 0346     		mov	r3, r0
+ 466 0008 FB80     		strh	r3, [r7, #6]	@ movhi
  433:Generated_Source\PSoC5/heartbeat_timer.c ****     #if(heartbeat_timer_UsingFixedFunction)
  434:Generated_Source\PSoC5/heartbeat_timer.c ****         uint16 period_temp = (uint16)period;
  435:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG16(heartbeat_timer_PERIOD_LSB_PTR, period_temp);
  436:Generated_Source\PSoC5/heartbeat_timer.c ****     #else
- 437:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG32(heartbeat_timer_PERIOD_LSB_PTR, period);
- 465              		.loc 1 437 0
- 466 0008 034A     		ldr	r2, .L36
- 467 000a 7B68     		ldr	r3, [r7, #4]
- 468 000c 1360     		str	r3, [r2]
+ 437:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG16(heartbeat_timer_PERIOD_LSB_PTR, period);
+ 467              		.loc 1 437 0
+ 468 000a 044A     		ldr	r2, .L36
+ 469 000c FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 470 000e 1380     		strh	r3, [r2]	@ movhi
  438:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed functi
  439:Generated_Source\PSoC5/heartbeat_timer.c **** }
- 469              		.loc 1 439 0
- 470 000e 0C37     		adds	r7, r7, #12
- 471              		.cfi_def_cfa_offset 4
- 472 0010 BD46     		mov	sp, r7
- 473              		.cfi_def_cfa_register 13
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 17
+ 471              		.loc 1 439 0
+ 472 0010 0C37     		adds	r7, r7, #12
+ 473              		.cfi_def_cfa_offset 4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 17
 
 
- 474              		@ sp needed
- 475 0012 5DF8047B 		ldr	r7, [sp], #4
- 476              		.cfi_restore 7
- 477              		.cfi_def_cfa_offset 0
- 478 0016 7047     		bx	lr
- 479              	.L37:
- 480              		.align	2
- 481              	.L36:
- 482 0018 24650040 		.word	1073767716
- 483              		.cfi_endproc
- 484              	.LFE10:
- 485              		.size	heartbeat_timer_WritePeriod, .-heartbeat_timer_WritePeriod
- 486              		.section	.text.heartbeat_timer_ReadCapture,"ax",%progbits
- 487              		.align	2
- 488              		.global	heartbeat_timer_ReadCapture
- 489              		.thumb
- 490              		.thumb_func
- 491              		.type	heartbeat_timer_ReadCapture, %function
- 492              	heartbeat_timer_ReadCapture:
- 493              	.LFB11:
+ 474 0012 BD46     		mov	sp, r7
+ 475              		.cfi_def_cfa_register 13
+ 476              		@ sp needed
+ 477 0014 5DF8047B 		ldr	r7, [sp], #4
+ 478              		.cfi_restore 7
+ 479              		.cfi_def_cfa_offset 0
+ 480 0018 7047     		bx	lr
+ 481              	.L37:
+ 482 001a 00BF     		.align	2
+ 483              	.L36:
+ 484 001c 546A0040 		.word	1073769044
+ 485              		.cfi_endproc
+ 486              	.LFE10:
+ 487              		.size	heartbeat_timer_WritePeriod, .-heartbeat_timer_WritePeriod
+ 488              		.section	.text.heartbeat_timer_ReadCapture,"ax",%progbits
+ 489              		.align	2
+ 490              		.global	heartbeat_timer_ReadCapture
+ 491              		.thumb
+ 492              		.thumb_func
+ 493              		.type	heartbeat_timer_ReadCapture, %function
+ 494              	heartbeat_timer_ReadCapture:
+ 495              	.LFB11:
  440:Generated_Source\PSoC5/heartbeat_timer.c **** 
  441:Generated_Source\PSoC5/heartbeat_timer.c **** 
  442:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
@@ -997,54 +999,55 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  453:Generated_Source\PSoC5/heartbeat_timer.c **** *  Present Capture value.
  454:Generated_Source\PSoC5/heartbeat_timer.c **** *
  455:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
- 456:Generated_Source\PSoC5/heartbeat_timer.c **** uint32 heartbeat_timer_ReadCapture(void) 
+ 456:Generated_Source\PSoC5/heartbeat_timer.c **** uint16 heartbeat_timer_ReadCapture(void) 
  457:Generated_Source\PSoC5/heartbeat_timer.c **** {
- 494              		.loc 1 457 0
- 495              		.cfi_startproc
- 496              		@ args = 0, pretend = 0, frame = 0
- 497              		@ frame_needed = 1, uses_anonymous_args = 0
- 498              		@ link register save eliminated.
- 499 0000 80B4     		push	{r7}
- 500              		.cfi_def_cfa_offset 4
- 501              		.cfi_offset 7, -4
- 502 0002 00AF     		add	r7, sp, #0
- 503              		.cfi_def_cfa_register 7
+ 496              		.loc 1 457 0
+ 497              		.cfi_startproc
+ 498              		@ args = 0, pretend = 0, frame = 0
+ 499              		@ frame_needed = 1, uses_anonymous_args = 0
+ 500              		@ link register save eliminated.
+ 501 0000 80B4     		push	{r7}
+ 502              		.cfi_def_cfa_offset 4
+ 503              		.cfi_offset 7, -4
+ 504 0002 00AF     		add	r7, sp, #0
+ 505              		.cfi_def_cfa_register 7
  458:Generated_Source\PSoC5/heartbeat_timer.c ****    #if(heartbeat_timer_UsingFixedFunction)
- 459:Generated_Source\PSoC5/heartbeat_timer.c ****        return ((uint32)CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
+ 459:Generated_Source\PSoC5/heartbeat_timer.c ****        return ((uint16)CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
  460:Generated_Source\PSoC5/heartbeat_timer.c ****    #else
- 461:Generated_Source\PSoC5/heartbeat_timer.c ****        return (CY_GET_REG32(heartbeat_timer_CAPTURE_LSB_PTR));
- 504              		.loc 1 461 0
- 505 0004 034B     		ldr	r3, .L40
- 506 0006 1B68     		ldr	r3, [r3]
+ 461:Generated_Source\PSoC5/heartbeat_timer.c ****        return (CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
+ 506              		.loc 1 461 0
+ 507 0004 034B     		ldr	r3, .L40
+ 508 0006 1B88     		ldrh	r3, [r3]	@ movhi
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 18
+
+
+ 509 0008 9BB2     		uxth	r3, r3
  462:Generated_Source\PSoC5/heartbeat_timer.c ****    #endif /* (heartbeat_timer_UsingFixedFunction) */
  463:Generated_Source\PSoC5/heartbeat_timer.c **** }
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 18
-
-
- 507              		.loc 1 463 0
- 508 0008 1846     		mov	r0, r3
- 509 000a BD46     		mov	sp, r7
- 510              		.cfi_def_cfa_register 13
- 511              		@ sp needed
- 512 000c 5DF8047B 		ldr	r7, [sp], #4
- 513              		.cfi_restore 7
- 514              		.cfi_def_cfa_offset 0
- 515 0010 7047     		bx	lr
- 516              	.L41:
- 517 0012 00BF     		.align	2
- 518              	.L40:
- 519 0014 44650040 		.word	1073767748
- 520              		.cfi_endproc
- 521              	.LFE11:
- 522              		.size	heartbeat_timer_ReadCapture, .-heartbeat_timer_ReadCapture
- 523              		.section	.text.heartbeat_timer_WriteCounter,"ax",%progbits
- 524              		.align	2
- 525              		.global	heartbeat_timer_WriteCounter
- 526              		.thumb
- 527              		.thumb_func
- 528              		.type	heartbeat_timer_WriteCounter, %function
- 529              	heartbeat_timer_WriteCounter:
- 530              	.LFB12:
+ 510              		.loc 1 463 0
+ 511 000a 1846     		mov	r0, r3
+ 512 000c BD46     		mov	sp, r7
+ 513              		.cfi_def_cfa_register 13
+ 514              		@ sp needed
+ 515 000e 5DF8047B 		ldr	r7, [sp], #4
+ 516              		.cfi_restore 7
+ 517              		.cfi_def_cfa_offset 0
+ 518 0012 7047     		bx	lr
+ 519              	.L41:
+ 520              		.align	2
+ 521              	.L40:
+ 522 0014 946A0040 		.word	1073769108
+ 523              		.cfi_endproc
+ 524              	.LFE11:
+ 525              		.size	heartbeat_timer_ReadCapture, .-heartbeat_timer_ReadCapture
+ 526              		.section	.text.heartbeat_timer_WriteCounter,"ax",%progbits
+ 527              		.align	2
+ 528              		.global	heartbeat_timer_WriteCounter
+ 529              		.thumb
+ 530              		.thumb_func
+ 531              		.type	heartbeat_timer_WriteCounter, %function
+ 532              	heartbeat_timer_WriteCounter:
+ 533              	.LFB12:
  464:Generated_Source\PSoC5/heartbeat_timer.c **** 
  465:Generated_Source\PSoC5/heartbeat_timer.c **** 
  466:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
@@ -1061,63 +1064,64 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  477:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
  478:Generated_Source\PSoC5/heartbeat_timer.c **** *
  479:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
- 480:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_WriteCounter(uint32 counter) 
+ 480:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_WriteCounter(uint16 counter) 
  481:Generated_Source\PSoC5/heartbeat_timer.c **** {
- 531              		.loc 1 481 0
- 532              		.cfi_startproc
- 533              		@ args = 0, pretend = 0, frame = 8
- 534              		@ frame_needed = 1, uses_anonymous_args = 0
- 535              		@ link register save eliminated.
- 536 0000 80B4     		push	{r7}
- 537              		.cfi_def_cfa_offset 4
- 538              		.cfi_offset 7, -4
- 539 0002 83B0     		sub	sp, sp, #12
- 540              		.cfi_def_cfa_offset 16
- 541 0004 00AF     		add	r7, sp, #0
- 542              		.cfi_def_cfa_register 7
- 543 0006 7860     		str	r0, [r7, #4]
+ 534              		.loc 1 481 0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 8
+ 537              		@ frame_needed = 1, uses_anonymous_args = 0
+ 538              		@ link register save eliminated.
+ 539 0000 80B4     		push	{r7}
+ 540              		.cfi_def_cfa_offset 4
+ 541              		.cfi_offset 7, -4
+ 542 0002 83B0     		sub	sp, sp, #12
+ 543              		.cfi_def_cfa_offset 16
+ 544 0004 00AF     		add	r7, sp, #0
+ 545              		.cfi_def_cfa_register 7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 19
+
+
+ 546 0006 0346     		mov	r3, r0
+ 547 0008 FB80     		strh	r3, [r7, #6]	@ movhi
  482:Generated_Source\PSoC5/heartbeat_timer.c ****    #if(heartbeat_timer_UsingFixedFunction)
  483:Generated_Source\PSoC5/heartbeat_timer.c ****         /* This functionality is removed until a FixedFunction HW update to
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 19
-
-
  484:Generated_Source\PSoC5/heartbeat_timer.c ****          * allow this register to be written
  485:Generated_Source\PSoC5/heartbeat_timer.c ****          */
  486:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG16(heartbeat_timer_COUNTER_LSB_PTR, (uint16)counter);
  487:Generated_Source\PSoC5/heartbeat_timer.c ****         
  488:Generated_Source\PSoC5/heartbeat_timer.c ****     #else
- 489:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG32(heartbeat_timer_COUNTER_LSB_PTR, counter);
- 544              		.loc 1 489 0
- 545 0008 034A     		ldr	r2, .L43
- 546 000a 7B68     		ldr	r3, [r7, #4]
- 547 000c 1360     		str	r3, [r2]
+ 489:Generated_Source\PSoC5/heartbeat_timer.c ****         CY_SET_REG16(heartbeat_timer_COUNTER_LSB_PTR, counter);
+ 548              		.loc 1 489 0
+ 549 000a 044A     		ldr	r2, .L43
+ 550 000c FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 551 000e 1380     		strh	r3, [r2]	@ movhi
  490:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fix
  491:Generated_Source\PSoC5/heartbeat_timer.c **** }
- 548              		.loc 1 491 0
- 549 000e 0C37     		adds	r7, r7, #12
- 550              		.cfi_def_cfa_offset 4
- 551 0010 BD46     		mov	sp, r7
- 552              		.cfi_def_cfa_register 13
- 553              		@ sp needed
- 554 0012 5DF8047B 		ldr	r7, [sp], #4
- 555              		.cfi_restore 7
- 556              		.cfi_def_cfa_offset 0
- 557 0016 7047     		bx	lr
- 558              	.L44:
- 559              		.align	2
- 560              	.L43:
- 561 0018 04650040 		.word	1073767684
- 562              		.cfi_endproc
- 563              	.LFE12:
- 564              		.size	heartbeat_timer_WriteCounter, .-heartbeat_timer_WriteCounter
- 565              		.section	.text.heartbeat_timer_ReadCounter,"ax",%progbits
- 566              		.align	2
- 567              		.global	heartbeat_timer_ReadCounter
- 568              		.thumb
- 569              		.thumb_func
- 570              		.type	heartbeat_timer_ReadCounter, %function
- 571              	heartbeat_timer_ReadCounter:
- 572              	.LFB13:
+ 552              		.loc 1 491 0
+ 553 0010 0C37     		adds	r7, r7, #12
+ 554              		.cfi_def_cfa_offset 4
+ 555 0012 BD46     		mov	sp, r7
+ 556              		.cfi_def_cfa_register 13
+ 557              		@ sp needed
+ 558 0014 5DF8047B 		ldr	r7, [sp], #4
+ 559              		.cfi_restore 7
+ 560              		.cfi_def_cfa_offset 0
+ 561 0018 7047     		bx	lr
+ 562              	.L44:
+ 563 001a 00BF     		.align	2
+ 564              	.L43:
+ 565 001c 146A0040 		.word	1073768980
+ 566              		.cfi_endproc
+ 567              	.LFE12:
+ 568              		.size	heartbeat_timer_WriteCounter, .-heartbeat_timer_WriteCounter
+ 569              		.section	.text.heartbeat_timer_ReadCounter,"ax",%progbits
+ 570              		.align	2
+ 571              		.global	heartbeat_timer_ReadCounter
+ 572              		.thumb
+ 573              		.thumb_func
+ 574              		.type	heartbeat_timer_ReadCounter, %function
+ 575              	heartbeat_timer_ReadCounter:
+ 576              	.LFB13:
  492:Generated_Source\PSoC5/heartbeat_timer.c **** 
  493:Generated_Source\PSoC5/heartbeat_timer.c **** 
  494:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
@@ -1134,21 +1138,21 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  505:Generated_Source\PSoC5/heartbeat_timer.c **** *  Present compare value.
  506:Generated_Source\PSoC5/heartbeat_timer.c **** *
  507:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
- 508:Generated_Source\PSoC5/heartbeat_timer.c **** uint32 heartbeat_timer_ReadCounter(void) 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 20
+
+
+ 508:Generated_Source\PSoC5/heartbeat_timer.c **** uint16 heartbeat_timer_ReadCounter(void) 
  509:Generated_Source\PSoC5/heartbeat_timer.c **** {
- 573              		.loc 1 509 0
- 574              		.cfi_startproc
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 20
-
-
- 575              		@ args = 0, pretend = 0, frame = 0
- 576              		@ frame_needed = 1, uses_anonymous_args = 0
- 577              		@ link register save eliminated.
- 578 0000 80B4     		push	{r7}
- 579              		.cfi_def_cfa_offset 4
- 580              		.cfi_offset 7, -4
- 581 0002 00AF     		add	r7, sp, #0
- 582              		.cfi_def_cfa_register 7
+ 577              		.loc 1 509 0
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 0
+ 580              		@ frame_needed = 1, uses_anonymous_args = 0
+ 581              		@ link register save eliminated.
+ 582 0000 80B4     		push	{r7}
+ 583              		.cfi_def_cfa_offset 4
+ 584              		.cfi_offset 7, -4
+ 585 0002 00AF     		add	r7, sp, #0
+ 586              		.cfi_def_cfa_register 7
  510:Generated_Source\PSoC5/heartbeat_timer.c ****     /* Force capture by reading Accumulator */
  511:Generated_Source\PSoC5/heartbeat_timer.c ****     /* Must first do a software capture to be able to read the counter */
  512:Generated_Source\PSoC5/heartbeat_timer.c ****     /* It is up to the user code to make sure there isn't already captured data in the FIFO */
@@ -1156,51 +1160,52 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  514:Generated_Source\PSoC5/heartbeat_timer.c ****         (void)CY_GET_REG16(heartbeat_timer_COUNTER_LSB_PTR);
  515:Generated_Source\PSoC5/heartbeat_timer.c ****     #else
  516:Generated_Source\PSoC5/heartbeat_timer.c ****         (void)CY_GET_REG8(heartbeat_timer_COUNTER_LSB_PTR_8BIT);
- 583              		.loc 1 516 0
- 584 0004 044B     		ldr	r3, .L47
- 585 0006 1B78     		ldrb	r3, [r3]
+ 587              		.loc 1 516 0
+ 588 0004 044B     		ldr	r3, .L47
+ 589 0006 1B78     		ldrb	r3, [r3]
  517:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif/* (heartbeat_timer_UsingFixedFunction) */
  518:Generated_Source\PSoC5/heartbeat_timer.c **** 
  519:Generated_Source\PSoC5/heartbeat_timer.c ****     /* Read the data from the FIFO (or capture register for Fixed Function)*/
  520:Generated_Source\PSoC5/heartbeat_timer.c ****     #if(heartbeat_timer_UsingFixedFunction)
- 521:Generated_Source\PSoC5/heartbeat_timer.c ****         return ((uint32)CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
+ 521:Generated_Source\PSoC5/heartbeat_timer.c ****         return ((uint16)CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
  522:Generated_Source\PSoC5/heartbeat_timer.c ****     #else
- 523:Generated_Source\PSoC5/heartbeat_timer.c ****         return (CY_GET_REG32(heartbeat_timer_CAPTURE_LSB_PTR));
- 586              		.loc 1 523 0
- 587 0008 044B     		ldr	r3, .L47+4
- 588 000a 1B68     		ldr	r3, [r3]
+ 523:Generated_Source\PSoC5/heartbeat_timer.c ****         return (CY_GET_REG16(heartbeat_timer_CAPTURE_LSB_PTR));
+ 590              		.loc 1 523 0
+ 591 0008 044B     		ldr	r3, .L47+4
+ 592 000a 1B88     		ldrh	r3, [r3]	@ movhi
+ 593 000c 9BB2     		uxth	r3, r3
  524:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* (heartbeat_timer_UsingFixedFunction) */
  525:Generated_Source\PSoC5/heartbeat_timer.c **** }
- 589              		.loc 1 525 0
- 590 000c 1846     		mov	r0, r3
- 591 000e BD46     		mov	sp, r7
- 592              		.cfi_def_cfa_register 13
- 593              		@ sp needed
- 594 0010 5DF8047B 		ldr	r7, [sp], #4
- 595              		.cfi_restore 7
- 596              		.cfi_def_cfa_offset 0
- 597 0014 7047     		bx	lr
- 598              	.L48:
- 599 0016 00BF     		.align	2
- 600              	.L47:
- 601 0018 04650040 		.word	1073767684
- 602 001c 44650040 		.word	1073767748
- 603              		.cfi_endproc
- 604              	.LFE13:
- 605              		.size	heartbeat_timer_ReadCounter, .-heartbeat_timer_ReadCounter
- 606              		.section	.text.heartbeat_timer_ClearFIFO,"ax",%progbits
- 607              		.align	2
- 608              		.global	heartbeat_timer_ClearFIFO
- 609              		.thumb
- 610              		.thumb_func
- 611              		.type	heartbeat_timer_ClearFIFO, %function
- 612              	heartbeat_timer_ClearFIFO:
- 613              	.LFB14:
+ 594              		.loc 1 525 0
+ 595 000e 1846     		mov	r0, r3
+ 596 0010 BD46     		mov	sp, r7
+ 597              		.cfi_def_cfa_register 13
+ 598              		@ sp needed
+ 599 0012 5DF8047B 		ldr	r7, [sp], #4
+ 600              		.cfi_restore 7
+ 601              		.cfi_def_cfa_offset 0
+ 602 0016 7047     		bx	lr
+ 603              	.L48:
+ 604              		.align	2
+ 605              	.L47:
+ 606 0018 0A650040 		.word	1073767690
+ 607 001c 946A0040 		.word	1073769108
+ 608              		.cfi_endproc
+ 609              	.LFE13:
+ 610              		.size	heartbeat_timer_ReadCounter, .-heartbeat_timer_ReadCounter
+ 611              		.section	.text.heartbeat_timer_ClearFIFO,"ax",%progbits
+ 612              		.align	2
+ 613              		.global	heartbeat_timer_ClearFIFO
+ 614              		.thumb
+ 615              		.thumb_func
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 21
+
+
+ 616              		.type	heartbeat_timer_ClearFIFO, %function
+ 617              	heartbeat_timer_ClearFIFO:
+ 618              	.LFB14:
  526:Generated_Source\PSoC5/heartbeat_timer.c **** 
  527:Generated_Source\PSoC5/heartbeat_timer.c **** 
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 21
-
-
  528:Generated_Source\PSoC5/heartbeat_timer.c **** #if(!heartbeat_timer_UsingFixedFunction) /* UDB Specific Functions */
  529:Generated_Source\PSoC5/heartbeat_timer.c **** 
  530:Generated_Source\PSoC5/heartbeat_timer.c ****     
@@ -1253,14 +1258,14 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  577:Generated_Source\PSoC5/heartbeat_timer.c ****         heartbeat_timer_CONTROL |= captureMode;
  578:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* (!heartbeat_timer_UDB_CONTROL_REG_REMOVED) */
  579:Generated_Source\PSoC5/heartbeat_timer.c **** }
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 22
+
+
  580:Generated_Source\PSoC5/heartbeat_timer.c **** #endif /* Remove API if Capture Mode is not Software Controlled */
  581:Generated_Source\PSoC5/heartbeat_timer.c **** 
  582:Generated_Source\PSoC5/heartbeat_timer.c **** 
  583:Generated_Source\PSoC5/heartbeat_timer.c **** #if (heartbeat_timer_SoftwareTriggerMode)
  584:Generated_Source\PSoC5/heartbeat_timer.c **** 
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 22
-
-
  585:Generated_Source\PSoC5/heartbeat_timer.c **** 
  586:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
  587:Generated_Source\PSoC5/heartbeat_timer.c **** * Function Name: heartbeat_timer_SetTriggerMode
@@ -1313,14 +1318,14 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  634:Generated_Source\PSoC5/heartbeat_timer.c **** * Return:
  635:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
  636:Generated_Source\PSoC5/heartbeat_timer.c **** *
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 23
+
+
  637:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
  638:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_EnableTrigger(void) 
  639:Generated_Source\PSoC5/heartbeat_timer.c **** {
  640:Generated_Source\PSoC5/heartbeat_timer.c ****     #if (!heartbeat_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is re
  641:Generated_Source\PSoC5/heartbeat_timer.c ****         heartbeat_timer_CONTROL |= heartbeat_timer_CTRL_TRIG_EN;
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 23
-
-
  642:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* Remove code section if control register is not used */
  643:Generated_Source\PSoC5/heartbeat_timer.c **** }
  644:Generated_Source\PSoC5/heartbeat_timer.c **** 
@@ -1373,14 +1378,14 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  691:Generated_Source\PSoC5/heartbeat_timer.c ****     interruptCount &= heartbeat_timer_CTRL_INTCNT_MASK;
  692:Generated_Source\PSoC5/heartbeat_timer.c **** 
  693:Generated_Source\PSoC5/heartbeat_timer.c ****     #if (!heartbeat_timer_UDB_CONTROL_REG_REMOVED)
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 24
+
+
  694:Generated_Source\PSoC5/heartbeat_timer.c ****         /* Clear the Current Setting */
  695:Generated_Source\PSoC5/heartbeat_timer.c ****         heartbeat_timer_CONTROL &= ((uint8)(~heartbeat_timer_CTRL_INTCNT_MASK));
  696:Generated_Source\PSoC5/heartbeat_timer.c ****         /* Write The New Setting */
  697:Generated_Source\PSoC5/heartbeat_timer.c ****         heartbeat_timer_CONTROL |= interruptCount;
  698:Generated_Source\PSoC5/heartbeat_timer.c ****     #endif /* (!heartbeat_timer_UDB_CONTROL_REG_REMOVED) */
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 24
-
-
  699:Generated_Source\PSoC5/heartbeat_timer.c **** }
  700:Generated_Source\PSoC5/heartbeat_timer.c **** #endif /* heartbeat_timer_InterruptOnCaptureCount */
  701:Generated_Source\PSoC5/heartbeat_timer.c **** 
@@ -1433,14 +1438,14 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  748:Generated_Source\PSoC5/heartbeat_timer.c **** 
  749:Generated_Source\PSoC5/heartbeat_timer.c **** /*******************************************************************************
  750:Generated_Source\PSoC5/heartbeat_timer.c **** * Function Name: heartbeat_timer_ClearFIFO
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 25
+
+
  751:Generated_Source\PSoC5/heartbeat_timer.c **** ********************************************************************************
  752:Generated_Source\PSoC5/heartbeat_timer.c **** *
  753:Generated_Source\PSoC5/heartbeat_timer.c **** * Summary:
  754:Generated_Source\PSoC5/heartbeat_timer.c **** *  This function clears all capture data from the capture FIFO
  755:Generated_Source\PSoC5/heartbeat_timer.c **** *
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 25
-
-
  756:Generated_Source\PSoC5/heartbeat_timer.c **** * Parameters:
  757:Generated_Source\PSoC5/heartbeat_timer.c **** *  void
  758:Generated_Source\PSoC5/heartbeat_timer.c **** *
@@ -1450,940 +1455,940 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 1
  762:Generated_Source\PSoC5/heartbeat_timer.c **** *******************************************************************************/
  763:Generated_Source\PSoC5/heartbeat_timer.c **** void heartbeat_timer_ClearFIFO(void) 
  764:Generated_Source\PSoC5/heartbeat_timer.c **** {
- 614              		.loc 1 764 0
- 615              		.cfi_startproc
- 616              		@ args = 0, pretend = 0, frame = 0
- 617              		@ frame_needed = 1, uses_anonymous_args = 0
- 618 0000 80B5     		push	{r7, lr}
- 619              		.cfi_def_cfa_offset 8
- 620              		.cfi_offset 7, -8
- 621              		.cfi_offset 14, -4
- 622 0002 00AF     		add	r7, sp, #0
- 623              		.cfi_def_cfa_register 7
+ 619              		.loc 1 764 0
+ 620              		.cfi_startproc
+ 621              		@ args = 0, pretend = 0, frame = 0
+ 622              		@ frame_needed = 1, uses_anonymous_args = 0
+ 623 0000 80B5     		push	{r7, lr}
+ 624              		.cfi_def_cfa_offset 8
+ 625              		.cfi_offset 7, -8
+ 626              		.cfi_offset 14, -4
+ 627 0002 00AF     		add	r7, sp, #0
+ 628              		.cfi_def_cfa_register 7
  765:Generated_Source\PSoC5/heartbeat_timer.c ****     while(0u != (heartbeat_timer_ReadStatusRegister() & heartbeat_timer_STATUS_FIFONEMP))
- 624              		.loc 1 765 0
- 625 0004 01E0     		b	.L50
- 626              	.L51:
+ 629              		.loc 1 765 0
+ 630 0004 01E0     		b	.L50
+ 631              	.L51:
  766:Generated_Source\PSoC5/heartbeat_timer.c ****     {
  767:Generated_Source\PSoC5/heartbeat_timer.c ****         (void)heartbeat_timer_ReadCapture();
- 627              		.loc 1 767 0
- 628 0006 FFF7FEFF 		bl	heartbeat_timer_ReadCapture
- 629              	.L50:
+ 632              		.loc 1 767 0
+ 633 0006 FFF7FEFF 		bl	heartbeat_timer_ReadCapture
+ 634              	.L50:
  765:Generated_Source\PSoC5/heartbeat_timer.c ****     while(0u != (heartbeat_timer_ReadStatusRegister() & heartbeat_timer_STATUS_FIFONEMP))
- 630              		.loc 1 765 0
- 631 000a FFF7FEFF 		bl	heartbeat_timer_ReadStatusRegister
- 632 000e 0346     		mov	r3, r0
- 633 0010 03F00803 		and	r3, r3, #8
- 634 0014 002B     		cmp	r3, #0
- 635 0016 F6D1     		bne	.L51
+ 635              		.loc 1 765 0
+ 636 000a FFF7FEFF 		bl	heartbeat_timer_ReadStatusRegister
+ 637 000e 0346     		mov	r3, r0
+ 638 0010 03F00803 		and	r3, r3, #8
+ 639 0014 002B     		cmp	r3, #0
+ 640 0016 F6D1     		bne	.L51
  768:Generated_Source\PSoC5/heartbeat_timer.c ****     }
  769:Generated_Source\PSoC5/heartbeat_timer.c **** }
- 636              		.loc 1 769 0
- 637 0018 80BD     		pop	{r7, pc}
- 638              		.cfi_endproc
- 639              	.LFE14:
- 640              		.size	heartbeat_timer_ClearFIFO, .-heartbeat_timer_ClearFIFO
- 641 001a 00BF     		.text
- 642              	.Letext0:
- 643              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
- 644              		.section	.debug_info,"",%progbits
- 645              	.Ldebug_info0:
- 646 0000 50020000 		.4byte	0x250
- 647 0004 0400     		.2byte	0x4
- 648 0006 00000000 		.4byte	.Ldebug_abbrev0
- 649 000a 04       		.byte	0x4
- 650 000b 01       		.uleb128 0x1
- 651 000c E3010000 		.4byte	.LASF36
- 652 0010 01       		.byte	0x1
- 653 0011 E1000000 		.4byte	.LASF37
- 654 0015 A4000000 		.4byte	.LASF38
- 655 0019 00000000 		.4byte	.Ldebug_ranges0+0
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 26
+ 641              		.loc 1 769 0
+ 642 0018 80BD     		pop	{r7, pc}
+ 643              		.cfi_endproc
+ 644              	.LFE14:
+ 645              		.size	heartbeat_timer_ClearFIFO, .-heartbeat_timer_ClearFIFO
+ 646 001a 00BF     		.text
+ 647              	.Letext0:
+ 648              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 649              		.section	.debug_info,"",%progbits
+ 650              	.Ldebug_info0:
+ 651 0000 50020000 		.4byte	0x250
+ 652 0004 0400     		.2byte	0x4
+ 653 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 654 000a 04       		.byte	0x4
+ 655 000b 01       		.uleb128 0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 26
 
 
- 656 001d 00000000 		.4byte	0
- 657 0021 00000000 		.4byte	.Ldebug_line0
- 658 0025 02       		.uleb128 0x2
- 659 0026 01       		.byte	0x1
- 660 0027 06       		.byte	0x6
- 661 0028 A5030000 		.4byte	.LASF0
- 662 002c 02       		.uleb128 0x2
- 663 002d 01       		.byte	0x1
- 664 002e 08       		.byte	0x8
- 665 002f 55010000 		.4byte	.LASF1
- 666 0033 02       		.uleb128 0x2
- 667 0034 02       		.byte	0x2
- 668 0035 05       		.byte	0x5
- 669 0036 6E030000 		.4byte	.LASF2
- 670 003a 02       		.uleb128 0x2
- 671 003b 02       		.byte	0x2
- 672 003c 07       		.byte	0x7
- 673 003d 91000000 		.4byte	.LASF3
- 674 0041 02       		.uleb128 0x2
- 675 0042 04       		.byte	0x4
- 676 0043 05       		.byte	0x5
- 677 0044 97030000 		.4byte	.LASF4
- 678 0048 02       		.uleb128 0x2
- 679 0049 04       		.byte	0x4
- 680 004a 07       		.byte	0x7
- 681 004b 68010000 		.4byte	.LASF5
- 682 004f 02       		.uleb128 0x2
- 683 0050 08       		.byte	0x8
- 684 0051 05       		.byte	0x5
- 685 0052 3B030000 		.4byte	.LASF6
- 686 0056 02       		.uleb128 0x2
- 687 0057 08       		.byte	0x8
- 688 0058 07       		.byte	0x7
- 689 0059 AD020000 		.4byte	.LASF7
- 690 005d 03       		.uleb128 0x3
- 691 005e 04       		.byte	0x4
- 692 005f 05       		.byte	0x5
- 693 0060 696E7400 		.ascii	"int\000"
- 694 0064 02       		.uleb128 0x2
- 695 0065 04       		.byte	0x4
- 696 0066 07       		.byte	0x7
- 697 0067 7F020000 		.4byte	.LASF8
- 698 006b 04       		.uleb128 0x4
- 699 006c 7A010000 		.4byte	.LASF9
- 700 0070 02       		.byte	0x2
- 701 0071 9201     		.2byte	0x192
- 702 0073 2C000000 		.4byte	0x2c
- 703 0077 04       		.uleb128 0x4
- 704 0078 78020000 		.4byte	.LASF10
- 705 007c 02       		.byte	0x2
- 706 007d 9401     		.2byte	0x194
- 707 007f 48000000 		.4byte	0x48
- 708 0083 02       		.uleb128 0x2
- 709 0084 04       		.byte	0x4
- 710 0085 04       		.byte	0x4
- 711 0086 47010000 		.4byte	.LASF11
- 712 008a 02       		.uleb128 0x2
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 27
+ 656 000c E3010000 		.4byte	.LASF36
+ 657 0010 01       		.byte	0x1
+ 658 0011 E1000000 		.4byte	.LASF37
+ 659 0015 A4000000 		.4byte	.LASF38
+ 660 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 661 001d 00000000 		.4byte	0
+ 662 0021 00000000 		.4byte	.Ldebug_line0
+ 663 0025 02       		.uleb128 0x2
+ 664 0026 01       		.byte	0x1
+ 665 0027 06       		.byte	0x6
+ 666 0028 A5030000 		.4byte	.LASF0
+ 667 002c 02       		.uleb128 0x2
+ 668 002d 01       		.byte	0x1
+ 669 002e 08       		.byte	0x8
+ 670 002f 55010000 		.4byte	.LASF1
+ 671 0033 02       		.uleb128 0x2
+ 672 0034 02       		.byte	0x2
+ 673 0035 05       		.byte	0x5
+ 674 0036 6E030000 		.4byte	.LASF2
+ 675 003a 02       		.uleb128 0x2
+ 676 003b 02       		.byte	0x2
+ 677 003c 07       		.byte	0x7
+ 678 003d 91000000 		.4byte	.LASF3
+ 679 0041 02       		.uleb128 0x2
+ 680 0042 04       		.byte	0x4
+ 681 0043 05       		.byte	0x5
+ 682 0044 97030000 		.4byte	.LASF4
+ 683 0048 02       		.uleb128 0x2
+ 684 0049 04       		.byte	0x4
+ 685 004a 07       		.byte	0x7
+ 686 004b 68010000 		.4byte	.LASF5
+ 687 004f 02       		.uleb128 0x2
+ 688 0050 08       		.byte	0x8
+ 689 0051 05       		.byte	0x5
+ 690 0052 3B030000 		.4byte	.LASF6
+ 691 0056 02       		.uleb128 0x2
+ 692 0057 08       		.byte	0x8
+ 693 0058 07       		.byte	0x7
+ 694 0059 AD020000 		.4byte	.LASF7
+ 695 005d 03       		.uleb128 0x3
+ 696 005e 04       		.byte	0x4
+ 697 005f 05       		.byte	0x5
+ 698 0060 696E7400 		.ascii	"int\000"
+ 699 0064 02       		.uleb128 0x2
+ 700 0065 04       		.byte	0x4
+ 701 0066 07       		.byte	0x7
+ 702 0067 7F020000 		.4byte	.LASF8
+ 703 006b 04       		.uleb128 0x4
+ 704 006c 7A010000 		.4byte	.LASF9
+ 705 0070 02       		.byte	0x2
+ 706 0071 9201     		.2byte	0x192
+ 707 0073 2C000000 		.4byte	0x2c
+ 708 0077 04       		.uleb128 0x4
+ 709 0078 78020000 		.4byte	.LASF10
+ 710 007c 02       		.byte	0x2
+ 711 007d 9301     		.2byte	0x193
+ 712 007f 3A000000 		.4byte	0x3a
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 27
 
 
- 713 008b 08       		.byte	0x8
- 714 008c 04       		.byte	0x4
- 715 008d 71020000 		.4byte	.LASF12
- 716 0091 02       		.uleb128 0x2
- 717 0092 01       		.byte	0x1
- 718 0093 08       		.byte	0x8
- 719 0094 A0030000 		.4byte	.LASF13
- 720 0098 04       		.uleb128 0x4
- 721 0099 63010000 		.4byte	.LASF14
- 722 009d 02       		.byte	0x2
- 723 009e 3C02     		.2byte	0x23c
- 724 00a0 A4000000 		.4byte	0xa4
- 725 00a4 05       		.uleb128 0x5
- 726 00a5 6B000000 		.4byte	0x6b
- 727 00a9 04       		.uleb128 0x4
- 728 00aa 00000000 		.4byte	.LASF15
- 729 00ae 02       		.byte	0x2
- 730 00af 3E02     		.2byte	0x23e
- 731 00b1 B5000000 		.4byte	0xb5
- 732 00b5 05       		.uleb128 0x5
- 733 00b6 77000000 		.4byte	0x77
- 734 00ba 02       		.uleb128 0x2
- 735 00bb 04       		.byte	0x4
- 736 00bc 07       		.byte	0x7
- 737 00bd 01030000 		.4byte	.LASF16
- 738 00c1 06       		.uleb128 0x6
- 739 00c2 38000000 		.4byte	.LASF20
- 740 00c6 01       		.byte	0x1
- 741 00c7 2B       		.byte	0x2b
- 742 00c8 00000000 		.4byte	.LFB0
- 743 00cc 4C000000 		.4byte	.LFE0-.LFB0
- 744 00d0 01       		.uleb128 0x1
- 745 00d1 9C       		.byte	0x9c
- 746 00d2 E5000000 		.4byte	0xe5
- 747 00d6 07       		.uleb128 0x7
- 748 00d7 78030000 		.4byte	.LASF39
- 749 00db 01       		.byte	0x1
- 750 00dc 2F       		.byte	0x2f
- 751 00dd 6B000000 		.4byte	0x6b
- 752 00e1 02       		.uleb128 0x2
- 753 00e2 91       		.byte	0x91
- 754 00e3 77       		.sleb128 -9
- 755 00e4 00       		.byte	0
- 756 00e5 08       		.uleb128 0x8
- 757 00e6 57030000 		.4byte	.LASF17
- 758 00ea 01       		.byte	0x1
- 759 00eb B4       		.byte	0xb4
- 760 00ec 00000000 		.4byte	.LFB1
- 761 00f0 20000000 		.4byte	.LFE1-.LFB1
- 762 00f4 01       		.uleb128 0x1
- 763 00f5 9C       		.byte	0x9c
- 764 00f6 09       		.uleb128 0x9
- 765 00f7 06000000 		.4byte	.LASF18
- 766 00fb 01       		.byte	0x1
- 767 00fc D7       		.byte	0xd7
- 768 00fd 00000000 		.4byte	.LFB2
- 769 0101 20000000 		.4byte	.LFE2-.LFB2
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 28
+ 713 0083 02       		.uleb128 0x2
+ 714 0084 04       		.byte	0x4
+ 715 0085 04       		.byte	0x4
+ 716 0086 47010000 		.4byte	.LASF11
+ 717 008a 02       		.uleb128 0x2
+ 718 008b 08       		.byte	0x8
+ 719 008c 04       		.byte	0x4
+ 720 008d 71020000 		.4byte	.LASF12
+ 721 0091 02       		.uleb128 0x2
+ 722 0092 01       		.byte	0x1
+ 723 0093 08       		.byte	0x8
+ 724 0094 A0030000 		.4byte	.LASF13
+ 725 0098 04       		.uleb128 0x4
+ 726 0099 63010000 		.4byte	.LASF14
+ 727 009d 02       		.byte	0x2
+ 728 009e 3C02     		.2byte	0x23c
+ 729 00a0 A4000000 		.4byte	0xa4
+ 730 00a4 05       		.uleb128 0x5
+ 731 00a5 6B000000 		.4byte	0x6b
+ 732 00a9 04       		.uleb128 0x4
+ 733 00aa 00000000 		.4byte	.LASF15
+ 734 00ae 02       		.byte	0x2
+ 735 00af 3D02     		.2byte	0x23d
+ 736 00b1 B5000000 		.4byte	0xb5
+ 737 00b5 05       		.uleb128 0x5
+ 738 00b6 77000000 		.4byte	0x77
+ 739 00ba 02       		.uleb128 0x2
+ 740 00bb 04       		.byte	0x4
+ 741 00bc 07       		.byte	0x7
+ 742 00bd 01030000 		.4byte	.LASF16
+ 743 00c1 06       		.uleb128 0x6
+ 744 00c2 38000000 		.4byte	.LASF20
+ 745 00c6 01       		.byte	0x1
+ 746 00c7 2B       		.byte	0x2b
+ 747 00c8 00000000 		.4byte	.LFB0
+ 748 00cc 4C000000 		.4byte	.LFE0-.LFB0
+ 749 00d0 01       		.uleb128 0x1
+ 750 00d1 9C       		.byte	0x9c
+ 751 00d2 E5000000 		.4byte	0xe5
+ 752 00d6 07       		.uleb128 0x7
+ 753 00d7 78030000 		.4byte	.LASF39
+ 754 00db 01       		.byte	0x1
+ 755 00dc 2F       		.byte	0x2f
+ 756 00dd 6B000000 		.4byte	0x6b
+ 757 00e1 02       		.uleb128 0x2
+ 758 00e2 91       		.byte	0x91
+ 759 00e3 77       		.sleb128 -9
+ 760 00e4 00       		.byte	0
+ 761 00e5 08       		.uleb128 0x8
+ 762 00e6 57030000 		.4byte	.LASF17
+ 763 00ea 01       		.byte	0x1
+ 764 00eb B4       		.byte	0xb4
+ 765 00ec 00000000 		.4byte	.LFB1
+ 766 00f0 20000000 		.4byte	.LFE1-.LFB1
+ 767 00f4 01       		.uleb128 0x1
+ 768 00f5 9C       		.byte	0x9c
+ 769 00f6 09       		.uleb128 0x9
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 28
 
 
- 770 0105 01       		.uleb128 0x1
- 771 0106 9C       		.byte	0x9c
- 772 0107 08       		.uleb128 0x8
- 773 0108 26030000 		.4byte	.LASF19
- 774 010c 01       		.byte	0x1
- 775 010d F7       		.byte	0xf7
- 776 010e 00000000 		.4byte	.LFB3
- 777 0112 20000000 		.4byte	.LFE3-.LFB3
- 778 0116 01       		.uleb128 0x1
- 779 0117 9C       		.byte	0x9c
- 780 0118 0A       		.uleb128 0xa
- 781 0119 8C020000 		.4byte	.LASF21
- 782 011d 01       		.byte	0x1
- 783 011e 1701     		.2byte	0x117
- 784 0120 00000000 		.4byte	.LFB4
- 785 0124 20000000 		.4byte	.LFE4-.LFB4
- 786 0128 01       		.uleb128 0x1
- 787 0129 9C       		.byte	0x9c
- 788 012a 3E010000 		.4byte	0x13e
- 789 012e 0B       		.uleb128 0xb
- 790 012f 49030000 		.4byte	.LASF26
- 791 0133 01       		.byte	0x1
- 792 0134 1701     		.2byte	0x117
- 793 0136 6B000000 		.4byte	0x6b
- 794 013a 02       		.uleb128 0x2
- 795 013b 91       		.byte	0x91
- 796 013c 77       		.sleb128 -9
- 797 013d 00       		.byte	0
- 798 013e 0C       		.uleb128 0xc
- 799 013f C4020000 		.4byte	.LASF22
- 800 0143 01       		.byte	0x1
- 801 0144 2E01     		.2byte	0x12e
- 802 0146 00000000 		.4byte	.LFB5
- 803 014a 14000000 		.4byte	.LFE5-.LFB5
- 804 014e 01       		.uleb128 0x1
- 805 014f 9C       		.byte	0x9c
- 806 0150 0D       		.uleb128 0xd
- 807 0151 24010000 		.4byte	.LASF23
- 808 0155 01       		.byte	0x1
- 809 0156 4D01     		.2byte	0x14d
- 810 0158 6B000000 		.4byte	0x6b
- 811 015c 00000000 		.4byte	.LFB6
- 812 0160 18000000 		.4byte	.LFE6-.LFB6
- 813 0164 01       		.uleb128 0x1
- 814 0165 9C       		.byte	0x9c
- 815 0166 0D       		.uleb128 0xd
- 816 0167 BF010000 		.4byte	.LASF24
- 817 016b 01       		.byte	0x1
- 818 016c 6401     		.2byte	0x164
- 819 016e 6B000000 		.4byte	0x6b
- 820 0172 00000000 		.4byte	.LFB7
- 821 0176 18000000 		.4byte	.LFE7-.LFB7
- 822 017a 01       		.uleb128 0x1
- 823 017b 9C       		.byte	0x9c
- 824 017c 0A       		.uleb128 0xa
- 825 017d 6C000000 		.4byte	.LASF25
- 826 0181 01       		.byte	0x1
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 29
+ 770 00f7 06000000 		.4byte	.LASF18
+ 771 00fb 01       		.byte	0x1
+ 772 00fc D7       		.byte	0xd7
+ 773 00fd 00000000 		.4byte	.LFB2
+ 774 0101 20000000 		.4byte	.LFE2-.LFB2
+ 775 0105 01       		.uleb128 0x1
+ 776 0106 9C       		.byte	0x9c
+ 777 0107 08       		.uleb128 0x8
+ 778 0108 26030000 		.4byte	.LASF19
+ 779 010c 01       		.byte	0x1
+ 780 010d F7       		.byte	0xf7
+ 781 010e 00000000 		.4byte	.LFB3
+ 782 0112 20000000 		.4byte	.LFE3-.LFB3
+ 783 0116 01       		.uleb128 0x1
+ 784 0117 9C       		.byte	0x9c
+ 785 0118 0A       		.uleb128 0xa
+ 786 0119 8C020000 		.4byte	.LASF21
+ 787 011d 01       		.byte	0x1
+ 788 011e 1701     		.2byte	0x117
+ 789 0120 00000000 		.4byte	.LFB4
+ 790 0124 20000000 		.4byte	.LFE4-.LFB4
+ 791 0128 01       		.uleb128 0x1
+ 792 0129 9C       		.byte	0x9c
+ 793 012a 3E010000 		.4byte	0x13e
+ 794 012e 0B       		.uleb128 0xb
+ 795 012f 49030000 		.4byte	.LASF26
+ 796 0133 01       		.byte	0x1
+ 797 0134 1701     		.2byte	0x117
+ 798 0136 6B000000 		.4byte	0x6b
+ 799 013a 02       		.uleb128 0x2
+ 800 013b 91       		.byte	0x91
+ 801 013c 77       		.sleb128 -9
+ 802 013d 00       		.byte	0
+ 803 013e 0C       		.uleb128 0xc
+ 804 013f C4020000 		.4byte	.LASF22
+ 805 0143 01       		.byte	0x1
+ 806 0144 2E01     		.2byte	0x12e
+ 807 0146 00000000 		.4byte	.LFB5
+ 808 014a 14000000 		.4byte	.LFE5-.LFB5
+ 809 014e 01       		.uleb128 0x1
+ 810 014f 9C       		.byte	0x9c
+ 811 0150 0D       		.uleb128 0xd
+ 812 0151 24010000 		.4byte	.LASF23
+ 813 0155 01       		.byte	0x1
+ 814 0156 4D01     		.2byte	0x14d
+ 815 0158 6B000000 		.4byte	0x6b
+ 816 015c 00000000 		.4byte	.LFB6
+ 817 0160 18000000 		.4byte	.LFE6-.LFB6
+ 818 0164 01       		.uleb128 0x1
+ 819 0165 9C       		.byte	0x9c
+ 820 0166 0D       		.uleb128 0xd
+ 821 0167 BF010000 		.4byte	.LASF24
+ 822 016b 01       		.byte	0x1
+ 823 016c 6401     		.2byte	0x164
+ 824 016e 6B000000 		.4byte	0x6b
+ 825 0172 00000000 		.4byte	.LFB7
+ 826 0176 18000000 		.4byte	.LFE7-.LFB7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 29
 
 
- 827 0182 7B01     		.2byte	0x17b
- 828 0184 00000000 		.4byte	.LFB8
- 829 0188 20000000 		.4byte	.LFE8-.LFB8
- 830 018c 01       		.uleb128 0x1
- 831 018d 9C       		.byte	0x9c
- 832 018e A2010000 		.4byte	0x1a2
- 833 0192 0B       		.uleb128 0xb
- 834 0193 80010000 		.4byte	.LASF27
- 835 0197 01       		.byte	0x1
- 836 0198 7B01     		.2byte	0x17b
- 837 019a 6B000000 		.4byte	0x6b
- 838 019e 02       		.uleb128 0x2
- 839 019f 91       		.byte	0x91
- 840 01a0 77       		.sleb128 -9
- 841 01a1 00       		.byte	0
- 842 01a2 0D       		.uleb128 0xd
- 843 01a3 A4010000 		.4byte	.LASF28
- 844 01a7 01       		.byte	0x1
- 845 01a8 9501     		.2byte	0x195
- 846 01aa 77000000 		.4byte	0x77
- 847 01ae 00000000 		.4byte	.LFB9
- 848 01b2 18000000 		.4byte	.LFE9-.LFB9
- 849 01b6 01       		.uleb128 0x1
- 850 01b7 9C       		.byte	0x9c
- 851 01b8 0A       		.uleb128 0xa
- 852 01b9 0A030000 		.4byte	.LASF29
- 853 01bd 01       		.byte	0x1
- 854 01be AF01     		.2byte	0x1af
- 855 01c0 00000000 		.4byte	.LFB10
- 856 01c4 1C000000 		.4byte	.LFE10-.LFB10
- 857 01c8 01       		.uleb128 0x1
- 858 01c9 9C       		.byte	0x9c
- 859 01ca DE010000 		.4byte	0x1de
- 860 01ce 0B       		.uleb128 0xb
- 861 01cf 65000000 		.4byte	.LASF30
- 862 01d3 01       		.byte	0x1
- 863 01d4 AF01     		.2byte	0x1af
- 864 01d6 77000000 		.4byte	0x77
- 865 01da 02       		.uleb128 0x2
- 866 01db 91       		.byte	0x91
- 867 01dc 74       		.sleb128 -12
- 868 01dd 00       		.byte	0
- 869 01de 0D       		.uleb128 0xd
- 870 01df 1C000000 		.4byte	.LASF31
- 871 01e3 01       		.byte	0x1
- 872 01e4 C801     		.2byte	0x1c8
- 873 01e6 77000000 		.4byte	0x77
- 874 01ea 00000000 		.4byte	.LFB11
- 875 01ee 18000000 		.4byte	.LFE11-.LFB11
- 876 01f2 01       		.uleb128 0x1
- 877 01f3 9C       		.byte	0x9c
- 878 01f4 0A       		.uleb128 0xa
- 879 01f5 E4020000 		.4byte	.LASF32
- 880 01f9 01       		.byte	0x1
- 881 01fa E001     		.2byte	0x1e0
- 882 01fc 00000000 		.4byte	.LFB12
- 883 0200 1C000000 		.4byte	.LFE12-.LFB12
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 30
+ 827 017a 01       		.uleb128 0x1
+ 828 017b 9C       		.byte	0x9c
+ 829 017c 0A       		.uleb128 0xa
+ 830 017d 6C000000 		.4byte	.LASF25
+ 831 0181 01       		.byte	0x1
+ 832 0182 7B01     		.2byte	0x17b
+ 833 0184 00000000 		.4byte	.LFB8
+ 834 0188 20000000 		.4byte	.LFE8-.LFB8
+ 835 018c 01       		.uleb128 0x1
+ 836 018d 9C       		.byte	0x9c
+ 837 018e A2010000 		.4byte	0x1a2
+ 838 0192 0B       		.uleb128 0xb
+ 839 0193 80010000 		.4byte	.LASF27
+ 840 0197 01       		.byte	0x1
+ 841 0198 7B01     		.2byte	0x17b
+ 842 019a 6B000000 		.4byte	0x6b
+ 843 019e 02       		.uleb128 0x2
+ 844 019f 91       		.byte	0x91
+ 845 01a0 77       		.sleb128 -9
+ 846 01a1 00       		.byte	0
+ 847 01a2 0D       		.uleb128 0xd
+ 848 01a3 A4010000 		.4byte	.LASF28
+ 849 01a7 01       		.byte	0x1
+ 850 01a8 9501     		.2byte	0x195
+ 851 01aa 77000000 		.4byte	0x77
+ 852 01ae 00000000 		.4byte	.LFB9
+ 853 01b2 18000000 		.4byte	.LFE9-.LFB9
+ 854 01b6 01       		.uleb128 0x1
+ 855 01b7 9C       		.byte	0x9c
+ 856 01b8 0A       		.uleb128 0xa
+ 857 01b9 0A030000 		.4byte	.LASF29
+ 858 01bd 01       		.byte	0x1
+ 859 01be AF01     		.2byte	0x1af
+ 860 01c0 00000000 		.4byte	.LFB10
+ 861 01c4 20000000 		.4byte	.LFE10-.LFB10
+ 862 01c8 01       		.uleb128 0x1
+ 863 01c9 9C       		.byte	0x9c
+ 864 01ca DE010000 		.4byte	0x1de
+ 865 01ce 0B       		.uleb128 0xb
+ 866 01cf 65000000 		.4byte	.LASF30
+ 867 01d3 01       		.byte	0x1
+ 868 01d4 AF01     		.2byte	0x1af
+ 869 01d6 77000000 		.4byte	0x77
+ 870 01da 02       		.uleb128 0x2
+ 871 01db 91       		.byte	0x91
+ 872 01dc 76       		.sleb128 -10
+ 873 01dd 00       		.byte	0
+ 874 01de 0D       		.uleb128 0xd
+ 875 01df 1C000000 		.4byte	.LASF31
+ 876 01e3 01       		.byte	0x1
+ 877 01e4 C801     		.2byte	0x1c8
+ 878 01e6 77000000 		.4byte	0x77
+ 879 01ea 00000000 		.4byte	.LFB11
+ 880 01ee 18000000 		.4byte	.LFE11-.LFB11
+ 881 01f2 01       		.uleb128 0x1
+ 882 01f3 9C       		.byte	0x9c
+ 883 01f4 0A       		.uleb128 0xa
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 30
 
 
- 884 0204 01       		.uleb128 0x1
- 885 0205 9C       		.byte	0x9c
- 886 0206 1A020000 		.4byte	0x21a
- 887 020a 0B       		.uleb128 0xb
- 888 020b 4D010000 		.4byte	.LASF33
- 889 020f 01       		.byte	0x1
- 890 0210 E001     		.2byte	0x1e0
- 891 0212 77000000 		.4byte	0x77
- 892 0216 02       		.uleb128 0x2
- 893 0217 91       		.byte	0x91
- 894 0218 74       		.sleb128 -12
- 895 0219 00       		.byte	0
- 896 021a 0D       		.uleb128 0xd
- 897 021b 88010000 		.4byte	.LASF34
- 898 021f 01       		.byte	0x1
- 899 0220 FC01     		.2byte	0x1fc
- 900 0222 77000000 		.4byte	0x77
- 901 0226 00000000 		.4byte	.LFB13
- 902 022a 20000000 		.4byte	.LFE13-.LFB13
- 903 022e 01       		.uleb128 0x1
- 904 022f 9C       		.byte	0x9c
- 905 0230 0E       		.uleb128 0xe
- 906 0231 0A010000 		.4byte	.LASF35
- 907 0235 01       		.byte	0x1
- 908 0236 FB02     		.2byte	0x2fb
- 909 0238 00000000 		.4byte	.LFB14
- 910 023c 1A000000 		.4byte	.LFE14-.LFB14
- 911 0240 01       		.uleb128 0x1
- 912 0241 9C       		.byte	0x9c
- 913 0242 0F       		.uleb128 0xf
- 914 0243 4D000000 		.4byte	.LASF40
- 915 0247 01       		.byte	0x1
- 916 0248 1A       		.byte	0x1a
- 917 0249 6B000000 		.4byte	0x6b
- 918 024d 05       		.uleb128 0x5
- 919 024e 03       		.byte	0x3
- 920 024f 00000000 		.4byte	heartbeat_timer_initVar
- 921 0253 00       		.byte	0
- 922              		.section	.debug_abbrev,"",%progbits
- 923              	.Ldebug_abbrev0:
- 924 0000 01       		.uleb128 0x1
- 925 0001 11       		.uleb128 0x11
- 926 0002 01       		.byte	0x1
- 927 0003 25       		.uleb128 0x25
- 928 0004 0E       		.uleb128 0xe
- 929 0005 13       		.uleb128 0x13
- 930 0006 0B       		.uleb128 0xb
- 931 0007 03       		.uleb128 0x3
- 932 0008 0E       		.uleb128 0xe
- 933 0009 1B       		.uleb128 0x1b
- 934 000a 0E       		.uleb128 0xe
- 935 000b 55       		.uleb128 0x55
- 936 000c 17       		.uleb128 0x17
- 937 000d 11       		.uleb128 0x11
- 938 000e 01       		.uleb128 0x1
- 939 000f 10       		.uleb128 0x10
- 940 0010 17       		.uleb128 0x17
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 31
+ 884 01f5 E4020000 		.4byte	.LASF32
+ 885 01f9 01       		.byte	0x1
+ 886 01fa E001     		.2byte	0x1e0
+ 887 01fc 00000000 		.4byte	.LFB12
+ 888 0200 20000000 		.4byte	.LFE12-.LFB12
+ 889 0204 01       		.uleb128 0x1
+ 890 0205 9C       		.byte	0x9c
+ 891 0206 1A020000 		.4byte	0x21a
+ 892 020a 0B       		.uleb128 0xb
+ 893 020b 4D010000 		.4byte	.LASF33
+ 894 020f 01       		.byte	0x1
+ 895 0210 E001     		.2byte	0x1e0
+ 896 0212 77000000 		.4byte	0x77
+ 897 0216 02       		.uleb128 0x2
+ 898 0217 91       		.byte	0x91
+ 899 0218 76       		.sleb128 -10
+ 900 0219 00       		.byte	0
+ 901 021a 0D       		.uleb128 0xd
+ 902 021b 88010000 		.4byte	.LASF34
+ 903 021f 01       		.byte	0x1
+ 904 0220 FC01     		.2byte	0x1fc
+ 905 0222 77000000 		.4byte	0x77
+ 906 0226 00000000 		.4byte	.LFB13
+ 907 022a 20000000 		.4byte	.LFE13-.LFB13
+ 908 022e 01       		.uleb128 0x1
+ 909 022f 9C       		.byte	0x9c
+ 910 0230 0E       		.uleb128 0xe
+ 911 0231 0A010000 		.4byte	.LASF35
+ 912 0235 01       		.byte	0x1
+ 913 0236 FB02     		.2byte	0x2fb
+ 914 0238 00000000 		.4byte	.LFB14
+ 915 023c 1A000000 		.4byte	.LFE14-.LFB14
+ 916 0240 01       		.uleb128 0x1
+ 917 0241 9C       		.byte	0x9c
+ 918 0242 0F       		.uleb128 0xf
+ 919 0243 4D000000 		.4byte	.LASF40
+ 920 0247 01       		.byte	0x1
+ 921 0248 1A       		.byte	0x1a
+ 922 0249 6B000000 		.4byte	0x6b
+ 923 024d 05       		.uleb128 0x5
+ 924 024e 03       		.byte	0x3
+ 925 024f 00000000 		.4byte	heartbeat_timer_initVar
+ 926 0253 00       		.byte	0
+ 927              		.section	.debug_abbrev,"",%progbits
+ 928              	.Ldebug_abbrev0:
+ 929 0000 01       		.uleb128 0x1
+ 930 0001 11       		.uleb128 0x11
+ 931 0002 01       		.byte	0x1
+ 932 0003 25       		.uleb128 0x25
+ 933 0004 0E       		.uleb128 0xe
+ 934 0005 13       		.uleb128 0x13
+ 935 0006 0B       		.uleb128 0xb
+ 936 0007 03       		.uleb128 0x3
+ 937 0008 0E       		.uleb128 0xe
+ 938 0009 1B       		.uleb128 0x1b
+ 939 000a 0E       		.uleb128 0xe
+ 940 000b 55       		.uleb128 0x55
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 31
 
 
- 941 0011 00       		.byte	0
- 942 0012 00       		.byte	0
- 943 0013 02       		.uleb128 0x2
- 944 0014 24       		.uleb128 0x24
- 945 0015 00       		.byte	0
- 946 0016 0B       		.uleb128 0xb
- 947 0017 0B       		.uleb128 0xb
- 948 0018 3E       		.uleb128 0x3e
- 949 0019 0B       		.uleb128 0xb
- 950 001a 03       		.uleb128 0x3
- 951 001b 0E       		.uleb128 0xe
- 952 001c 00       		.byte	0
- 953 001d 00       		.byte	0
- 954 001e 03       		.uleb128 0x3
- 955 001f 24       		.uleb128 0x24
- 956 0020 00       		.byte	0
- 957 0021 0B       		.uleb128 0xb
- 958 0022 0B       		.uleb128 0xb
- 959 0023 3E       		.uleb128 0x3e
- 960 0024 0B       		.uleb128 0xb
- 961 0025 03       		.uleb128 0x3
- 962 0026 08       		.uleb128 0x8
- 963 0027 00       		.byte	0
- 964 0028 00       		.byte	0
- 965 0029 04       		.uleb128 0x4
- 966 002a 16       		.uleb128 0x16
- 967 002b 00       		.byte	0
- 968 002c 03       		.uleb128 0x3
- 969 002d 0E       		.uleb128 0xe
- 970 002e 3A       		.uleb128 0x3a
- 971 002f 0B       		.uleb128 0xb
- 972 0030 3B       		.uleb128 0x3b
- 973 0031 05       		.uleb128 0x5
- 974 0032 49       		.uleb128 0x49
- 975 0033 13       		.uleb128 0x13
- 976 0034 00       		.byte	0
- 977 0035 00       		.byte	0
- 978 0036 05       		.uleb128 0x5
- 979 0037 35       		.uleb128 0x35
- 980 0038 00       		.byte	0
- 981 0039 49       		.uleb128 0x49
- 982 003a 13       		.uleb128 0x13
- 983 003b 00       		.byte	0
- 984 003c 00       		.byte	0
- 985 003d 06       		.uleb128 0x6
- 986 003e 2E       		.uleb128 0x2e
- 987 003f 01       		.byte	0x1
- 988 0040 3F       		.uleb128 0x3f
- 989 0041 19       		.uleb128 0x19
- 990 0042 03       		.uleb128 0x3
- 991 0043 0E       		.uleb128 0xe
- 992 0044 3A       		.uleb128 0x3a
- 993 0045 0B       		.uleb128 0xb
- 994 0046 3B       		.uleb128 0x3b
- 995 0047 0B       		.uleb128 0xb
- 996 0048 27       		.uleb128 0x27
- 997 0049 19       		.uleb128 0x19
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 32
+ 941 000c 17       		.uleb128 0x17
+ 942 000d 11       		.uleb128 0x11
+ 943 000e 01       		.uleb128 0x1
+ 944 000f 10       		.uleb128 0x10
+ 945 0010 17       		.uleb128 0x17
+ 946 0011 00       		.byte	0
+ 947 0012 00       		.byte	0
+ 948 0013 02       		.uleb128 0x2
+ 949 0014 24       		.uleb128 0x24
+ 950 0015 00       		.byte	0
+ 951 0016 0B       		.uleb128 0xb
+ 952 0017 0B       		.uleb128 0xb
+ 953 0018 3E       		.uleb128 0x3e
+ 954 0019 0B       		.uleb128 0xb
+ 955 001a 03       		.uleb128 0x3
+ 956 001b 0E       		.uleb128 0xe
+ 957 001c 00       		.byte	0
+ 958 001d 00       		.byte	0
+ 959 001e 03       		.uleb128 0x3
+ 960 001f 24       		.uleb128 0x24
+ 961 0020 00       		.byte	0
+ 962 0021 0B       		.uleb128 0xb
+ 963 0022 0B       		.uleb128 0xb
+ 964 0023 3E       		.uleb128 0x3e
+ 965 0024 0B       		.uleb128 0xb
+ 966 0025 03       		.uleb128 0x3
+ 967 0026 08       		.uleb128 0x8
+ 968 0027 00       		.byte	0
+ 969 0028 00       		.byte	0
+ 970 0029 04       		.uleb128 0x4
+ 971 002a 16       		.uleb128 0x16
+ 972 002b 00       		.byte	0
+ 973 002c 03       		.uleb128 0x3
+ 974 002d 0E       		.uleb128 0xe
+ 975 002e 3A       		.uleb128 0x3a
+ 976 002f 0B       		.uleb128 0xb
+ 977 0030 3B       		.uleb128 0x3b
+ 978 0031 05       		.uleb128 0x5
+ 979 0032 49       		.uleb128 0x49
+ 980 0033 13       		.uleb128 0x13
+ 981 0034 00       		.byte	0
+ 982 0035 00       		.byte	0
+ 983 0036 05       		.uleb128 0x5
+ 984 0037 35       		.uleb128 0x35
+ 985 0038 00       		.byte	0
+ 986 0039 49       		.uleb128 0x49
+ 987 003a 13       		.uleb128 0x13
+ 988 003b 00       		.byte	0
+ 989 003c 00       		.byte	0
+ 990 003d 06       		.uleb128 0x6
+ 991 003e 2E       		.uleb128 0x2e
+ 992 003f 01       		.byte	0x1
+ 993 0040 3F       		.uleb128 0x3f
+ 994 0041 19       		.uleb128 0x19
+ 995 0042 03       		.uleb128 0x3
+ 996 0043 0E       		.uleb128 0xe
+ 997 0044 3A       		.uleb128 0x3a
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 32
 
 
- 998 004a 11       		.uleb128 0x11
- 999 004b 01       		.uleb128 0x1
- 1000 004c 12       		.uleb128 0x12
- 1001 004d 06       		.uleb128 0x6
- 1002 004e 40       		.uleb128 0x40
- 1003 004f 18       		.uleb128 0x18
- 1004 0050 9642     		.uleb128 0x2116
- 1005 0052 19       		.uleb128 0x19
- 1006 0053 01       		.uleb128 0x1
- 1007 0054 13       		.uleb128 0x13
- 1008 0055 00       		.byte	0
- 1009 0056 00       		.byte	0
- 1010 0057 07       		.uleb128 0x7
- 1011 0058 34       		.uleb128 0x34
- 1012 0059 00       		.byte	0
- 1013 005a 03       		.uleb128 0x3
- 1014 005b 0E       		.uleb128 0xe
- 1015 005c 3A       		.uleb128 0x3a
- 1016 005d 0B       		.uleb128 0xb
- 1017 005e 3B       		.uleb128 0x3b
- 1018 005f 0B       		.uleb128 0xb
- 1019 0060 49       		.uleb128 0x49
- 1020 0061 13       		.uleb128 0x13
- 1021 0062 02       		.uleb128 0x2
- 1022 0063 18       		.uleb128 0x18
- 1023 0064 00       		.byte	0
- 1024 0065 00       		.byte	0
- 1025 0066 08       		.uleb128 0x8
- 1026 0067 2E       		.uleb128 0x2e
- 1027 0068 00       		.byte	0
- 1028 0069 3F       		.uleb128 0x3f
- 1029 006a 19       		.uleb128 0x19
- 1030 006b 03       		.uleb128 0x3
- 1031 006c 0E       		.uleb128 0xe
- 1032 006d 3A       		.uleb128 0x3a
- 1033 006e 0B       		.uleb128 0xb
- 1034 006f 3B       		.uleb128 0x3b
- 1035 0070 0B       		.uleb128 0xb
- 1036 0071 27       		.uleb128 0x27
- 1037 0072 19       		.uleb128 0x19
- 1038 0073 11       		.uleb128 0x11
- 1039 0074 01       		.uleb128 0x1
- 1040 0075 12       		.uleb128 0x12
- 1041 0076 06       		.uleb128 0x6
- 1042 0077 40       		.uleb128 0x40
- 1043 0078 18       		.uleb128 0x18
- 1044 0079 9742     		.uleb128 0x2117
- 1045 007b 19       		.uleb128 0x19
- 1046 007c 00       		.byte	0
- 1047 007d 00       		.byte	0
- 1048 007e 09       		.uleb128 0x9
- 1049 007f 2E       		.uleb128 0x2e
- 1050 0080 00       		.byte	0
- 1051 0081 3F       		.uleb128 0x3f
- 1052 0082 19       		.uleb128 0x19
- 1053 0083 03       		.uleb128 0x3
- 1054 0084 0E       		.uleb128 0xe
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 33
+ 998 0045 0B       		.uleb128 0xb
+ 999 0046 3B       		.uleb128 0x3b
+ 1000 0047 0B       		.uleb128 0xb
+ 1001 0048 27       		.uleb128 0x27
+ 1002 0049 19       		.uleb128 0x19
+ 1003 004a 11       		.uleb128 0x11
+ 1004 004b 01       		.uleb128 0x1
+ 1005 004c 12       		.uleb128 0x12
+ 1006 004d 06       		.uleb128 0x6
+ 1007 004e 40       		.uleb128 0x40
+ 1008 004f 18       		.uleb128 0x18
+ 1009 0050 9642     		.uleb128 0x2116
+ 1010 0052 19       		.uleb128 0x19
+ 1011 0053 01       		.uleb128 0x1
+ 1012 0054 13       		.uleb128 0x13
+ 1013 0055 00       		.byte	0
+ 1014 0056 00       		.byte	0
+ 1015 0057 07       		.uleb128 0x7
+ 1016 0058 34       		.uleb128 0x34
+ 1017 0059 00       		.byte	0
+ 1018 005a 03       		.uleb128 0x3
+ 1019 005b 0E       		.uleb128 0xe
+ 1020 005c 3A       		.uleb128 0x3a
+ 1021 005d 0B       		.uleb128 0xb
+ 1022 005e 3B       		.uleb128 0x3b
+ 1023 005f 0B       		.uleb128 0xb
+ 1024 0060 49       		.uleb128 0x49
+ 1025 0061 13       		.uleb128 0x13
+ 1026 0062 02       		.uleb128 0x2
+ 1027 0063 18       		.uleb128 0x18
+ 1028 0064 00       		.byte	0
+ 1029 0065 00       		.byte	0
+ 1030 0066 08       		.uleb128 0x8
+ 1031 0067 2E       		.uleb128 0x2e
+ 1032 0068 00       		.byte	0
+ 1033 0069 3F       		.uleb128 0x3f
+ 1034 006a 19       		.uleb128 0x19
+ 1035 006b 03       		.uleb128 0x3
+ 1036 006c 0E       		.uleb128 0xe
+ 1037 006d 3A       		.uleb128 0x3a
+ 1038 006e 0B       		.uleb128 0xb
+ 1039 006f 3B       		.uleb128 0x3b
+ 1040 0070 0B       		.uleb128 0xb
+ 1041 0071 27       		.uleb128 0x27
+ 1042 0072 19       		.uleb128 0x19
+ 1043 0073 11       		.uleb128 0x11
+ 1044 0074 01       		.uleb128 0x1
+ 1045 0075 12       		.uleb128 0x12
+ 1046 0076 06       		.uleb128 0x6
+ 1047 0077 40       		.uleb128 0x40
+ 1048 0078 18       		.uleb128 0x18
+ 1049 0079 9742     		.uleb128 0x2117
+ 1050 007b 19       		.uleb128 0x19
+ 1051 007c 00       		.byte	0
+ 1052 007d 00       		.byte	0
+ 1053 007e 09       		.uleb128 0x9
+ 1054 007f 2E       		.uleb128 0x2e
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 33
 
 
- 1055 0085 3A       		.uleb128 0x3a
- 1056 0086 0B       		.uleb128 0xb
- 1057 0087 3B       		.uleb128 0x3b
- 1058 0088 0B       		.uleb128 0xb
- 1059 0089 27       		.uleb128 0x27
- 1060 008a 19       		.uleb128 0x19
- 1061 008b 11       		.uleb128 0x11
- 1062 008c 01       		.uleb128 0x1
- 1063 008d 12       		.uleb128 0x12
- 1064 008e 06       		.uleb128 0x6
- 1065 008f 40       		.uleb128 0x40
- 1066 0090 18       		.uleb128 0x18
- 1067 0091 9642     		.uleb128 0x2116
- 1068 0093 19       		.uleb128 0x19
- 1069 0094 00       		.byte	0
- 1070 0095 00       		.byte	0
- 1071 0096 0A       		.uleb128 0xa
- 1072 0097 2E       		.uleb128 0x2e
- 1073 0098 01       		.byte	0x1
- 1074 0099 3F       		.uleb128 0x3f
- 1075 009a 19       		.uleb128 0x19
- 1076 009b 03       		.uleb128 0x3
- 1077 009c 0E       		.uleb128 0xe
- 1078 009d 3A       		.uleb128 0x3a
- 1079 009e 0B       		.uleb128 0xb
- 1080 009f 3B       		.uleb128 0x3b
- 1081 00a0 05       		.uleb128 0x5
- 1082 00a1 27       		.uleb128 0x27
- 1083 00a2 19       		.uleb128 0x19
- 1084 00a3 11       		.uleb128 0x11
- 1085 00a4 01       		.uleb128 0x1
- 1086 00a5 12       		.uleb128 0x12
- 1087 00a6 06       		.uleb128 0x6
- 1088 00a7 40       		.uleb128 0x40
- 1089 00a8 18       		.uleb128 0x18
- 1090 00a9 9742     		.uleb128 0x2117
- 1091 00ab 19       		.uleb128 0x19
- 1092 00ac 01       		.uleb128 0x1
- 1093 00ad 13       		.uleb128 0x13
- 1094 00ae 00       		.byte	0
- 1095 00af 00       		.byte	0
- 1096 00b0 0B       		.uleb128 0xb
- 1097 00b1 05       		.uleb128 0x5
- 1098 00b2 00       		.byte	0
- 1099 00b3 03       		.uleb128 0x3
- 1100 00b4 0E       		.uleb128 0xe
- 1101 00b5 3A       		.uleb128 0x3a
- 1102 00b6 0B       		.uleb128 0xb
- 1103 00b7 3B       		.uleb128 0x3b
- 1104 00b8 05       		.uleb128 0x5
- 1105 00b9 49       		.uleb128 0x49
- 1106 00ba 13       		.uleb128 0x13
- 1107 00bb 02       		.uleb128 0x2
- 1108 00bc 18       		.uleb128 0x18
- 1109 00bd 00       		.byte	0
- 1110 00be 00       		.byte	0
- 1111 00bf 0C       		.uleb128 0xc
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 34
+ 1055 0080 00       		.byte	0
+ 1056 0081 3F       		.uleb128 0x3f
+ 1057 0082 19       		.uleb128 0x19
+ 1058 0083 03       		.uleb128 0x3
+ 1059 0084 0E       		.uleb128 0xe
+ 1060 0085 3A       		.uleb128 0x3a
+ 1061 0086 0B       		.uleb128 0xb
+ 1062 0087 3B       		.uleb128 0x3b
+ 1063 0088 0B       		.uleb128 0xb
+ 1064 0089 27       		.uleb128 0x27
+ 1065 008a 19       		.uleb128 0x19
+ 1066 008b 11       		.uleb128 0x11
+ 1067 008c 01       		.uleb128 0x1
+ 1068 008d 12       		.uleb128 0x12
+ 1069 008e 06       		.uleb128 0x6
+ 1070 008f 40       		.uleb128 0x40
+ 1071 0090 18       		.uleb128 0x18
+ 1072 0091 9642     		.uleb128 0x2116
+ 1073 0093 19       		.uleb128 0x19
+ 1074 0094 00       		.byte	0
+ 1075 0095 00       		.byte	0
+ 1076 0096 0A       		.uleb128 0xa
+ 1077 0097 2E       		.uleb128 0x2e
+ 1078 0098 01       		.byte	0x1
+ 1079 0099 3F       		.uleb128 0x3f
+ 1080 009a 19       		.uleb128 0x19
+ 1081 009b 03       		.uleb128 0x3
+ 1082 009c 0E       		.uleb128 0xe
+ 1083 009d 3A       		.uleb128 0x3a
+ 1084 009e 0B       		.uleb128 0xb
+ 1085 009f 3B       		.uleb128 0x3b
+ 1086 00a0 05       		.uleb128 0x5
+ 1087 00a1 27       		.uleb128 0x27
+ 1088 00a2 19       		.uleb128 0x19
+ 1089 00a3 11       		.uleb128 0x11
+ 1090 00a4 01       		.uleb128 0x1
+ 1091 00a5 12       		.uleb128 0x12
+ 1092 00a6 06       		.uleb128 0x6
+ 1093 00a7 40       		.uleb128 0x40
+ 1094 00a8 18       		.uleb128 0x18
+ 1095 00a9 9742     		.uleb128 0x2117
+ 1096 00ab 19       		.uleb128 0x19
+ 1097 00ac 01       		.uleb128 0x1
+ 1098 00ad 13       		.uleb128 0x13
+ 1099 00ae 00       		.byte	0
+ 1100 00af 00       		.byte	0
+ 1101 00b0 0B       		.uleb128 0xb
+ 1102 00b1 05       		.uleb128 0x5
+ 1103 00b2 00       		.byte	0
+ 1104 00b3 03       		.uleb128 0x3
+ 1105 00b4 0E       		.uleb128 0xe
+ 1106 00b5 3A       		.uleb128 0x3a
+ 1107 00b6 0B       		.uleb128 0xb
+ 1108 00b7 3B       		.uleb128 0x3b
+ 1109 00b8 05       		.uleb128 0x5
+ 1110 00b9 49       		.uleb128 0x49
+ 1111 00ba 13       		.uleb128 0x13
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 34
 
 
- 1112 00c0 2E       		.uleb128 0x2e
- 1113 00c1 00       		.byte	0
- 1114 00c2 3F       		.uleb128 0x3f
- 1115 00c3 19       		.uleb128 0x19
- 1116 00c4 03       		.uleb128 0x3
- 1117 00c5 0E       		.uleb128 0xe
- 1118 00c6 3A       		.uleb128 0x3a
- 1119 00c7 0B       		.uleb128 0xb
- 1120 00c8 3B       		.uleb128 0x3b
- 1121 00c9 05       		.uleb128 0x5
- 1122 00ca 27       		.uleb128 0x27
- 1123 00cb 19       		.uleb128 0x19
- 1124 00cc 11       		.uleb128 0x11
- 1125 00cd 01       		.uleb128 0x1
- 1126 00ce 12       		.uleb128 0x12
- 1127 00cf 06       		.uleb128 0x6
- 1128 00d0 40       		.uleb128 0x40
- 1129 00d1 18       		.uleb128 0x18
- 1130 00d2 9742     		.uleb128 0x2117
- 1131 00d4 19       		.uleb128 0x19
- 1132 00d5 00       		.byte	0
- 1133 00d6 00       		.byte	0
- 1134 00d7 0D       		.uleb128 0xd
- 1135 00d8 2E       		.uleb128 0x2e
- 1136 00d9 00       		.byte	0
- 1137 00da 3F       		.uleb128 0x3f
- 1138 00db 19       		.uleb128 0x19
- 1139 00dc 03       		.uleb128 0x3
- 1140 00dd 0E       		.uleb128 0xe
- 1141 00de 3A       		.uleb128 0x3a
- 1142 00df 0B       		.uleb128 0xb
- 1143 00e0 3B       		.uleb128 0x3b
- 1144 00e1 05       		.uleb128 0x5
- 1145 00e2 27       		.uleb128 0x27
- 1146 00e3 19       		.uleb128 0x19
- 1147 00e4 49       		.uleb128 0x49
- 1148 00e5 13       		.uleb128 0x13
- 1149 00e6 11       		.uleb128 0x11
- 1150 00e7 01       		.uleb128 0x1
- 1151 00e8 12       		.uleb128 0x12
- 1152 00e9 06       		.uleb128 0x6
- 1153 00ea 40       		.uleb128 0x40
- 1154 00eb 18       		.uleb128 0x18
- 1155 00ec 9742     		.uleb128 0x2117
- 1156 00ee 19       		.uleb128 0x19
- 1157 00ef 00       		.byte	0
- 1158 00f0 00       		.byte	0
- 1159 00f1 0E       		.uleb128 0xe
- 1160 00f2 2E       		.uleb128 0x2e
- 1161 00f3 00       		.byte	0
- 1162 00f4 3F       		.uleb128 0x3f
- 1163 00f5 19       		.uleb128 0x19
- 1164 00f6 03       		.uleb128 0x3
- 1165 00f7 0E       		.uleb128 0xe
- 1166 00f8 3A       		.uleb128 0x3a
- 1167 00f9 0B       		.uleb128 0xb
- 1168 00fa 3B       		.uleb128 0x3b
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 35
+ 1112 00bb 02       		.uleb128 0x2
+ 1113 00bc 18       		.uleb128 0x18
+ 1114 00bd 00       		.byte	0
+ 1115 00be 00       		.byte	0
+ 1116 00bf 0C       		.uleb128 0xc
+ 1117 00c0 2E       		.uleb128 0x2e
+ 1118 00c1 00       		.byte	0
+ 1119 00c2 3F       		.uleb128 0x3f
+ 1120 00c3 19       		.uleb128 0x19
+ 1121 00c4 03       		.uleb128 0x3
+ 1122 00c5 0E       		.uleb128 0xe
+ 1123 00c6 3A       		.uleb128 0x3a
+ 1124 00c7 0B       		.uleb128 0xb
+ 1125 00c8 3B       		.uleb128 0x3b
+ 1126 00c9 05       		.uleb128 0x5
+ 1127 00ca 27       		.uleb128 0x27
+ 1128 00cb 19       		.uleb128 0x19
+ 1129 00cc 11       		.uleb128 0x11
+ 1130 00cd 01       		.uleb128 0x1
+ 1131 00ce 12       		.uleb128 0x12
+ 1132 00cf 06       		.uleb128 0x6
+ 1133 00d0 40       		.uleb128 0x40
+ 1134 00d1 18       		.uleb128 0x18
+ 1135 00d2 9742     		.uleb128 0x2117
+ 1136 00d4 19       		.uleb128 0x19
+ 1137 00d5 00       		.byte	0
+ 1138 00d6 00       		.byte	0
+ 1139 00d7 0D       		.uleb128 0xd
+ 1140 00d8 2E       		.uleb128 0x2e
+ 1141 00d9 00       		.byte	0
+ 1142 00da 3F       		.uleb128 0x3f
+ 1143 00db 19       		.uleb128 0x19
+ 1144 00dc 03       		.uleb128 0x3
+ 1145 00dd 0E       		.uleb128 0xe
+ 1146 00de 3A       		.uleb128 0x3a
+ 1147 00df 0B       		.uleb128 0xb
+ 1148 00e0 3B       		.uleb128 0x3b
+ 1149 00e1 05       		.uleb128 0x5
+ 1150 00e2 27       		.uleb128 0x27
+ 1151 00e3 19       		.uleb128 0x19
+ 1152 00e4 49       		.uleb128 0x49
+ 1153 00e5 13       		.uleb128 0x13
+ 1154 00e6 11       		.uleb128 0x11
+ 1155 00e7 01       		.uleb128 0x1
+ 1156 00e8 12       		.uleb128 0x12
+ 1157 00e9 06       		.uleb128 0x6
+ 1158 00ea 40       		.uleb128 0x40
+ 1159 00eb 18       		.uleb128 0x18
+ 1160 00ec 9742     		.uleb128 0x2117
+ 1161 00ee 19       		.uleb128 0x19
+ 1162 00ef 00       		.byte	0
+ 1163 00f0 00       		.byte	0
+ 1164 00f1 0E       		.uleb128 0xe
+ 1165 00f2 2E       		.uleb128 0x2e
+ 1166 00f3 00       		.byte	0
+ 1167 00f4 3F       		.uleb128 0x3f
+ 1168 00f5 19       		.uleb128 0x19
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 35
 
 
- 1169 00fb 05       		.uleb128 0x5
- 1170 00fc 27       		.uleb128 0x27
- 1171 00fd 19       		.uleb128 0x19
- 1172 00fe 11       		.uleb128 0x11
- 1173 00ff 01       		.uleb128 0x1
- 1174 0100 12       		.uleb128 0x12
- 1175 0101 06       		.uleb128 0x6
- 1176 0102 40       		.uleb128 0x40
- 1177 0103 18       		.uleb128 0x18
- 1178 0104 9642     		.uleb128 0x2116
- 1179 0106 19       		.uleb128 0x19
- 1180 0107 00       		.byte	0
- 1181 0108 00       		.byte	0
- 1182 0109 0F       		.uleb128 0xf
- 1183 010a 34       		.uleb128 0x34
- 1184 010b 00       		.byte	0
- 1185 010c 03       		.uleb128 0x3
- 1186 010d 0E       		.uleb128 0xe
- 1187 010e 3A       		.uleb128 0x3a
- 1188 010f 0B       		.uleb128 0xb
- 1189 0110 3B       		.uleb128 0x3b
- 1190 0111 0B       		.uleb128 0xb
- 1191 0112 49       		.uleb128 0x49
- 1192 0113 13       		.uleb128 0x13
- 1193 0114 3F       		.uleb128 0x3f
- 1194 0115 19       		.uleb128 0x19
- 1195 0116 02       		.uleb128 0x2
- 1196 0117 18       		.uleb128 0x18
- 1197 0118 00       		.byte	0
- 1198 0119 00       		.byte	0
- 1199 011a 00       		.byte	0
- 1200              		.section	.debug_aranges,"",%progbits
- 1201 0000 8C000000 		.4byte	0x8c
- 1202 0004 0200     		.2byte	0x2
- 1203 0006 00000000 		.4byte	.Ldebug_info0
- 1204 000a 04       		.byte	0x4
- 1205 000b 00       		.byte	0
- 1206 000c 0000     		.2byte	0
- 1207 000e 0000     		.2byte	0
- 1208 0010 00000000 		.4byte	.LFB0
- 1209 0014 4C000000 		.4byte	.LFE0-.LFB0
- 1210 0018 00000000 		.4byte	.LFB1
- 1211 001c 20000000 		.4byte	.LFE1-.LFB1
- 1212 0020 00000000 		.4byte	.LFB2
- 1213 0024 20000000 		.4byte	.LFE2-.LFB2
- 1214 0028 00000000 		.4byte	.LFB3
- 1215 002c 20000000 		.4byte	.LFE3-.LFB3
- 1216 0030 00000000 		.4byte	.LFB4
- 1217 0034 20000000 		.4byte	.LFE4-.LFB4
- 1218 0038 00000000 		.4byte	.LFB5
- 1219 003c 14000000 		.4byte	.LFE5-.LFB5
- 1220 0040 00000000 		.4byte	.LFB6
- 1221 0044 18000000 		.4byte	.LFE6-.LFB6
- 1222 0048 00000000 		.4byte	.LFB7
- 1223 004c 18000000 		.4byte	.LFE7-.LFB7
- 1224 0050 00000000 		.4byte	.LFB8
- 1225 0054 20000000 		.4byte	.LFE8-.LFB8
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 36
+ 1169 00f6 03       		.uleb128 0x3
+ 1170 00f7 0E       		.uleb128 0xe
+ 1171 00f8 3A       		.uleb128 0x3a
+ 1172 00f9 0B       		.uleb128 0xb
+ 1173 00fa 3B       		.uleb128 0x3b
+ 1174 00fb 05       		.uleb128 0x5
+ 1175 00fc 27       		.uleb128 0x27
+ 1176 00fd 19       		.uleb128 0x19
+ 1177 00fe 11       		.uleb128 0x11
+ 1178 00ff 01       		.uleb128 0x1
+ 1179 0100 12       		.uleb128 0x12
+ 1180 0101 06       		.uleb128 0x6
+ 1181 0102 40       		.uleb128 0x40
+ 1182 0103 18       		.uleb128 0x18
+ 1183 0104 9642     		.uleb128 0x2116
+ 1184 0106 19       		.uleb128 0x19
+ 1185 0107 00       		.byte	0
+ 1186 0108 00       		.byte	0
+ 1187 0109 0F       		.uleb128 0xf
+ 1188 010a 34       		.uleb128 0x34
+ 1189 010b 00       		.byte	0
+ 1190 010c 03       		.uleb128 0x3
+ 1191 010d 0E       		.uleb128 0xe
+ 1192 010e 3A       		.uleb128 0x3a
+ 1193 010f 0B       		.uleb128 0xb
+ 1194 0110 3B       		.uleb128 0x3b
+ 1195 0111 0B       		.uleb128 0xb
+ 1196 0112 49       		.uleb128 0x49
+ 1197 0113 13       		.uleb128 0x13
+ 1198 0114 3F       		.uleb128 0x3f
+ 1199 0115 19       		.uleb128 0x19
+ 1200 0116 02       		.uleb128 0x2
+ 1201 0117 18       		.uleb128 0x18
+ 1202 0118 00       		.byte	0
+ 1203 0119 00       		.byte	0
+ 1204 011a 00       		.byte	0
+ 1205              		.section	.debug_aranges,"",%progbits
+ 1206 0000 8C000000 		.4byte	0x8c
+ 1207 0004 0200     		.2byte	0x2
+ 1208 0006 00000000 		.4byte	.Ldebug_info0
+ 1209 000a 04       		.byte	0x4
+ 1210 000b 00       		.byte	0
+ 1211 000c 0000     		.2byte	0
+ 1212 000e 0000     		.2byte	0
+ 1213 0010 00000000 		.4byte	.LFB0
+ 1214 0014 4C000000 		.4byte	.LFE0-.LFB0
+ 1215 0018 00000000 		.4byte	.LFB1
+ 1216 001c 20000000 		.4byte	.LFE1-.LFB1
+ 1217 0020 00000000 		.4byte	.LFB2
+ 1218 0024 20000000 		.4byte	.LFE2-.LFB2
+ 1219 0028 00000000 		.4byte	.LFB3
+ 1220 002c 20000000 		.4byte	.LFE3-.LFB3
+ 1221 0030 00000000 		.4byte	.LFB4
+ 1222 0034 20000000 		.4byte	.LFE4-.LFB4
+ 1223 0038 00000000 		.4byte	.LFB5
+ 1224 003c 14000000 		.4byte	.LFE5-.LFB5
+ 1225 0040 00000000 		.4byte	.LFB6
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 36
 
 
- 1226 0058 00000000 		.4byte	.LFB9
- 1227 005c 18000000 		.4byte	.LFE9-.LFB9
- 1228 0060 00000000 		.4byte	.LFB10
- 1229 0064 1C000000 		.4byte	.LFE10-.LFB10
- 1230 0068 00000000 		.4byte	.LFB11
- 1231 006c 18000000 		.4byte	.LFE11-.LFB11
- 1232 0070 00000000 		.4byte	.LFB12
- 1233 0074 1C000000 		.4byte	.LFE12-.LFB12
- 1234 0078 00000000 		.4byte	.LFB13
- 1235 007c 20000000 		.4byte	.LFE13-.LFB13
- 1236 0080 00000000 		.4byte	.LFB14
- 1237 0084 1A000000 		.4byte	.LFE14-.LFB14
- 1238 0088 00000000 		.4byte	0
- 1239 008c 00000000 		.4byte	0
- 1240              		.section	.debug_ranges,"",%progbits
- 1241              	.Ldebug_ranges0:
- 1242 0000 00000000 		.4byte	.LFB0
- 1243 0004 4C000000 		.4byte	.LFE0
- 1244 0008 00000000 		.4byte	.LFB1
- 1245 000c 20000000 		.4byte	.LFE1
- 1246 0010 00000000 		.4byte	.LFB2
- 1247 0014 20000000 		.4byte	.LFE2
- 1248 0018 00000000 		.4byte	.LFB3
- 1249 001c 20000000 		.4byte	.LFE3
- 1250 0020 00000000 		.4byte	.LFB4
- 1251 0024 20000000 		.4byte	.LFE4
- 1252 0028 00000000 		.4byte	.LFB5
- 1253 002c 14000000 		.4byte	.LFE5
- 1254 0030 00000000 		.4byte	.LFB6
- 1255 0034 18000000 		.4byte	.LFE6
- 1256 0038 00000000 		.4byte	.LFB7
- 1257 003c 18000000 		.4byte	.LFE7
- 1258 0040 00000000 		.4byte	.LFB8
- 1259 0044 20000000 		.4byte	.LFE8
- 1260 0048 00000000 		.4byte	.LFB9
- 1261 004c 18000000 		.4byte	.LFE9
- 1262 0050 00000000 		.4byte	.LFB10
- 1263 0054 1C000000 		.4byte	.LFE10
- 1264 0058 00000000 		.4byte	.LFB11
- 1265 005c 18000000 		.4byte	.LFE11
- 1266 0060 00000000 		.4byte	.LFB12
- 1267 0064 1C000000 		.4byte	.LFE12
- 1268 0068 00000000 		.4byte	.LFB13
- 1269 006c 20000000 		.4byte	.LFE13
- 1270 0070 00000000 		.4byte	.LFB14
- 1271 0074 1A000000 		.4byte	.LFE14
- 1272 0078 00000000 		.4byte	0
- 1273 007c 00000000 		.4byte	0
- 1274              		.section	.debug_line,"",%progbits
- 1275              	.Ldebug_line0:
- 1276 0000 74010000 		.section	.debug_str,"MS",%progbits,1
- 1276      02004C00 
- 1276      00000201 
- 1276      FB0E0D00 
- 1276      01010101 
- 1277              	.LASF15:
- 1278 0000 72656733 		.ascii	"reg32\000"
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 37
+ 1226 0044 18000000 		.4byte	.LFE6-.LFB6
+ 1227 0048 00000000 		.4byte	.LFB7
+ 1228 004c 18000000 		.4byte	.LFE7-.LFB7
+ 1229 0050 00000000 		.4byte	.LFB8
+ 1230 0054 20000000 		.4byte	.LFE8-.LFB8
+ 1231 0058 00000000 		.4byte	.LFB9
+ 1232 005c 18000000 		.4byte	.LFE9-.LFB9
+ 1233 0060 00000000 		.4byte	.LFB10
+ 1234 0064 20000000 		.4byte	.LFE10-.LFB10
+ 1235 0068 00000000 		.4byte	.LFB11
+ 1236 006c 18000000 		.4byte	.LFE11-.LFB11
+ 1237 0070 00000000 		.4byte	.LFB12
+ 1238 0074 20000000 		.4byte	.LFE12-.LFB12
+ 1239 0078 00000000 		.4byte	.LFB13
+ 1240 007c 20000000 		.4byte	.LFE13-.LFB13
+ 1241 0080 00000000 		.4byte	.LFB14
+ 1242 0084 1A000000 		.4byte	.LFE14-.LFB14
+ 1243 0088 00000000 		.4byte	0
+ 1244 008c 00000000 		.4byte	0
+ 1245              		.section	.debug_ranges,"",%progbits
+ 1246              	.Ldebug_ranges0:
+ 1247 0000 00000000 		.4byte	.LFB0
+ 1248 0004 4C000000 		.4byte	.LFE0
+ 1249 0008 00000000 		.4byte	.LFB1
+ 1250 000c 20000000 		.4byte	.LFE1
+ 1251 0010 00000000 		.4byte	.LFB2
+ 1252 0014 20000000 		.4byte	.LFE2
+ 1253 0018 00000000 		.4byte	.LFB3
+ 1254 001c 20000000 		.4byte	.LFE3
+ 1255 0020 00000000 		.4byte	.LFB4
+ 1256 0024 20000000 		.4byte	.LFE4
+ 1257 0028 00000000 		.4byte	.LFB5
+ 1258 002c 14000000 		.4byte	.LFE5
+ 1259 0030 00000000 		.4byte	.LFB6
+ 1260 0034 18000000 		.4byte	.LFE6
+ 1261 0038 00000000 		.4byte	.LFB7
+ 1262 003c 18000000 		.4byte	.LFE7
+ 1263 0040 00000000 		.4byte	.LFB8
+ 1264 0044 20000000 		.4byte	.LFE8
+ 1265 0048 00000000 		.4byte	.LFB9
+ 1266 004c 18000000 		.4byte	.LFE9
+ 1267 0050 00000000 		.4byte	.LFB10
+ 1268 0054 20000000 		.4byte	.LFE10
+ 1269 0058 00000000 		.4byte	.LFB11
+ 1270 005c 18000000 		.4byte	.LFE11
+ 1271 0060 00000000 		.4byte	.LFB12
+ 1272 0064 20000000 		.4byte	.LFE12
+ 1273 0068 00000000 		.4byte	.LFB13
+ 1274 006c 20000000 		.4byte	.LFE13
+ 1275 0070 00000000 		.4byte	.LFB14
+ 1276 0074 1A000000 		.4byte	.LFE14
+ 1277 0078 00000000 		.4byte	0
+ 1278 007c 00000000 		.4byte	0
+ 1279              		.section	.debug_line,"",%progbits
+ 1280              	.Ldebug_line0:
+ 1281 0000 74010000 		.section	.debug_str,"MS",%progbits,1
+ 1281      02004C00 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 37
 
 
- 1278      3200
- 1279              	.LASF18:
- 1280 0006 68656172 		.ascii	"heartbeat_timer_Start\000"
- 1280      74626561 
- 1280      745F7469 
- 1280      6D65725F 
- 1280      53746172 
- 1281              	.LASF31:
- 1282 001c 68656172 		.ascii	"heartbeat_timer_ReadCapture\000"
- 1282      74626561 
- 1282      745F7469 
- 1282      6D65725F 
- 1282      52656164 
- 1283              	.LASF20:
- 1284 0038 68656172 		.ascii	"heartbeat_timer_Init\000"
- 1284      74626561 
- 1284      745F7469 
- 1284      6D65725F 
- 1284      496E6974 
- 1285              	.LASF40:
- 1286 004d 68656172 		.ascii	"heartbeat_timer_initVar\000"
- 1286      74626561 
- 1286      745F7469 
- 1286      6D65725F 
- 1286      696E6974 
- 1287              	.LASF30:
- 1288 0065 70657269 		.ascii	"period\000"
- 1288      6F6400
- 1289              	.LASF25:
- 1290 006c 68656172 		.ascii	"heartbeat_timer_WriteControlRegister\000"
- 1290      74626561 
- 1290      745F7469 
- 1290      6D65725F 
- 1290      57726974 
- 1291              	.LASF3:
- 1292 0091 73686F72 		.ascii	"short unsigned int\000"
- 1292      7420756E 
- 1292      7369676E 
- 1292      65642069 
- 1292      6E7400
- 1293              	.LASF38:
- 1294 00a4 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver\\Node-Beaver\\Nod"
- 1294      6F776E6C 
- 1294      6F616473 
- 1294      5C465255 
- 1294      43445C4E 
- 1295 00d2 652D4265 		.ascii	"e-Beaver.cydsn\000"
- 1295      61766572 
- 1295      2E637964 
- 1295      736E00
- 1296              	.LASF37:
- 1297 00e1 47656E65 		.ascii	"Generated_Source\\PSoC5\\heartbeat_timer.c\000"
- 1297      72617465 
- 1297      645F536F 
- 1297      75726365 
- 1297      5C50536F 
- 1298              	.LASF35:
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 38
+ 1281      00000201 
+ 1281      FB0E0D00 
+ 1281      01010101 
+ 1282              	.LASF15:
+ 1283 0000 72656731 		.ascii	"reg16\000"
+ 1283      3600
+ 1284              	.LASF18:
+ 1285 0006 68656172 		.ascii	"heartbeat_timer_Start\000"
+ 1285      74626561 
+ 1285      745F7469 
+ 1285      6D65725F 
+ 1285      53746172 
+ 1286              	.LASF31:
+ 1287 001c 68656172 		.ascii	"heartbeat_timer_ReadCapture\000"
+ 1287      74626561 
+ 1287      745F7469 
+ 1287      6D65725F 
+ 1287      52656164 
+ 1288              	.LASF20:
+ 1289 0038 68656172 		.ascii	"heartbeat_timer_Init\000"
+ 1289      74626561 
+ 1289      745F7469 
+ 1289      6D65725F 
+ 1289      496E6974 
+ 1290              	.LASF40:
+ 1291 004d 68656172 		.ascii	"heartbeat_timer_initVar\000"
+ 1291      74626561 
+ 1291      745F7469 
+ 1291      6D65725F 
+ 1291      696E6974 
+ 1292              	.LASF30:
+ 1293 0065 70657269 		.ascii	"period\000"
+ 1293      6F6400
+ 1294              	.LASF25:
+ 1295 006c 68656172 		.ascii	"heartbeat_timer_WriteControlRegister\000"
+ 1295      74626561 
+ 1295      745F7469 
+ 1295      6D65725F 
+ 1295      57726974 
+ 1296              	.LASF3:
+ 1297 0091 73686F72 		.ascii	"short unsigned int\000"
+ 1297      7420756E 
+ 1297      7369676E 
+ 1297      65642069 
+ 1297      6E7400
+ 1298              	.LASF38:
+ 1299 00a4 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver\\Node-Beaver\\Nod"
+ 1299      6F776E6C 
+ 1299      6F616473 
+ 1299      5C465255 
+ 1299      43445C4E 
+ 1300 00d2 652D4265 		.ascii	"e-Beaver.cydsn\000"
+ 1300      61766572 
+ 1300      2E637964 
+ 1300      736E00
+ 1301              	.LASF37:
+ 1302 00e1 47656E65 		.ascii	"Generated_Source\\PSoC5\\heartbeat_timer.c\000"
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 38
 
 
- 1299 010a 68656172 		.ascii	"heartbeat_timer_ClearFIFO\000"
- 1299      74626561 
- 1299      745F7469 
- 1299      6D65725F 
- 1299      436C6561 
- 1300              	.LASF23:
- 1301 0124 68656172 		.ascii	"heartbeat_timer_ReadStatusRegister\000"
- 1301      74626561 
- 1301      745F7469 
- 1301      6D65725F 
- 1301      52656164 
- 1302              	.LASF11:
- 1303 0147 666C6F61 		.ascii	"float\000"
- 1303      7400
- 1304              	.LASF33:
- 1305 014d 636F756E 		.ascii	"counter\000"
- 1305      74657200 
- 1306              	.LASF1:
- 1307 0155 756E7369 		.ascii	"unsigned char\000"
- 1307      676E6564 
- 1307      20636861 
- 1307      7200
- 1308              	.LASF14:
- 1309 0163 72656738 		.ascii	"reg8\000"
- 1309      00
- 1310              	.LASF5:
- 1311 0168 6C6F6E67 		.ascii	"long unsigned int\000"
- 1311      20756E73 
- 1311      69676E65 
- 1311      6420696E 
- 1311      7400
- 1312              	.LASF9:
- 1313 017a 75696E74 		.ascii	"uint8\000"
- 1313      3800
- 1314              	.LASF27:
- 1315 0180 636F6E74 		.ascii	"control\000"
- 1315      726F6C00 
- 1316              	.LASF34:
- 1317 0188 68656172 		.ascii	"heartbeat_timer_ReadCounter\000"
- 1317      74626561 
- 1317      745F7469 
- 1317      6D65725F 
- 1317      52656164 
- 1318              	.LASF28:
- 1319 01a4 68656172 		.ascii	"heartbeat_timer_ReadPeriod\000"
- 1319      74626561 
- 1319      745F7469 
- 1319      6D65725F 
- 1319      52656164 
- 1320              	.LASF24:
- 1321 01bf 68656172 		.ascii	"heartbeat_timer_ReadControlRegister\000"
- 1321      74626561 
- 1321      745F7469 
- 1321      6D65725F 
- 1321      52656164 
- 1322              	.LASF36:
- 1323 01e3 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 39
+ 1302      72617465 
+ 1302      645F536F 
+ 1302      75726365 
+ 1302      5C50536F 
+ 1303              	.LASF35:
+ 1304 010a 68656172 		.ascii	"heartbeat_timer_ClearFIFO\000"
+ 1304      74626561 
+ 1304      745F7469 
+ 1304      6D65725F 
+ 1304      436C6561 
+ 1305              	.LASF23:
+ 1306 0124 68656172 		.ascii	"heartbeat_timer_ReadStatusRegister\000"
+ 1306      74626561 
+ 1306      745F7469 
+ 1306      6D65725F 
+ 1306      52656164 
+ 1307              	.LASF11:
+ 1308 0147 666C6F61 		.ascii	"float\000"
+ 1308      7400
+ 1309              	.LASF33:
+ 1310 014d 636F756E 		.ascii	"counter\000"
+ 1310      74657200 
+ 1311              	.LASF1:
+ 1312 0155 756E7369 		.ascii	"unsigned char\000"
+ 1312      676E6564 
+ 1312      20636861 
+ 1312      7200
+ 1313              	.LASF14:
+ 1314 0163 72656738 		.ascii	"reg8\000"
+ 1314      00
+ 1315              	.LASF5:
+ 1316 0168 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1316      20756E73 
+ 1316      69676E65 
+ 1316      6420696E 
+ 1316      7400
+ 1317              	.LASF9:
+ 1318 017a 75696E74 		.ascii	"uint8\000"
+ 1318      3800
+ 1319              	.LASF27:
+ 1320 0180 636F6E74 		.ascii	"control\000"
+ 1320      726F6C00 
+ 1321              	.LASF34:
+ 1322 0188 68656172 		.ascii	"heartbeat_timer_ReadCounter\000"
+ 1322      74626561 
+ 1322      745F7469 
+ 1322      6D65725F 
+ 1322      52656164 
+ 1323              	.LASF28:
+ 1324 01a4 68656172 		.ascii	"heartbeat_timer_ReadPeriod\000"
+ 1324      74626561 
+ 1324      745F7469 
+ 1324      6D65725F 
+ 1324      52656164 
+ 1325              	.LASF24:
+ 1326 01bf 68656172 		.ascii	"heartbeat_timer_ReadControlRegister\000"
+ 1326      74626561 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 39
 
 
- 1323      4320342E 
- 1323      392E3320 
- 1323      32303135 
- 1323      30333033 
- 1324 0216 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
- 1324      20726576 
- 1324      6973696F 
- 1324      6E203232 
- 1324      31323230 
- 1325 0249 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
- 1325      66756E63 
- 1325      74696F6E 
- 1325      2D736563 
- 1325      74696F6E 
- 1326              	.LASF12:
- 1327 0271 646F7562 		.ascii	"double\000"
- 1327      6C6500
- 1328              	.LASF10:
- 1329 0278 75696E74 		.ascii	"uint32\000"
- 1329      333200
- 1330              	.LASF8:
- 1331 027f 756E7369 		.ascii	"unsigned int\000"
- 1331      676E6564 
- 1331      20696E74 
- 1331      00
- 1332              	.LASF21:
- 1333 028c 68656172 		.ascii	"heartbeat_timer_SetInterruptMode\000"
- 1333      74626561 
- 1333      745F7469 
- 1333      6D65725F 
- 1333      53657449 
- 1334              	.LASF7:
- 1335 02ad 6C6F6E67 		.ascii	"long long unsigned int\000"
- 1335      206C6F6E 
- 1335      6720756E 
- 1335      7369676E 
- 1335      65642069 
- 1336              	.LASF22:
- 1337 02c4 68656172 		.ascii	"heartbeat_timer_SoftwareCapture\000"
- 1337      74626561 
- 1337      745F7469 
- 1337      6D65725F 
- 1337      536F6674 
- 1338              	.LASF32:
- 1339 02e4 68656172 		.ascii	"heartbeat_timer_WriteCounter\000"
- 1339      74626561 
- 1339      745F7469 
- 1339      6D65725F 
- 1339      57726974 
- 1340              	.LASF16:
- 1341 0301 73697A65 		.ascii	"sizetype\000"
- 1341      74797065 
- 1341      00
- 1342              	.LASF29:
- 1343 030a 68656172 		.ascii	"heartbeat_timer_WritePeriod\000"
- 1343      74626561 
- 1343      745F7469 
-ARM GAS  D:\Windows\AppData\Local\Temp\ccSO0T1N.s 			page 40
+ 1326      745F7469 
+ 1326      6D65725F 
+ 1326      52656164 
+ 1327              	.LASF36:
+ 1328 01e3 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1328      4320342E 
+ 1328      392E3320 
+ 1328      32303135 
+ 1328      30333033 
+ 1329 0216 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1329      20726576 
+ 1329      6973696F 
+ 1329      6E203232 
+ 1329      31323230 
+ 1330 0249 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1330      66756E63 
+ 1330      74696F6E 
+ 1330      2D736563 
+ 1330      74696F6E 
+ 1331              	.LASF12:
+ 1332 0271 646F7562 		.ascii	"double\000"
+ 1332      6C6500
+ 1333              	.LASF10:
+ 1334 0278 75696E74 		.ascii	"uint16\000"
+ 1334      313600
+ 1335              	.LASF8:
+ 1336 027f 756E7369 		.ascii	"unsigned int\000"
+ 1336      676E6564 
+ 1336      20696E74 
+ 1336      00
+ 1337              	.LASF21:
+ 1338 028c 68656172 		.ascii	"heartbeat_timer_SetInterruptMode\000"
+ 1338      74626561 
+ 1338      745F7469 
+ 1338      6D65725F 
+ 1338      53657449 
+ 1339              	.LASF7:
+ 1340 02ad 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1340      206C6F6E 
+ 1340      6720756E 
+ 1340      7369676E 
+ 1340      65642069 
+ 1341              	.LASF22:
+ 1342 02c4 68656172 		.ascii	"heartbeat_timer_SoftwareCapture\000"
+ 1342      74626561 
+ 1342      745F7469 
+ 1342      6D65725F 
+ 1342      536F6674 
+ 1343              	.LASF32:
+ 1344 02e4 68656172 		.ascii	"heartbeat_timer_WriteCounter\000"
+ 1344      74626561 
+ 1344      745F7469 
+ 1344      6D65725F 
+ 1344      57726974 
+ 1345              	.LASF16:
+ 1346 0301 73697A65 		.ascii	"sizetype\000"
+ 1346      74797065 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc4WMeU1.s 			page 40
 
 
- 1343      6D65725F 
- 1343      57726974 
- 1344              	.LASF19:
- 1345 0326 68656172 		.ascii	"heartbeat_timer_Stop\000"
- 1345      74626561 
- 1345      745F7469 
- 1345      6D65725F 
- 1345      53746F70 
- 1346              	.LASF6:
- 1347 033b 6C6F6E67 		.ascii	"long long int\000"
- 1347      206C6F6E 
- 1347      6720696E 
- 1347      7400
- 1348              	.LASF26:
- 1349 0349 696E7465 		.ascii	"interruptMode\000"
- 1349      72727570 
- 1349      744D6F64 
- 1349      6500
- 1350              	.LASF17:
- 1351 0357 68656172 		.ascii	"heartbeat_timer_Enable\000"
- 1351      74626561 
- 1351      745F7469 
- 1351      6D65725F 
- 1351      456E6162 
- 1352              	.LASF2:
- 1353 036e 73686F72 		.ascii	"short int\000"
- 1353      7420696E 
- 1353      7400
- 1354              	.LASF39:
- 1355 0378 68656172 		.ascii	"heartbeat_timer_interruptState\000"
- 1355      74626561 
- 1355      745F7469 
- 1355      6D65725F 
- 1355      696E7465 
- 1356              	.LASF4:
- 1357 0397 6C6F6E67 		.ascii	"long int\000"
- 1357      20696E74 
- 1357      00
- 1358              	.LASF13:
- 1359 03a0 63686172 		.ascii	"char\000"
- 1359      00
- 1360              	.LASF0:
- 1361 03a5 7369676E 		.ascii	"signed char\000"
- 1361      65642063 
- 1361      68617200 
- 1362              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
+ 1346      00
+ 1347              	.LASF29:
+ 1348 030a 68656172 		.ascii	"heartbeat_timer_WritePeriod\000"
+ 1348      74626561 
+ 1348      745F7469 
+ 1348      6D65725F 
+ 1348      57726974 
+ 1349              	.LASF19:
+ 1350 0326 68656172 		.ascii	"heartbeat_timer_Stop\000"
+ 1350      74626561 
+ 1350      745F7469 
+ 1350      6D65725F 
+ 1350      53746F70 
+ 1351              	.LASF6:
+ 1352 033b 6C6F6E67 		.ascii	"long long int\000"
+ 1352      206C6F6E 
+ 1352      6720696E 
+ 1352      7400
+ 1353              	.LASF26:
+ 1354 0349 696E7465 		.ascii	"interruptMode\000"
+ 1354      72727570 
+ 1354      744D6F64 
+ 1354      6500
+ 1355              	.LASF17:
+ 1356 0357 68656172 		.ascii	"heartbeat_timer_Enable\000"
+ 1356      74626561 
+ 1356      745F7469 
+ 1356      6D65725F 
+ 1356      456E6162 
+ 1357              	.LASF2:
+ 1358 036e 73686F72 		.ascii	"short int\000"
+ 1358      7420696E 
+ 1358      7400
+ 1359              	.LASF39:
+ 1360 0378 68656172 		.ascii	"heartbeat_timer_interruptState\000"
+ 1360      74626561 
+ 1360      745F7469 
+ 1360      6D65725F 
+ 1360      696E7465 
+ 1361              	.LASF4:
+ 1362 0397 6C6F6E67 		.ascii	"long int\000"
+ 1362      20696E74 
+ 1362      00
+ 1363              	.LASF13:
+ 1364 03a0 63686172 		.ascii	"char\000"
+ 1364      00
+ 1365              	.LASF0:
+ 1366 03a5 7369676E 		.ascii	"signed char\000"
+ 1366      65642063 
+ 1366      68617200 
+ 1367              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

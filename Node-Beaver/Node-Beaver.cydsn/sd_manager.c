@@ -50,7 +50,6 @@ void sd_init(Time time) {
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
 	sd_ok = 1;
 	char date_str[32], file_str[64];
-	uint32_t vsize;
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
@@ -168,7 +167,7 @@ void sd_write() {
 	
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
 	for(sd_head=0; sd_head<sd_tail; sd_head++) {
-		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
+		length = sprintf(buffer, "%03X,%u,%02X,%02X,%02X,%02X,%02X,%02X,%02X,%02X\n",
 			(unsigned)sd_queue[sd_head].id,
 			MILLI_PERIOD - (unsigned)sd_queue[sd_head].millicounter,
 			(unsigned)sd_queue[sd_head].data[0],

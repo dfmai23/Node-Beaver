@@ -12,6 +12,7 @@
 #define THROTTLE_ID			0x200
 #define BRAKE_ID			0x201
 #define BMS_STATUS_ID 		0x188
+#define BMS_CURRENT_ID		0x288
 #define BMS_VOLTAGE_ID		0x388
 #define BMS_TEMP_ID			0x488
 
@@ -25,6 +26,7 @@ DataPacket CURTIS_VOLTAGE;	//0x866
 DataPacket THROTTLE;		//0x200
 DataPacket BRAKE;			//0x201
 DataPacket BMS_STATUS;		//0x188
+DataPacket BMS_CURRENT;		//0x288
 DataPacket BMS_VOLTAGE;		//0x388
 DataPacket BMS_TEMP;		//0x488
 
@@ -35,13 +37,15 @@ CY_ISR(car_state_interrupt) {	//will send out every second
 	DASH.millicounter = millis_timer_ReadCounter();
 	BMS_STATUS.millicounter = millis_timer_ReadCounter();
 	BMS_TEMP.millicounter = millis_timer_ReadCounter();
-	xbee_send(&DASH);
+
 	sd_buffer(&DASH);
-	xbee_send(&BMS_STATUS);
 	sd_buffer(&BMS_STATUS);
+	xbee_send(&DASH);
+	xbee_send(&BMS_STATUS);
 	xbee_send(&BMS_TEMP);
 	sd_buffer(&BMS_TEMP);
 }
+
 CY_ISR(heartbeat_interrupt) {
 	LOGGER_HEARTBEAT.millicounter = millis_timer_ReadCounter();
 	DataPacket * LOGGER_HEARTBEAT_ptr = &LOGGER_HEARTBEAT;
@@ -49,6 +53,7 @@ CY_ISR(heartbeat_interrupt) {
 	xbee_send(LOGGER_HEARTBEAT_ptr);
 	sd_buffer(LOGGER_HEARTBEAT_ptr);
 }
+
 
 void can_init() {
 	CAN_1_GlobalIntEnable(); // CAN Initialization
@@ -60,7 +65,8 @@ void can_init() {
 	can_msg_init(&DASH, DASH_ID);
 	can_msg_init(&CURTIS_DEBUG, CURTIS_DEBUG_ID);
 	can_msg_init(&CURTIS_STATUS, CURTIS_STATUS_ID);
-	can_msg_init(&CURTIS_RCV, CURTIS_RCVACK_ID);
+	can_msg_init(&CURTIS_RCVACK, CURTIS_RCVACK_ID);
+	can_msg_init(&CURTIS_RCV, CURTIS_RCV_ID);
 	can_msg_init(&CURTIS_VOLTAGE, CURTIS_VOLTAGE_ID);
 	can_msg_init(&THROTTLE, THROTTLE_ID);
 	can_msg_init(&BRAKE, BRAKE_ID);
@@ -72,7 +78,6 @@ void can_init() {
 	heartbeat_isr_StartEx(heartbeat_interrupt);
 	car_state_timer_Start();
 	car_state_isr_StartEx(car_state_interrupt);
-
 } // can_init()
 
 
@@ -107,11 +112,7 @@ void can_msg_init(DataPacket* can_msg, uint16_t id) {
 		BMS_TEMP.data[6] = 0x00;
 	}
 	if(id == BRAKE_ID) {
-		for(i=0; i<BRAKE.length; i++) {
-			BRAKE.data[i] = 0x00;
-		}
-		BRAKE.data[6] = 0x01;
-		BRAKE.data[7] = 0x97;
+		brake_default_val();
 	}
 } //can_msg_init()
 
@@ -153,7 +154,6 @@ int can_process(DataPacket* can_msg){
 	returns: 1 if message was updated, 0 if message same as before */
 int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	uint8_t i, j;
-	uint8_t offset = 0;
 	DataPacket temp;
  
 	temp.id = new_msg->id;
@@ -165,9 +165,9 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	
 	//bytes received in little endian so have to reverse to big endian 32bits
 	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 0-3
-		new_msg->data[i+offset] = temp.data[offset + temp.length/2 - i - 1];
+		new_msg->data[i] = temp.data[temp.length/2 - i - 1];
 	}//for
-	offset = 4;
+	uint8_t offset = 4;
 	for(i=0; i<(new_msg->length/2); i++) {		//swap bytes 4-7
 		new_msg->data[i+offset] = temp.data[offset + temp.length/2 - i - 1];
 	}//for
@@ -186,6 +186,10 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 			}
 			return 1;
 		}//if
+		else if (new_brake_val != prev_brake_val && new_brake_val < 0x0200) { // no brake pressure
+			brake_default_val();
+			return 1;
+		}//else if
 		return 0;
 	}
 	
@@ -204,6 +208,15 @@ int can_compare(DataPacket* prev_msg, DataPacket* new_msg) {
 	return 0;
 }
 
+
+void brake_default_val() {	//gets default brake value 
+	uint8_t i;
+	for(i=0; i<BRAKE.length; i++) {
+		BRAKE.data[i] = 0x00;
+	}
+	BRAKE.data[6] = 0x01;
+	BRAKE.data[7] = 0x97;
+}
 
 void can_test_send() {
 	uint8_t i;
