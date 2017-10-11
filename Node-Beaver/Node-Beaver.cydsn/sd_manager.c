@@ -15,8 +15,8 @@ CY_ISR(power_interrupt) {
     LED_Write(1);
 	sd_stop();
 	power_isr_ClearPending();
-    CyDelay(1000);
-    for(;;); // halt program until IC shuts down
+    CySoftwareReset();
+    for(;;); // halt program
 } // CY_ISR(power_interrupt)
 
 //triggers every second

@@ -70,7 +70,8 @@ void can_init() {
 	can_msg_init(&CURTIS_VOLTAGE, CURTIS_VOLTAGE_ID);
 	can_msg_init(&THROTTLE, THROTTLE_ID);
 	can_msg_init(&BRAKE, BRAKE_ID);
-	can_msg_init(&BMS_STATUS, BMS_STATUS_ID); 
+	can_msg_init(&BMS_STATUS, BMS_STATUS_ID);
+    can_msg_init(&BMS_CURRENT, BMS_CURRENT_ID);
 	can_msg_init(&BMS_VOLTAGE, BMS_VOLTAGE_ID);
 	can_msg_init(&BMS_TEMP, BMS_TEMP_ID);
 	
@@ -138,6 +139,8 @@ int can_process(DataPacket* can_msg){
 		status = can_compare(&BRAKE, can_msg);	break;
 	case BMS_STATUS_ID:		//0x188
 		status = can_compare(&BMS_STATUS, can_msg);	break;
+    case BMS_CURRENT_ID:    //0x288
+        status = can_compare(&BMS_CURRENT, can_msg);    break;
 	case BMS_VOLTAGE_ID:	//0x388
 		status = can_compare(&BMS_VOLTAGE, can_msg);	break;
 	case BMS_TEMP_ID:		//0x488

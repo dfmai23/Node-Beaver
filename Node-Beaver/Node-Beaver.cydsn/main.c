@@ -1,5 +1,6 @@
-/* Node-Beaver
-	 This node logs data via CAN and presents the data to the outside world.
+/*  Node-Beaver
+	This node logs data from the CAN network and presents the data to the outside world.
+    FRUCD 2016-2017
  */
 
 #include <project.h>

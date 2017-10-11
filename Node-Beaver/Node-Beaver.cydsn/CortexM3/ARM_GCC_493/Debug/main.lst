@@ -1,4 +1,4 @@
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 1
 
 
    1              		.syntax unified
@@ -27,21 +27,23 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
   24              	main:
   25              	.LFB63:
   26              		.file 1 "main.c"
-   1:main.c        **** /* Node-Beaver
-   2:main.c        **** 	 This node logs data via CAN and presents the data to the outside world.
-   3:main.c        ****  */
-   4:main.c        **** 
-   5:main.c        **** #include <project.h>
-   6:main.c        **** #include "data.h"
-   7:main.c        **** #include "time_manager.h"
-   8:main.c        **** #include "can_manager.h"
-   9:main.c        **** #include "usb_manager.h"
-  10:main.c        **** #include "sd_manager.h"
-  11:main.c        **** #include "radio_manager.h"
-  12:main.c        **** 
-  13:main.c        **** 
-  14:main.c        **** int main(void) {
-  27              		.loc 1 14 0
+   1:main.c        **** /*  Node-Beaver
+   2:main.c        **** 	This node logs data from the CAN network and presents the data to the outside world.
+   3:main.c        ****     
+   4:main.c        ****     Dustin Mai FRUCD 2016-2017
+   5:main.c        ****  */
+   6:main.c        **** 
+   7:main.c        **** #include <project.h>
+   8:main.c        **** #include "data.h"
+   9:main.c        **** #include "time_manager.h"
+  10:main.c        **** #include "can_manager.h"
+  11:main.c        **** #include "usb_manager.h"
+  12:main.c        **** #include "sd_manager.h"
+  13:main.c        **** #include "radio_manager.h"
+  14:main.c        **** 
+  15:main.c        **** 
+  16:main.c        **** int main(void) {
+  27              		.loc 1 16 0
   28              		.cfi_startproc
   29              		@ args = 0, pretend = 0, frame = 24
   30              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -53,59 +55,59 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
   36              		.cfi_def_cfa_offset 32
   37 0004 00AF     		add	r7, sp, #0
   38              		.cfi_def_cfa_register 7
-  15:main.c        **** 	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts 
-  39              		.loc 1 15 0
-  40              	@ 15 "main.c" 1
+  17:main.c        **** 	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts 
+  39              		.loc 1 17 0
+  40              	@ 17 "main.c" 1
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 2
+
+
   41 0006 62B6     		CPSIE   i
   42              	@ 0 "" 2
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 2
-
-
-  16:main.c        **** 
-  17:main.c        **** 	uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-  43              		.loc 1 17 0
+  18:main.c        **** 
+  19:main.c        **** 	uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
+  43              		.loc 1 19 0
   44              		.thumb
   45 0008 FFF7FEFF 		bl	CyEnterCriticalSection
   46 000c 0346     		mov	r3, r0
   47 000e FB75     		strb	r3, [r7, #23]
-  18:main.c        **** 	time_init();                //init everything
-  48              		.loc 1 18 0
+  20:main.c        **** 	time_init();                //init everything
+  48              		.loc 1 20 0
   49 0010 FFF7FEFF 		bl	time_init
-  19:main.c        **** 	can_init();
-  50              		.loc 1 19 0
+  21:main.c        **** 	can_init();
+  50              		.loc 1 21 0
   51 0014 FFF7FEFF 		bl	can_init
-  20:main.c        **** 	usb_init();
-  52              		.loc 1 20 0
+  22:main.c        **** 	usb_init();
+  52              		.loc 1 22 0
   53 0018 FFF7FEFF 		bl	usb_init
-  21:main.c        **** 	sd_init(time_get());
-  54              		.loc 1 21 0
+  23:main.c        **** 	sd_init(time_get());
+  54              		.loc 1 23 0
   55 001c 3B1D     		adds	r3, r7, #4
   56 001e 1846     		mov	r0, r3
   57 0020 FFF7FEFF 		bl	time_get
   58 0024 3B1D     		adds	r3, r7, #4
   59 0026 0FCB     		ldmia	r3, {r0, r1, r2, r3}
   60 0028 FFF7FEFF 		bl	sd_init
-  22:main.c        ****     radio_init_UART();          //xbee UART
-  61              		.loc 1 22 0
+  24:main.c        ****     radio_init_UART();          //xbee UART
+  61              		.loc 1 24 0
   62 002c FFF7FEFF 		bl	radio_init_UART
-  23:main.c        **** 	//wdt_init();
-  24:main.c        **** 	CyDelay(100);				//give some time to finish setup
-  63              		.loc 1 24 0
+  25:main.c        **** 	//wdt_init();
+  26:main.c        **** 	CyDelay(100);				//give some time to finish setup
+  63              		.loc 1 26 0
   64 0030 6420     		movs	r0, #100
   65 0032 FFF7FEFF 		bl	CyDelay
-  25:main.c        **** 	CyExitCriticalSection(atomic_state);               // END ATOMIC
-  66              		.loc 1 25 0
+  27:main.c        **** 	CyExitCriticalSection(atomic_state);               // END ATOMIC
+  66              		.loc 1 27 0
   67 0036 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
   68 0038 1846     		mov	r0, r3
   69 003a FFF7FEFF 		bl	CyExitCriticalSection
   70              	.L2:
-  26:main.c        **** 	
-  27:main.c        **** 	for(;;)	{
-  28:main.c        **** 	    //can_test_send();
-  29:main.c        **** 		//can_test_receive();
-  30:main.c        **** 		//CyDelay(1000);
-  31:main.c        **** 	} // main loop
-  71              		.loc 1 31 0 discriminator 1
+  28:main.c        **** 	
+  29:main.c        **** 	for(;;)	{
+  30:main.c        **** 	    //can_test_send();
+  31:main.c        **** 		//can_test_receive();
+  32:main.c        **** 		//CyDelay(1000);
+  33:main.c        **** 	} // main loop
+  71              		.loc 1 33 0 discriminator 1
   72 003e FEE7     		b	.L2
   73              		.cfi_endproc
   74              	.LFE63:
@@ -116,21 +118,21 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
   79              		.thumb
   80              		.thumb_func
   81              		.type	msg_recieve, %function
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 3
+
+
   82              	msg_recieve:
   83              	.LFB64:
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 3
-
-
-  32:main.c        **** 
-  33:main.c        **** 	return 0;
-  34:main.c        **** } // main()
-  35:main.c        **** 
-  36:main.c        **** /* when a can message is recieved will immediately save messages to external devices
-  37:main.c        **** 	- transmit over xbee
-  38:main.c        **** 	- write to sd
-  39:main.c        **** 	- write to usb	*/
-  40:main.c        **** void msg_recieve(DataPacket * msg) {
-  84              		.loc 1 40 0
+  34:main.c        **** 
+  35:main.c        **** 	return 0;
+  36:main.c        **** } // main()
+  37:main.c        **** 
+  38:main.c        **** /* when a can message is recieved will immediately save messages to external devices
+  39:main.c        **** 	- transmit over xbee
+  40:main.c        **** 	- write to sd
+  41:main.c        **** 	- write to usb	*/
+  42:main.c        **** void msg_recieve(DataPacket * msg) {
+  84              		.loc 1 42 0
   85              		.cfi_startproc
   86              		@ args = 0, pretend = 0, frame = 8
   87              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -143,29 +145,29 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
   94 0004 00AF     		add	r7, sp, #0
   95              		.cfi_def_cfa_register 7
   96 0006 7860     		str	r0, [r7, #4]
-  41:main.c        **** 	if(can_process(msg)) {	//if message is new data value
-  97              		.loc 1 41 0
+  43:main.c        **** 	if(can_process(msg)) {	//if message is new data value
+  97              		.loc 1 43 0
   98 0008 7868     		ldr	r0, [r7, #4]
   99 000a FFF7FEFF 		bl	can_process
  100 000e 0346     		mov	r3, r0
  101 0010 002B     		cmp	r3, #0
  102 0012 08D0     		beq	.L3
-  42:main.c        **** 		xbee_send(msg);
- 103              		.loc 1 42 0
+  44:main.c        **** 		xbee_send(msg);
+ 103              		.loc 1 44 0
  104 0014 7868     		ldr	r0, [r7, #4]
  105 0016 FFF7FEFF 		bl	xbee_send
-  43:main.c        **** 		sd_buffer(msg);
- 106              		.loc 1 43 0
+  45:main.c        **** 		sd_buffer(msg);
+ 106              		.loc 1 45 0
  107 001a 7868     		ldr	r0, [r7, #4]
  108 001c FFF7FEFF 		bl	sd_buffer
-  44:main.c        **** 		usb_write(msg);
- 109              		.loc 1 44 0
+  46:main.c        **** 		usb_write(msg);
+ 109              		.loc 1 46 0
  110 0020 7868     		ldr	r0, [r7, #4]
  111 0022 FFF7FEFF 		bl	usb_write
  112              	.L3:
-  45:main.c        **** 	}
-  46:main.c        **** }
- 113              		.loc 1 46 0
+  47:main.c        **** 	}
+  48:main.c        **** }
+ 113              		.loc 1 48 0
  114 0026 0837     		adds	r7, r7, #8
  115              		.cfi_def_cfa_offset 8
  116 0028 BD46     		mov	sp, r7
@@ -176,11 +178,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  121              	.LFE64:
  122              		.size	msg_recieve, .-msg_recieve
  123              		.text
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 4
+
+
  124              	.Letext0:
  125              		.file 2 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 4
-
-
  126              		.file 3 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
  127              		.file 4 "data.h"
  128              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
@@ -236,11 +238,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  178 0069 03       		.uleb128 0x3
  179 006a 11010000 		.4byte	.LASF8
  180 006e 02       		.byte	0x2
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 5
+
+
  181 006f 41       		.byte	0x41
  182 0070 74000000 		.4byte	0x74
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 5
-
-
  183 0074 02       		.uleb128 0x2
  184 0075 04       		.byte	0x4
  185 0076 07       		.byte	0x7
@@ -296,11 +298,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  235 00d8 02       		.uleb128 0x2
  236 00d9 04       		.byte	0x4
  237 00da 07       		.byte	0x7
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 6
+
+
  238 00db BB010000 		.4byte	.LASF20
  239 00df 05       		.uleb128 0x5
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 6
-
-
  240 00e0 10       		.byte	0x10
  241 00e1 04       		.byte	0x4
  242 00e2 0A       		.byte	0xa
@@ -345,7 +347,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  281 0132 0A       		.uleb128 0xa
  282 0133 77010000 		.4byte	.LASF28
  283 0137 01       		.byte	0x1
- 284 0138 0E       		.byte	0xe
+ 284 0138 10       		.byte	0x10
  285 0139 89000000 		.4byte	0x89
  286 013d 00000000 		.4byte	.LFB63
  287 0141 40000000 		.4byte	.LFE63-.LFB63
@@ -355,19 +357,19 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  291 014b 0B       		.uleb128 0xb
  292 014c 6A010000 		.4byte	.LASF29
  293 0150 01       		.byte	0x1
- 294 0151 11       		.byte	0x11
+ 294 0151 13       		.byte	0x13
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 7
+
+
  295 0152 97000000 		.4byte	0x97
  296 0156 02       		.uleb128 0x2
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 7
-
-
  297 0157 91       		.byte	0x91
  298 0158 77       		.sleb128 -9
  299 0159 00       		.byte	0
  300 015a 0C       		.uleb128 0xc
  301 015b EC000000 		.4byte	.LASF30
  302 015f 01       		.byte	0x1
- 303 0160 28       		.byte	0x28
+ 303 0160 2A       		.byte	0x2a
  304 0161 00000000 		.4byte	.LFB64
  305 0165 2C000000 		.4byte	.LFE64-.LFB64
  306 0169 01       		.uleb128 0x1
@@ -376,7 +378,7 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  309 016f 0D       		.uleb128 0xd
  310 0170 6D736700 		.ascii	"msg\000"
  311 0174 01       		.byte	0x1
- 312 0175 28       		.byte	0x28
+ 312 0175 2A       		.byte	0x2a
  313 0176 7E010000 		.4byte	0x17e
  314 017a 02       		.uleb128 0x2
  315 017b 91       		.byte	0x91
@@ -416,11 +418,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  349 0012 00       		.byte	0
  350 0013 02       		.uleb128 0x2
  351 0014 24       		.uleb128 0x24
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 8
+
+
  352 0015 00       		.byte	0
  353 0016 0B       		.uleb128 0xb
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 8
-
-
  354 0017 0B       		.uleb128 0xb
  355 0018 3E       		.uleb128 0x3e
  356 0019 0B       		.uleb128 0xb
@@ -476,11 +478,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  406 004b 0B       		.uleb128 0xb
  407 004c 49       		.uleb128 0x49
  408 004d 13       		.uleb128 0x13
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 9
+
+
  409 004e 38       		.uleb128 0x38
  410 004f 0B       		.uleb128 0xb
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 9
-
-
  411 0050 00       		.byte	0
  412 0051 00       		.byte	0
  413 0052 07       		.uleb128 0x7
@@ -536,11 +538,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  463 0084 12       		.uleb128 0x12
  464 0085 06       		.uleb128 0x6
  465 0086 40       		.uleb128 0x40
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 10
+
+
  466 0087 18       		.uleb128 0x18
  467 0088 9642     		.uleb128 0x2116
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 10
-
-
  468 008a 19       		.uleb128 0x19
  469 008b 01       		.uleb128 0x1
  470 008c 13       		.uleb128 0x13
@@ -596,11 +598,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  520 00bf 3B       		.uleb128 0x3b
  521 00c0 0B       		.uleb128 0xb
  522 00c1 49       		.uleb128 0x49
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 11
+
+
  523 00c2 13       		.uleb128 0x13
  524 00c3 02       		.uleb128 0x2
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 11
-
-
  525 00c4 18       		.uleb128 0x18
  526 00c5 00       		.byte	0
  527 00c6 00       		.byte	0
@@ -656,11 +658,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  577              	.Ldebug_ranges0:
  578 0000 00000000 		.4byte	.LFB63
  579 0004 40000000 		.4byte	.LFE63
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 12
+
+
  580 0008 00000000 		.4byte	.LFB64
  581 000c 2C000000 		.4byte	.LFE64
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 12
-
-
  582 0010 00000000 		.4byte	0
  583 0014 00000000 		.4byte	0
  584              		.section	.debug_line,"",%progbits
@@ -716,11 +718,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  602              	.LASF17:
  603 00f8 666C6F61 		.ascii	"float\000"
  603      7400
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 13
+
+
  604              	.LASF23:
  605 00fe 64617461 		.ascii	"data\000"
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 13
-
-
  605      00
  606              	.LASF1:
  607 0103 756E7369 		.ascii	"unsigned char\000"
@@ -776,11 +778,11 @@ ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 1
  629 0189 44617461 		.ascii	"DataPacket\000"
  629      5061636B 
  629      657400
+ARM GAS  D:\Windows\AppData\Local\Temp\ccisZbac.s 			page 14
+
+
  630              	.LASF11:
  631 0194 6C6F6E67 		.ascii	"long long unsigned int\000"
-ARM GAS  D:\Windows\AppData\Local\Temp\ccuLRlFH.s 			page 14
-
-
  631      206C6F6E 
  631      6720756E 
  631      7369676E 
